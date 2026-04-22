@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Działa!</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #1f2937;
+    }
+    .card {
+      background: #ffffff;
+      padding: 2.5rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 480px;
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 3rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      margin: 0 0 1.5rem;
+      color: #4b5563;
+    }
+    #timestamp {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+      font-size: 1.125rem;
+      color: #111827;
+      background: #f3f4f6;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e5e7eb; }
+      .card { background: #111827; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+      .subtitle { color: #9ca3af; }
+      #timestamp { background: #1f2937; color: #f9fafb; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Działa!</h1>
+    <p class="subtitle">HTML, CSS i JavaScript ładują się poprawnie.</p>
+    <p id="timestamp">—</p>
+  </main>
+  <script>
+    const el = document.getElementById("timestamp");
+    const render = () => {
+      el.textContent = new Date().toLocaleString("pl-PL");
+    };
+    render();
+    setInterval(render, 1000);
+  </script>
+</body>
+</html>

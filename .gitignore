@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Środowiska / sekrety
+.env
+.env.*
+!.env.example
+
+# Zależności
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build / output
+dist/
+build/
+*.log
+
+# Claude Code (lokalne ustawienia sesji)
+.claude/settings.local.json
