@@ -6,6 +6,19 @@
   <meta name="description" content="Biuro Rachunkowe Kowalski & Partnerzy — kompleksowa obsługa księgowa, kadry, doradztwo podatkowe. 15 lat doświadczenia, 120+ firm.">
   <meta name="color-scheme" content="light dark">
   <title>Biuro Rachunkowe Kowalski & Partnerzy — Księgowość bez stresu</title>
+  <script>
+    // Theme init — musi być w <head> PRZED <style>, żeby uniknąć "flashu" złego motywu (FOUC)
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = stored || (systemDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <style>
     /* ============================================================
        TOKENS
@@ -28,23 +41,21 @@
       --radius: 10px;
       --radius-lg: 18px;
       --max: 1200px;
-      --nav-h: 72px;
+      --nav-h: 80px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0B1220;
-        --card: #111827;
-        --heading: #F3F4F6;
-        --text: #D1D5DB;
-        --muted: #9CA3AF;
-        --accent: #D4B87A;
-        --accent-hover: #E0C98C;
-        --accent-soft: #2A2416;
-        --border: #1F2937;
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-        --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-        --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-      }
+    :root[data-theme="dark"] {
+      --bg: #0B1220;
+      --card: #111827;
+      --heading: #F3F4F6;
+      --text: #D1D5DB;
+      --muted: #9CA3AF;
+      --accent: #D4B87A;
+      --accent-hover: #E0C98C;
+      --accent-soft: #2A2416;
+      --border: #1F2937;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     /* ============================================================
@@ -65,6 +76,14 @@
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+    /* Płynne przełączanie motywu — aktywne tylko gdy JS doda tę klasę na czas tranzycji.
+       Nie rozlewa się na inne transitiony (hover, focus itp.). */
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease, stroke 0.3s ease !important;
     }
     body.nav-open { overflow: hidden; }
     img, svg { display: block; max-width: 100%; }
@@ -180,33 +199,33 @@
     .nav__inner {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       height: var(--nav-h);
-      gap: 1.5rem;
+      gap: 0.75rem;
     }
+    .logo { margin-right: auto; }
     .logo {
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.75rem;
       color: var(--heading);
       font-family: var(--font-serif);
-      font-size: 1.15rem;
+      font-size: 1.35rem;
       font-weight: 700;
       letter-spacing: -0.01em;
     }
     .logo:hover { color: var(--heading); }
     .logo__mark {
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       background: var(--heading);
       color: var(--accent);
-      border-radius: 8px;
+      border-radius: 10px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: var(--font-serif);
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 1.2rem;
       letter-spacing: -0.02em;
     }
     .logo__name { white-space: nowrap; }
@@ -221,13 +240,59 @@
     }
     .nav__link {
       color: var(--text);
-      font-size: 0.95rem;
-      padding: 0.5rem 0.85rem;
+      font-size: 1.05rem;
+      padding: 0.6rem 1rem;
       border-radius: var(--radius);
       font-weight: 500;
     }
     .nav__link:hover { color: var(--heading); background: var(--border); }
-    .nav__cta { margin-left: 0.75rem; }
+    .nav__cta-wrap {
+      position: relative;
+      display: inline-flex;
+      margin-left: 0.75rem;
+    }
+    .nav__cta {
+      font-size: 1.24rem;
+      padding: 1.1rem 1.95rem;
+      animation: cta-pulse 6s ease-in-out infinite;
+      transform-origin: center;
+      will-change: transform, box-shadow;
+    }
+    .nav__cta-cursor {
+      position: absolute;
+      top: 62%;
+      left: 62%;
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 10;
+      animation: cursor-approach 6s ease-in-out infinite;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+    }
+    @keyframes cursor-approach {
+      0%, 48%  { opacity: 0; transform: translate(70px, 55px) scale(0.85); }
+      53%      { opacity: 1; transform: translate(70px, 55px) scale(1); }
+      63%      { opacity: 1; transform: translate(0, 0) scale(1); }
+      67%      { opacity: 1; transform: translate(0, 0) scale(0.82); }
+      71%      { opacity: 1; transform: translate(0, 0) scale(1); }
+      80%      { opacity: 0; transform: translate(-12px, -10px) scale(1); }
+      100%     { opacity: 0; transform: translate(70px, 55px) scale(0.85); }
+    }
+    @keyframes cta-pulse {
+      0%, 62%  { transform: scale(1); box-shadow: 0 0 0 0 rgba(201, 169, 97, 0); }
+      68%      { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(201, 169, 97, 0.22); }
+      74%      { transform: scale(0.99); box-shadow: 0 0 0 18px rgba(201, 169, 97, 0); }
+      82%      { transform: scale(1.025); }
+      90%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(201, 169, 97, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav__cta { animation: none; }
+      .nav__cta-cursor { display: none; }
+    }
+    @media (max-width: 900px) {
+      .nav__cta-cursor { display: none; }
+    }
     .nav__toggle {
       display: none;
       background: none;
@@ -241,9 +306,35 @@
       color: var(--heading);
     }
     .nav__toggle:hover { border-color: var(--accent); }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--heading);
+      transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.15s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .theme-toggle:active { transform: scale(0.92); }
+    .theme-toggle__icon { width: 20px; height: 20px; }
+    /* W jasnym motywie pokazujemy księżyc (klik → idziesz w ciemny). W ciemnym: słońce. */
+    [data-theme="light"] .theme-toggle__sun,
+    :root:not([data-theme="dark"]) .theme-toggle__sun { display: none; }
+    [data-theme="dark"] .theme-toggle__moon { display: none; }
     @media (max-width: 900px) {
       .nav__links,
-      .nav__cta { display: none; }
+      .nav__cta-wrap { display: none; }
+      .nav__cta { animation: none; }
       .nav__toggle { display: inline-flex; }
       body.nav-open .nav__menu {
         transform: translateX(0);
@@ -272,9 +363,12 @@
         padding: 0.85rem 1rem;
         font-size: 1.05rem;
       }
-      .nav__menu .nav__cta {
-        display: inline-flex;
+      .nav__menu .nav__cta-wrap {
+        display: block;
         margin: 1rem 0 0;
+        width: 100%;
+      }
+      .nav__menu .nav__cta {
         width: 100%;
       }
     }
@@ -340,22 +434,20 @@
     }
     .hero__art {
       position: relative;
-      aspect-ratio: 1;
-      max-width: 460px;
+      aspect-ratio: 4 / 3;
+      max-width: 580px;
+      width: 100%;
       justify-self: end;
     }
-    .hero__art-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--accent-soft) 0%, var(--card) 100%);
-      border-radius: var(--radius-lg);
-      z-index: 0;
-    }
-    .hero__art-svg {
+    .hero__photo {
       position: relative;
       z-index: 1;
       width: 100%;
       height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      display: block;
     }
     @media (max-width: 900px) {
       .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -908,6 +1000,17 @@
         <line x1="5" y1="12" x2="19" y2="12"/>
         <polyline points="12 5 19 12 12 19"/>
       </symbol>
+      <symbol id="i-cursor" viewBox="0 0 24 24">
+        <path d="M5 3 L5 21 L10 16 L13 21.5 L15.5 20.2 L12.8 15 L18 15 Z"
+              fill="#0F2847" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -929,8 +1032,15 @@
           <li><a class="nav__link" href="#faq">FAQ</a></li>
           <li><a class="nav__link" href="#kontakt">Kontakt</a></li>
         </ul>
-        <a class="btn btn--primary nav__cta" href="#kontakt">Umów konsultację</a>
+        <div class="nav__cta-wrap">
+          <a class="btn btn--primary nav__cta" href="#kontakt">Umów konsultację</a>
+          <svg class="nav__cta-cursor" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cursor"/></svg>
+        </div>
       </nav>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Przełącz motyw jasny/ciemny" title="Przełącz motyw">
+        <svg class="theme-toggle__icon theme-toggle__sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__moon" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
       <button class="nav__toggle" id="navToggle" aria-label="Otwórz menu" aria-expanded="false" aria-controls="navMenu">
         <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
       </button>
@@ -971,48 +1081,8 @@
             </div>
           </div>
         </div>
-        <div class="hero__art" aria-hidden="true">
-          <div class="hero__art-bg"></div>
-          <svg class="hero__art-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-            <!-- Abstract accounting illustration: documents, chart, coin -->
-            <defs>
-              <linearGradient id="gradNavy" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#0F2847"/>
-                <stop offset="100%" stop-color="#1E3A5F"/>
-              </linearGradient>
-            </defs>
-            <!-- Background doc -->
-            <rect x="80" y="70" width="200" height="240" rx="12" fill="#fff" stroke="#E5E7EB" stroke-width="2"/>
-            <rect x="100" y="100" width="120" height="8" rx="4" fill="#0F2847" opacity="0.9"/>
-            <rect x="100" y="118" width="160" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="100" y="130" width="140" height="4" rx="2" fill="#9CA3AF"/>
-            <rect x="100" y="142" width="150" height="4" rx="2" fill="#9CA3AF"/>
-            <!-- Mini chart bars inside doc -->
-            <g transform="translate(100, 170)">
-              <rect x="0" y="60" width="18" height="40" rx="3" fill="#C9A961" opacity="0.85"/>
-              <rect x="26" y="40" width="18" height="60" rx="3" fill="#C9A961"/>
-              <rect x="52" y="20" width="18" height="80" rx="3" fill="#C9A961" opacity="0.9"/>
-              <rect x="78" y="50" width="18" height="50" rx="3" fill="#C9A961" opacity="0.75"/>
-              <rect x="104" y="10" width="18" height="90" rx="3" fill="#C9A961"/>
-              <rect x="130" y="30" width="18" height="70" rx="3" fill="#C9A961" opacity="0.9"/>
-            </g>
-            <!-- Foreground doc (angled) -->
-            <g transform="rotate(-7 200 340)">
-              <rect x="130" y="240" width="180" height="100" rx="10" fill="url(#gradNavy)"/>
-              <circle cx="160" cy="270" r="10" fill="#C9A961"/>
-              <rect x="180" y="266" width="100" height="6" rx="3" fill="#fff" opacity="0.9"/>
-              <rect x="180" y="280" width="80" height="4" rx="2" fill="#fff" opacity="0.5"/>
-              <rect x="150" y="305" width="140" height="4" rx="2" fill="#fff" opacity="0.4"/>
-              <rect x="150" y="315" width="110" height="4" rx="2" fill="#fff" opacity="0.4"/>
-            </g>
-            <!-- Coin/badge -->
-            <circle cx="320" cy="110" r="36" fill="#C9A961"/>
-            <text x="320" y="120" font-family="Georgia, serif" font-size="32" font-weight="700" fill="#0F2847" text-anchor="middle">zł</text>
-            <!-- Small accent dots -->
-            <circle cx="60" cy="200" r="5" fill="#C9A961"/>
-            <circle cx="340" cy="280" r="7" fill="#0F2847" opacity="0.8"/>
-            <circle cx="50" cy="330" r="4" fill="#0F2847" opacity="0.4"/>
-          </svg>
+        <div class="hero__art">
+          <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" width="1200" height="900">
         </div>
       </div>
     </section>
@@ -1384,6 +1454,26 @@
   </footer>
 
   <script>
+    // ============================================================
+    // THEME TOGGLE: light/dark with localStorage persistence
+    // (init zrobiony w <head>, tu tylko click handler)
+    // ============================================================
+    (function () {
+      const btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        const root = document.documentElement;
+        const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.classList.add('theme-transitioning');
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        btn.setAttribute('aria-label',
+          next === 'dark' ? 'Przełącz na motyw jasny' : 'Przełącz na motyw ciemny');
+        setTimeout(() => root.classList.remove('theme-transitioning'), 350);
+      });
+    })();
+
     // ============================================================
     // NAV: sticky shadow on scroll
     // ============================================================
