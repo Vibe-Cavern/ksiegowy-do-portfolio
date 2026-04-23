@@ -8,11 +8,11 @@
   <title>Biuro Rachunkowe Kowalski & Partnerzy — Księgowość bez stresu</title>
   <script>
     // Theme init — musi być w <head> PRZED <style>, żeby uniknąć "flashu" złego motywu (FOUC)
+    // Baza: light. Dark tylko gdy użytkownik ręcznie przełączył (zapisane w localStorage).
     (function () {
       try {
         var stored = localStorage.getItem('theme');
-        var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = stored || (systemDark ? 'dark' : 'light');
+        var theme = stored === 'dark' ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', theme);
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'light');
@@ -139,6 +139,10 @@
       font-weight: 600;
       margin-bottom: 0.75rem;
     }
+    .hero .eyebrow {
+      font-size: 1.28rem;
+      margin-bottom: 1rem;
+    }
     .icon {
       width: 24px;
       height: 24px;
@@ -244,8 +248,15 @@
       padding: 0.6rem 1rem;
       border-radius: var(--radius);
       font-weight: 500;
+      background: color-mix(in srgb, var(--accent) 80%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 90%, transparent);
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
-    .nav__link:hover { color: var(--heading); background: var(--border); }
+    .nav__link:hover {
+      color: var(--heading);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
     .nav__cta-wrap {
       position: relative;
       display: inline-flex;
@@ -917,6 +928,349 @@
       .logo__name { display: none; }
       .logo__name-short { display: inline; }
     }
+
+    /* ============================================================
+       CHATBOT (AI ASYSTENT) — prawy-dolny róg
+       ============================================================ */
+    .chatbot {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 60;
+      font-family: var(--font-sans);
+    }
+    .chatbot__fab {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--heading);
+      color: var(--accent);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(15, 40, 71, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .chatbot__fab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(15, 40, 71, 0.4);
+    }
+    .chatbot__fab svg { width: 26px; height: 26px; }
+    .chatbot__fab-icon--close {
+      position: absolute;
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.7);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .chatbot__fab-icon--open { transition: opacity 0.2s, transform 0.2s; }
+    .chatbot[data-open="true"] .chatbot__fab-icon--open {
+      opacity: 0;
+      transform: rotate(90deg) scale(0.7);
+    }
+    .chatbot[data-open="true"] .chatbot__fab-icon--close {
+      opacity: 1;
+      transform: rotate(0) scale(1);
+    }
+    .chatbot__fab::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #22C55E;
+      border: 2px solid var(--heading);
+      animation: chatbot-pulse 2s ease-in-out infinite;
+    }
+    .chatbot[data-open="true"] .chatbot__fab::after { display: none; }
+    @keyframes chatbot-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.8; }
+    }
+    .chatbot__panel {
+      position: absolute;
+      bottom: 76px;
+      right: 0;
+      width: min(380px, calc(100vw - 3rem));
+      height: min(580px, calc(100vh - 120px));
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 60px rgba(15, 40, 71, 0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      transform-origin: bottom right;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .chatbot[data-open="true"] .chatbot__panel {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .chatbot__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.1rem;
+      background: var(--heading);
+      color: #fff;
+    }
+    .chatbot__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--heading);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .chatbot__header > div { line-height: 1.25; }
+    .chatbot__title { display: block; font-size: 1rem; color: #fff; font-weight: 600; }
+    .chatbot__status {
+      display: block;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.72);
+    }
+    .chatbot__status::before {
+      content: "●";
+      color: #22C55E;
+      margin-right: 4px;
+      font-size: 0.7rem;
+      vertical-align: middle;
+    }
+    .chatbot__close {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-size: 1.5rem;
+      line-height: 1;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+    .chatbot__close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .chatbot__messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+    .msg {
+      max-width: 86%;
+      padding: 0.65rem 0.9rem;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      animation: msg-in 0.25s ease-out;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg--bot {
+      align-self: flex-start;
+      background: var(--card);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .msg--user {
+      align-self: flex-end;
+      background: var(--accent);
+      color: #1a1205;
+      border-bottom-right-radius: 4px;
+    }
+    .msg--typing {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      padding: 0.85rem 1rem;
+    }
+    .msg--typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      animation: typing-dot 1.2s infinite;
+    }
+    .msg--typing span:nth-child(2) { animation-delay: 0.15s; }
+    .msg--typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typing-dot {
+      0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+      30% { opacity: 1; transform: translateY(-3px); }
+    }
+    .chatbot__footer {
+      padding: 0.75rem 0.9rem 0.9rem;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+    }
+    .chatbot__questions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .chatbot__question {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 0.85rem;
+      font-size: 0.86rem;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      font-family: inherit;
+      line-height: 1.35;
+    }
+    .chatbot__question:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--heading);
+    }
+    .chatbot__question--custom {
+      background: var(--heading);
+      color: var(--accent);
+      border-color: var(--heading);
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+    .chatbot__question--custom:hover {
+      background: var(--accent);
+      color: var(--heading);
+      border-color: var(--accent);
+    }
+    .chatbot__form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .chatbot__form label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--heading);
+    }
+    .chatbot__form textarea,
+    .chatbot__form input[type=email],
+    .chatbot__form input[type=tel],
+    .chatbot__form input[type=text] {
+      font: inherit;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55rem 0.7rem;
+      width: 100%;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .chatbot__form textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    .chatbot__form textarea:focus,
+    .chatbot__form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .chatbot__radios {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .chatbot__radio {
+      flex: 1;
+      position: relative;
+      cursor: pointer;
+    }
+    .chatbot__radio input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .chatbot__radio span {
+      display: block;
+      padding: 0.5rem 0.65rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .chatbot__radio input:checked + span {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--heading);
+      font-weight: 600;
+    }
+    .chatbot__form-actions {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.25rem;
+    }
+    .chatbot__form-actions .btn {
+      flex: 1;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.85rem;
+    }
+    .chatbot__back {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.65rem 0.9rem;
+      font-size: 0.85rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .chatbot__back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .chatbot__note {
+      font-size: 0.74rem;
+      color: var(--muted);
+      text-align: center;
+      margin: 0.3rem 0 0;
+    }
+    @media (max-width: 560px) {
+      .chatbot { bottom: 1rem; right: 1rem; }
+      .chatbot__panel {
+        width: calc(100vw - 2rem);
+        bottom: 72px;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .chatbot__fab::after { animation: none; }
+      .msg { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -1010,6 +1364,9 @@
       </symbol>
       <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
       </symbol>
     </defs>
   </svg>
@@ -1453,6 +1810,31 @@
     </div>
   </footer>
 
+  <!-- ============================================================
+       CHATBOT (AI ASYSTENT)
+       DEMO: formularz "własne pytanie" nie wysyła realnie. W realnej
+       implementacji: POST do /api/ask → backend forwarduje na
+       FB Messenger API + WhatsApp Business API + SMTP na mail księgowego.
+       ============================================================ -->
+  <div class="chatbot" id="chatbot" data-open="false">
+    <button class="chatbot__fab" id="chatbotFab" type="button" aria-label="Otwórz asystenta AI" aria-expanded="false">
+      <svg class="chatbot__fab-icon chatbot__fab-icon--open" aria-hidden="true"><use href="#i-chat"/></svg>
+      <svg class="chatbot__fab-icon chatbot__fab-icon--close" aria-hidden="true"><use href="#i-x"/></svg>
+    </button>
+    <div class="chatbot__panel" id="chatbotPanel" role="dialog" aria-label="Asystent AI">
+      <header class="chatbot__header">
+        <div class="chatbot__avatar" aria-hidden="true">KP</div>
+        <div>
+          <strong class="chatbot__title">Asystent K&amp;P</strong>
+          <span class="chatbot__status">Online · odp. w minutę</span>
+        </div>
+        <button class="chatbot__close" id="chatbotClose" type="button" aria-label="Zamknij asystenta">&times;</button>
+      </header>
+      <div class="chatbot__messages" id="chatbotMessages" aria-live="polite" aria-atomic="false"></div>
+      <div class="chatbot__footer" id="chatbotFooter"></div>
+    </div>
+  </div>
+
   <script>
     // ============================================================
     // THEME TOGGLE: light/dark with localStorage persistence
@@ -1563,6 +1945,264 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       reveals.forEach(el => io.observe(el));
+    })();
+
+    // ============================================================
+    // CHATBOT (AI ASYSTENT)
+    // DEMO: odpowiedzi statyczne z listy; custom pytanie pokazuje
+    // komunikat sukcesu. W realu: POST do backendu → FB/WhatsApp/email.
+    // Używa createElement/textContent zamiast innerHTML (bez XSS).
+    // ============================================================
+    (function () {
+      const QUESTIONS = [
+        { q: "Ile kosztuje obsługa dla małej firmy?",
+          a: "Pakiet Mała firma (nasz najpopularniejszy) to od 499 zł/mies netto. Obejmuje wszystkie formy opodatkowania, do 10 pracowników i rozszerzone doradztwo. Szczegóły w sekcji Cennik." },
+        { q: "Obsługujecie JDG i spółki z o.o.?",
+          a: "Tak, prowadzimy wszystkie formy: JDG (KPiR lub ryczałt), spółki cywilne, jawne, komandytowe oraz z o.o. z pełną księgowością." },
+        { q: "Jak wygląda zmiana biura rachunkowego?",
+          a: "Przejęcie zajmuje 2–3 dni robocze. Odbieramy dokumentację, pełnomocnictwa podpisujemy elektronicznie. Zmianę można zgłosić do US w dowolnym momencie roku — nie musisz czekać do końca roku." },
+        { q: "Czy mogę przesyłać dokumenty online?",
+          a: "Oczywiście. Wspieramy skany, zdjęcia z telefonu, KSeF oraz bezpośrednie podpinanie kont bankowych. Papier przyjmujemy tylko wtedy, gdy sam tego chcesz." },
+        { q: "Jak szybko odpowiadacie na pytania?",
+          a: "Odpowiadamy tego samego dnia roboczego (zwykle w kilka godzin). Sprawy pilne załatwiamy od razu telefonicznie — masz dedykowanego opiekuna." }
+      ];
+
+      const fab = document.getElementById('chatbotFab');
+      const panel = document.getElementById('chatbotPanel');
+      const closeBtn = document.getElementById('chatbotClose');
+      const messagesEl = document.getElementById('chatbotMessages');
+      const footerEl = document.getElementById('chatbotFooter');
+      const container = document.getElementById('chatbot');
+      if (!fab || !panel) return;
+
+      // DOM helper: tworzy element z klasą, tekstem, atrybutami, handlerami, dziećmi.
+      function make(tag, opts) {
+        opts = opts || {};
+        const node = document.createElement(tag);
+        if (opts.class) node.className = opts.class;
+        if (opts.text !== undefined) node.textContent = opts.text;
+        if (opts.attrs) for (const k in opts.attrs) node.setAttribute(k, opts.attrs[k]);
+        if (opts.on) for (const evt in opts.on) node.addEventListener(evt, opts.on[evt]);
+        if (opts.children) opts.children.forEach(c => { if (c) node.appendChild(c); });
+        return node;
+      }
+      function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+
+      let messages = [];
+      let initialized = false;
+
+      function renderMessages() {
+        clear(messagesEl);
+        messages.forEach(m => {
+          if (m.role === 'typing') {
+            messagesEl.appendChild(make('div', {
+              class: 'msg msg--bot msg--typing',
+              children: [make('span'), make('span'), make('span')]
+            }));
+          } else {
+            messagesEl.appendChild(make('div', {
+              class: 'msg msg--' + m.role,
+              text: m.text
+            }));
+          }
+        });
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+
+      function addMessage(role, text) { messages.push({ role, text }); renderMessages(); }
+      function addTyping() { messages.push({ role: 'typing' }); renderMessages(); }
+      function removeTyping() { messages = messages.filter(m => m.role !== 'typing'); renderMessages(); }
+
+      function renderQuestions() {
+        clear(footerEl);
+        const wrap = make('div', { class: 'chatbot__questions' });
+        QUESTIONS.forEach((q, i) => {
+          wrap.appendChild(make('button', {
+            class: 'chatbot__question',
+            text: q.q,
+            attrs: { type: 'button' },
+            on: { click: () => handleQuestion(i) }
+          }));
+        });
+        wrap.appendChild(make('button', {
+          class: 'chatbot__question chatbot__question--custom',
+          text: 'Zadaj własne pytanie →',
+          attrs: { type: 'button' },
+          on: { click: showForm }
+        }));
+        footerEl.appendChild(wrap);
+      }
+
+      function buildContactField(type) {
+        const wrap = make('div', { attrs: { id: 'cb-contact-field' } });
+        if (type === 'email') {
+          wrap.appendChild(make('label', { text: 'Email', attrs: { for: 'cb-email' } }));
+          wrap.appendChild(make('input', { attrs: {
+            id: 'cb-email', name: 'email', type: 'email',
+            required: 'required', placeholder: 'jan@firma.pl'
+          } }));
+        } else {
+          wrap.appendChild(make('label', { text: 'Telefon', attrs: { for: 'cb-phone' } }));
+          wrap.appendChild(make('input', { attrs: {
+            id: 'cb-phone', name: 'phone', type: 'tel',
+            required: 'required', placeholder: '+48 600 000 000'
+          } }));
+        }
+        return wrap;
+      }
+
+      function renderForm() {
+        clear(footerEl);
+        const form = make('form', {
+          class: 'chatbot__form',
+          attrs: { id: 'chatbotForm', novalidate: 'novalidate' }
+        });
+
+        form.appendChild(make('label', { text: 'Twoje pytanie', attrs: { for: 'cb-q' } }));
+        form.appendChild(make('textarea', { attrs: {
+          id: 'cb-q', name: 'question', required: 'required',
+          placeholder: 'Opisz swoją sytuację...'
+        } }));
+
+        form.appendChild(make('label', { text: 'Jak się z Tobą skontaktować?' }));
+        const radiosWrap = make('div', { class: 'chatbot__radios' });
+        function makeRadio(value, label, checked) {
+          const attrs = { type: 'radio', name: 'contact', value };
+          if (checked) attrs.checked = 'checked';
+          return make('label', {
+            class: 'chatbot__radio',
+            children: [
+              make('input', { attrs }),
+              make('span', { text: label })
+            ]
+          });
+        }
+        radiosWrap.appendChild(makeRadio('email', 'Email', true));
+        radiosWrap.appendChild(makeRadio('phone', 'Telefon', false));
+        form.appendChild(radiosWrap);
+
+        form.appendChild(make('label', { text: 'Imię', attrs: { for: 'cb-name' } }));
+        form.appendChild(make('input', { attrs: {
+          id: 'cb-name', name: 'name', type: 'text',
+          required: 'required', placeholder: 'Jan'
+        } }));
+
+        form.appendChild(buildContactField('email'));
+
+        form.appendChild(make('div', {
+          class: 'chatbot__form-actions',
+          children: [
+            make('button', {
+              class: 'chatbot__back',
+              text: 'Wróć',
+              attrs: { type: 'button', id: 'cb-back' },
+              on: { click: showQuestions }
+            }),
+            make('button', {
+              class: 'btn btn--primary',
+              text: 'Wyślij',
+              attrs: { type: 'submit' }
+            })
+          ]
+        }));
+
+        form.appendChild(make('p', {
+          class: 'chatbot__note',
+          text: 'Odezwiemy się w ciągu 2h w godzinach pracy.'
+        }));
+
+        form.addEventListener('submit', handleCustomSubmit);
+        form.querySelectorAll('input[name="contact"]').forEach(r => {
+          r.addEventListener('change', (e) => {
+            const old = form.querySelector('#cb-contact-field');
+            const fresh = buildContactField(e.target.value);
+            old.parentNode.replaceChild(fresh, old);
+          });
+        });
+        footerEl.appendChild(form);
+      }
+
+      function showQuestions() { renderQuestions(); }
+
+      function showForm() {
+        addMessage('user', 'Chcę zadać własne pytanie');
+        addTyping();
+        setTimeout(() => {
+          removeTyping();
+          addMessage('bot', 'Jasne! Opisz swoją sytuację, wybierz kanał kontaktu i zostaw dane. Odezwiemy się w ciągu 2h.');
+          renderForm();
+        }, 650);
+      }
+
+      function handleQuestion(i) {
+        const q = QUESTIONS[i];
+        addMessage('user', q.q);
+        addTyping();
+        setTimeout(() => {
+          removeTyping();
+          addMessage('bot', q.a);
+          renderQuestions();
+        }, 700);
+      }
+
+      function handleCustomSubmit(e) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+        const data = new FormData(form);
+        const question = (data.get('question') || '').trim();
+        const contactType = data.get('contact');
+        const contactValue = ((data.get('email') || data.get('phone')) || '').trim();
+        const name = (data.get('name') || '').trim();
+
+        // DEMO: w realnej implementacji tutaj:
+        // fetch('/api/ask', { method: 'POST', body: JSON.stringify({...}) })
+        //   → backend: Facebook Messenger API, WhatsApp Business API, SMTP na mail księgowego.
+        console.log('[CHATBOT DEMO] Zgłoszenie:', { name, question, contactType, contactValue });
+
+        addMessage('user', question);
+        addTyping();
+        setTimeout(() => {
+          removeTyping();
+          const channel = contactType === 'email' ? 'podany email' : 'podany numer telefonu';
+          addMessage('bot', 'Dzięki, ' + name + '! Przekazaliśmy Twoje pytanie do księgowego. Odezwiemy się w ciągu 2h na ' + channel + '.');
+          clear(footerEl);
+          footerEl.appendChild(make('button', {
+            class: 'chatbot__back',
+            text: 'Zadaj kolejne pytanie',
+            attrs: { type: 'button', style: 'width:100%' },
+            on: { click: showQuestions }
+          }));
+        }, 900);
+      }
+
+      function initialize() {
+        if (initialized) return;
+        initialized = true;
+        addMessage('bot', 'Cześć! Jestem asystentem K&P. W czym mogę pomóc? Wybierz pytanie poniżej lub zadaj własne.');
+        renderQuestions();
+      }
+
+      function openPanel() {
+        container.setAttribute('data-open', 'true');
+        fab.setAttribute('aria-expanded', 'true');
+        fab.setAttribute('aria-label', 'Zamknij asystenta AI');
+        initialize();
+      }
+
+      function closePanel() {
+        container.setAttribute('data-open', 'false');
+        fab.setAttribute('aria-expanded', 'false');
+        fab.setAttribute('aria-label', 'Otwórz asystenta AI');
+      }
+
+      fab.addEventListener('click', () => {
+        if (container.getAttribute('data-open') === 'true') closePanel(); else openPanel();
+      });
+      closeBtn.addEventListener('click', closePanel);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && container.getAttribute('data-open') === 'true') closePanel();
+      });
     })();
   </script>
 </body>
