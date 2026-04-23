@@ -27,7 +27,7 @@ _Język(i), framework(i), baza danych, kluczowe biblioteki — uzupełnij, gdy z
 ## Czego NIE robić
 
 - Nie dodawać zależności bez zgody.
-- Nie pushować na `main` bez PR (gdy zdalne repo powstanie).
+- Nie pushować na `main` bez PR. Wyjątek: jednorazowy bootstrap push do nowo utworzonego (pustego) zdalnego repo — żeby zainicjalizować jego historię. Wszystkie kolejne zmiany przez PR.
 - Nie zapisywać sekretów w repo — używać `.env` (ignorowany).
 
 ## Struktura
