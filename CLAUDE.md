@@ -27,7 +27,9 @@ _Język(i), framework(i), baza danych, kluczowe biblioteki — uzupełnij, gdy z
 ## Czego NIE robić
 
 - Nie dodawać zależności bez zgody.
-- Nie pushować na `main` bez PR. Wyjątek: jednorazowy bootstrap push do nowo utworzonego (pustego) zdalnego repo — żeby zainicjalizować jego historię. Wszystkie kolejne zmiany przez PR.
+- Nie pushować na `main` bezpośrednio. Zmiany idą zawsze przez Pull Request.
+- Claude może **samodzielnie mergować PR-y które sam otworzył** (squash merge + delete branch). Dzięki temu user nie musi klikać "Merge" przy każdej zmianie. Historia PR-ów na GitHubie stanowi audit trail — zawsze można przejrzeć co się zmieniło.
+- Wyjątek od zakazu direct push: jednorazowy bootstrap push do nowo utworzonego (pustego) zdalnego repo — żeby zainicjalizować jego historię.
 - Nie zapisywać sekretów w repo — używać `.env` (ignorowany).
 
 ## Struktura
