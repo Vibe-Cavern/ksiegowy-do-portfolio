@@ -1077,6 +1077,33 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
+    .footer__social {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .footer__social a {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    }
+    .footer__social a:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .footer__social svg {
+      width: 18px;
+      height: 18px;
+    }
     .footer h5 {
       font-family: var(--font-sans);
       font-size: 0.85rem;
@@ -1561,6 +1588,14 @@
         <line x1="19" y1="12" x2="5" y2="12"/>
         <polyline points="12 19 5 12 12 5"/>
       </symbol>
+      <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/>
+      </symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </symbol>
       <symbol id="i-cursor" viewBox="0 0 24 24">
         <path d="M5 3 L5 21 L10 16 L13 21.5 L15.5 20.2 L12.8 15 L18 15 Z"
               fill="#0F2847" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
@@ -2006,6 +2041,14 @@
           </a>
           <p>Biuro rachunkowe dla małych i średnich firm. Księgowość, kadry, doradztwo — wszystko w jednym miejscu.</p>
           <p class="footer__meta">NIP 000-00-00-000 · REGON 000000000</p>
+          <div class="footer__social" aria-label="Social media">
+            <a href="#" aria-label="Facebook" rel="noopener noreferrer">
+              <svg aria-hidden="true"><use href="#i-facebook"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" rel="noopener noreferrer">
+              <svg aria-hidden="true"><use href="#i-instagram"/></svg>
+            </a>
+          </div>
         </div>
         <div>
           <h5>Nawigacja</h5>
