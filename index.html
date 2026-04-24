@@ -245,17 +245,19 @@
     .nav__link {
       color: var(--text);
       font-size: 1.05rem;
-      padding: 0.6rem 1rem;
+      padding: 0.6rem 0.9rem;
       border-radius: var(--radius);
       font-weight: 500;
-      background: color-mix(in srgb, var(--accent) 80%, transparent);
-      border: 1px solid color-mix(in srgb, var(--accent) 90%, transparent);
+      background: transparent;
+      border: 1px solid transparent;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
     }
-    .nav__link:hover {
+    .nav__link:hover,
+    .nav__link:focus-visible {
       color: var(--heading);
-      background: var(--accent);
-      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 26%, transparent);
     }
     .nav__cta-wrap {
       position: relative;
@@ -263,8 +265,8 @@
       margin-left: 0.75rem;
     }
     .nav__cta {
-      font-size: 1.24rem;
-      padding: 1.1rem 1.95rem;
+      font-size: 1.05rem;
+      padding: 0.65rem 1.1rem;
       animation: cta-pulse 6s ease-in-out infinite;
       transform-origin: center;
       will-change: transform, box-shadow;
@@ -347,7 +349,7 @@
     [data-theme="light"] .theme-toggle__sun,
     :root:not([data-theme="dark"]) .theme-toggle__sun { display: none; }
     [data-theme="dark"] .theme-toggle__moon { display: none; }
-    @media (max-width: 900px) {
+    @media (max-width: 1024px) {
       .nav__links,
       .nav__cta-wrap { display: none; }
       .nav__cta { animation: none; }
@@ -492,6 +494,7 @@
       body.nav-open .nav__menu .nav__links > li:nth-child(4) .nav__link { transition-delay: 0.20s, 0.20s, 0s, 0s, 0s; }
       body.nav-open .nav__menu .nav__links > li:nth-child(5) .nav__link { transition-delay: 0.24s, 0.24s, 0s, 0s, 0s; }
       body.nav-open .nav__menu .nav__links > li:nth-child(6) .nav__link { transition-delay: 0.28s, 0.28s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(7) .nav__link { transition-delay: 0.32s, 0.32s, 0s, 0s, 0s; }
 
       .nav__menu .nav__link:hover,
       .nav__menu .nav__link:focus-visible {
@@ -939,8 +942,338 @@
     .faq__body p { margin: 0; }
 
     /* ============================================================
+       CALCULATOR
+       ============================================================ */
+    .calc {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) { .calc { grid-template-columns: 1fr; padding: 1.5rem; gap: 1.5rem; } }
+    .calc__form { display: flex; flex-direction: column; gap: 1.4rem; }
+    .calc__group { display: flex; flex-direction: column; }
+    .calc__label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--heading);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+    }
+    .calc__options {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .calc__option {
+      position: relative;
+      cursor: pointer;
+      flex: 1 1 auto;
+      min-width: fit-content;
+    }
+    .calc__option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .calc__option span {
+      display: block;
+      padding: 0.7rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 0.92rem;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .calc__option span em {
+      font-style: normal;
+      color: var(--accent);
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.85em;
+    }
+    .calc__option input:checked + span {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--heading);
+      font-weight: 600;
+    }
+    .calc__option input:focus-visible + span {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .calc__options--checkbox .calc__option { flex: 1 1 100%; }
+    .calc__options--checkbox .calc__option span { text-align: left; }
+
+    .calc__result {
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      text-align: center;
+      border: 1px solid var(--border);
+      align-self: start;
+      position: sticky;
+      top: calc(var(--nav-h) + 1rem);
+    }
+    @media (max-width: 900px) { .calc__result { position: static; } }
+    .calc__price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 80px;
+    }
+    .calc__price-from { color: var(--muted); font-size: 1rem; }
+    .calc__price-value {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--heading);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .calc__price-unit {
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      align-items: flex-start;
+    }
+    .calc__price-unit small { font-size: 0.8rem; }
+    .calc__price--custom .calc__price-from,
+    .calc__price--custom .calc__price-unit { display: none; }
+    .calc__price--custom .calc__price-value {
+      font-size: 1.3rem;
+      font-family: var(--font-sans);
+      line-height: 1.3;
+      color: var(--heading);
+    }
+    .calc__package {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 0;
+      min-height: 2.5em;
+    }
+    .calc__package strong { color: var(--heading); }
+    .calc__cta { width: 100%; }
+    .calc__note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* ============================================================
+       TIMELINE
+       ============================================================ */
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 820px;
+      position: relative;
+      counter-reset: timeline;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 32px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        var(--accent) 0%,
+        var(--accent) 20%,
+        var(--border) 100%
+      );
+    }
+    .timeline__item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 1.5rem;
+      padding: 0.75rem 0 2rem;
+      position: relative;
+      align-items: start;
+    }
+    .timeline__item:last-child { padding-bottom: 0; }
+    .timeline__num {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.15rem;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 4px var(--bg);
+    }
+    .timeline__body {
+      padding-top: 0.6rem;
+    }
+    .timeline__body h3 {
+      margin: 0 0 0.5rem;
+      color: var(--heading);
+    }
+    .timeline__body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .timeline__cta {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 560px) {
+      .timeline::before { left: 24px; }
+      .timeline__item {
+        grid-template-columns: 52px 1fr;
+        gap: 1rem;
+        padding-bottom: 1.75rem;
+      }
+      .timeline__num {
+        width: 48px;
+        height: 48px;
+        font-size: 0.95rem;
+      }
+      .timeline__body { padding-top: 0.4rem; }
+    }
+
+    /* ============================================================
        CONTACT
        ============================================================ */
+    .contact__choice {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 700px) {
+      .contact__choice { grid-template-columns: 1fr; }
+    }
+    .contact__choice-btn {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.5rem 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--heading);
+      text-decoration: none;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact__choice-btn:hover,
+    .contact__choice-btn:focus-visible {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: var(--shadow-lg);
+    }
+    .contact__choice-icon {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: var(--heading);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contact__choice-btn--call .contact__choice-icon {
+      background: var(--accent);
+      color: var(--heading);
+    }
+    .contact__choice-icon svg { width: 26px; height: 26px; }
+    .contact__choice-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+    .contact__choice-body strong {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact__choice-big {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--heading);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .contact__choice-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .contact__map {
+      margin-bottom: 2.5rem;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      background: var(--card);
+    }
+    .contact__map iframe {
+      display: block;
+      width: 100%;
+      height: 340px;
+      border: 0;
+    }
+    .contact__map-link {
+      display: block;
+      text-align: center;
+      padding: 0.6rem 1rem;
+      background: var(--card);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .contact__map-link:hover {
+      background: var(--accent-soft);
+      color: var(--heading);
+    }
+    @media (max-width: 560px) {
+      .contact__map iframe { height: 260px; }
+    }
     .contact__grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -1076,6 +1409,33 @@
       font-size: 0.85rem;
       color: var(--muted);
     }
+    .footer__social {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .footer__social a {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    }
+    .footer__social a:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .footer__social svg {
+      width: 18px;
+      height: 18px;
+    }
     .footer h5 {
       font-family: var(--font-sans);
       font-size: 0.85rem;
@@ -1125,10 +1485,24 @@
       transform: translateY(0);
     }
 
-    /* Small screens nav tweaks */
-    @media (max-width: 420px) {
-      .logo__name { display: none; }
-      .logo__name-short { display: inline; }
+    /* Small screens nav tweaks — logo zawsze pokazuje pełną nazwę "Kowalski & Partnerzy",
+       po prostu zmniejsza się proporcjonalnie na ciasnych ekranach */
+    .logo__name-short { display: none; }
+    @media (max-width: 560px) {
+      .logo {
+        font-size: 1.1rem;
+        gap: 0.55rem;
+      }
+      .logo__mark {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+      }
+    }
+    @media (max-width: 400px) {
+      .logo { font-size: 1rem; }
+      .logo__mark { width: 32px; height: 32px; font-size: 0.85rem; }
     }
 
     /* ============================================================
@@ -1560,6 +1934,14 @@
         <line x1="19" y1="12" x2="5" y2="12"/>
         <polyline points="12 19 5 12 12 5"/>
       </symbol>
+      <symbol id="i-facebook" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07z"/>
+      </symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </symbol>
       <symbol id="i-cursor" viewBox="0 0 24 24">
         <path d="M5 3 L5 21 L10 16 L13 21.5 L15.5 20.2 L12.8 15 L18 15 Z"
               fill="#0F2847" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
@@ -1605,6 +1987,7 @@
           <li><a class="nav__link" href="#uslugi">Usługi</a></li>
           <li><a class="nav__link" href="#o-nas">O nas</a></li>
           <li><a class="nav__link" href="#cennik">Cennik</a></li>
+          <li><a class="nav__link" href="#jak-zaczynamy">Jak zaczynamy</a></li>
           <li><a class="nav__link" href="#faq">FAQ</a></li>
           <li><a class="nav__link" href="#kontakt">Kontakt</a></li>
         </ul>
@@ -1919,6 +2302,165 @@
     </section>
 
     <!-- ============================================================
+         CALCULATOR — Szacunkowa cena obsługi
+         ============================================================ -->
+    <section class="section" id="kalkulator" aria-labelledby="kalkulator-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Kalkulator</span>
+          <h2 id="kalkulator-title">Policz szacunkowy koszt obsługi</h2>
+          <p>Wypełnij formularz — otrzymasz szacunkową miesięczną cenę. Dokładna oferta po bezpłatnej konsultacji.</p>
+        </div>
+
+        <div class="calc reveal">
+          <form class="calc__form" id="calcForm" novalidate>
+            <div class="calc__group">
+              <label class="calc__label">Typ firmy</label>
+              <div class="calc__options">
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="jdg" checked>
+                  <span>JDG</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="partnership">
+                  <span>Spółka cywilna</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="llc">
+                  <span>Sp. z o.o.</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Forma opodatkowania</label>
+              <div class="calc__options" id="calc-tax-options">
+                <label class="calc__option">
+                  <input type="radio" name="tax-form" value="kpir" checked>
+                  <span>KPiR</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="tax-form" value="ryczalt">
+                  <span>Ryczałt</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Liczba pracowników</label>
+              <div class="calc__options">
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="0" checked>
+                  <span>0</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="1-5">
+                  <span>1–5</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="6-10">
+                  <span>6–10</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="11+">
+                  <span>11+</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Dodatkowe usługi (opcjonalnie)</label>
+              <div class="calc__options calc__options--checkbox">
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="doradztwo">
+                  <span>Doradztwo podatkowe <em>+100 zł</em></span>
+                </label>
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="ksef">
+                  <span>Obsługa KSeF <em>+80 zł</em></span>
+                </label>
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="kadry">
+                  <span>Rozszerzona obsługa kadrowa <em>+150 zł</em></span>
+                </label>
+              </div>
+            </div>
+          </form>
+
+          <aside class="calc__result">
+            <div class="calc__price" id="calcPriceWrap">
+              <span class="calc__price-from">od</span>
+              <span class="calc__price-value" id="calcPrice">249</span>
+              <span class="calc__price-unit">zł/mies<small>netto</small></span>
+            </div>
+            <p class="calc__package" id="calcPackage">Zbliżone do pakietu <strong>Samozatrudniony</strong></p>
+            <a class="btn btn--primary calc__cta" href="#kontakt">
+              Umów dokładną wycenę
+              <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+            <p class="calc__note">To szacunkowa cena startowa. Dokładna oferta po konsultacji uwzględnia specyfikę Twojej firmy i branży.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         TIMELINE — "Jak zaczynamy współpracę"
+         ============================================================ -->
+    <section class="section" id="jak-zaczynamy" aria-labelledby="timeline-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Proces</span>
+          <h2 id="timeline-title">Jak zaczynamy współpracę</h2>
+          <p>Pięć prostych kroków od pierwszej rozmowy do pełnej, comiesięcznej obsługi. Bez niespodzianek i długich procedur.</p>
+        </div>
+        <ol class="timeline">
+          <li class="timeline__item reveal">
+            <div class="timeline__num">01</div>
+            <div class="timeline__body">
+              <h3>Bezpłatna konsultacja</h3>
+              <p>15–30 minut rozmowy — poznajemy Twoją firmę, pytania i obecną sytuację księgową. Online lub u nas, jak Ci wygodniej.</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__num">02</div>
+            <div class="timeline__body">
+              <h3>Analiza i oferta</h3>
+              <p>Przeglądamy dotychczasową dokumentację, oceniamy zakres. Dostajesz indywidualną ofertę z jasną ceną — bez ukrytych kosztów.</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__num">03</div>
+            <div class="timeline__body">
+              <h3>Przejęcie dokumentacji</h3>
+              <p>Podpisujemy umowę i pełnomocnictwa elektronicznie. Odbieramy dokumenty od poprzedniego biura. Zajmuje 2–3 dni robocze.</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__num">04</div>
+            <div class="timeline__body">
+              <h3>Setup i onboarding</h3>
+              <p>Konfigurujemy panel klienta, dajemy dostęp do dedykowanego opiekuna, tłumaczymy jak przesyłać dokumenty online (KSeF, skany, wiadomości).</p>
+            </div>
+          </li>
+          <li class="timeline__item reveal">
+            <div class="timeline__num">05</div>
+            <div class="timeline__body">
+              <h3>Comiesięczna współpraca</h3>
+              <p>Do 5. dnia miesiąca wysyłasz nam dokumenty — my księgujemy, składamy deklaracje, informujemy o terminach. Ty skupiasz się na biznesie.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="timeline__cta reveal">
+          <a class="btn btn--primary" href="#kontakt">
+            Umów bezpłatną konsultację
+            <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
          CONTACT
          ============================================================ -->
     <section class="section" id="kontakt" aria-labelledby="kontakt-title">
@@ -1928,7 +2470,44 @@
           <h2 id="kontakt-title">Porozmawiajmy</h2>
           <p>Bezpłatna konsultacja. Odpowiadamy w ciągu 24 godzin.</p>
         </div>
-        <div class="contact__grid">
+        <div class="contact__choice reveal">
+          <a href="tel:+48221234567" class="contact__choice-btn contact__choice-btn--call">
+            <span class="contact__choice-icon" aria-hidden="true">
+              <svg><use href="#i-phone"/></svg>
+            </span>
+            <span class="contact__choice-body">
+              <strong>Zadzwoń do nas</strong>
+              <span class="contact__choice-big">+48 22 123 45 67</span>
+              <span class="contact__choice-hint">Pn–Pt 8:00–17:00 · odpowiemy od razu</span>
+            </span>
+          </a>
+          <a href="#kontakt-form" class="contact__choice-btn contact__choice-btn--message" id="contactChoiceMessage">
+            <span class="contact__choice-icon" aria-hidden="true">
+              <svg><use href="#i-mail"/></svg>
+            </span>
+            <span class="contact__choice-body">
+              <strong>Napisz wiadomość</strong>
+              <span class="contact__choice-big">Formularz poniżej</span>
+              <span class="contact__choice-hint">Odpowiemy w ciągu 24h</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="contact__map reveal" aria-label="Mapa z lokalizacją biura">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=20.9900%2C52.2260%2C21.0220%2C52.2400&amp;layer=mapnik&amp;marker=52.2330%2C21.0060"
+            title="Biuro Rachunkowe Kowalski &amp; Partnerzy — ul. Przykładowa 12, 00-001 Warszawa"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <a
+            class="contact__map-link"
+            href="https://www.openstreetmap.org/?mlat=52.2330&amp;mlon=21.0060#map=16/52.2330/21.0060"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Otwórz w większej mapie →</a>
+        </div>
+        <div class="contact__grid" id="kontakt-form">
           <!-- DEMO: Formularz nie wysyła realnie. Do podpięcia: endpoint Formspree, Getform, własny backend. -->
           <form class="form reveal" id="contactForm" novalidate>
             <div class="form__row">
@@ -2005,6 +2584,14 @@
           </a>
           <p>Biuro rachunkowe dla małych i średnich firm. Księgowość, kadry, doradztwo — wszystko w jednym miejscu.</p>
           <p class="footer__meta">NIP 000-00-00-000 · REGON 000000000</p>
+          <div class="footer__social" aria-label="Social media">
+            <a href="#" aria-label="Facebook" rel="noopener noreferrer">
+              <svg aria-hidden="true"><use href="#i-facebook"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" rel="noopener noreferrer">
+              <svg aria-hidden="true"><use href="#i-instagram"/></svg>
+            </a>
+          </div>
         </div>
         <div>
           <h5>Nawigacja</h5>
@@ -2113,8 +2700,8 @@
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && body.classList.contains('nav-open')) setOpen(false);
       });
-      // Close on nav link click (mobile)
-      document.querySelectorAll('.nav__links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+      // Close on ANY link click inside menu (mobile) — links, CTA, logo header
+      document.querySelectorAll('.nav__menu a').forEach(a => a.addEventListener('click', () => setOpen(false)));
       // Close on menu header close button (mobile, full-screen menu)
       const closeBtn = document.getElementById('navClose');
       if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
@@ -2174,6 +2761,131 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       reveals.forEach(el => io.observe(el));
+    })();
+
+    // ============================================================
+    // CALCULATOR — szacunkowy koszt obsługi księgowej
+    // Ceny demo (plausible dla rynku PL, do dostosowania w realu)
+    // ============================================================
+    (function () {
+      const form = document.getElementById('calcForm');
+      const priceEl = document.getElementById('calcPrice');
+      const priceWrap = document.getElementById('calcPriceWrap');
+      const packageEl = document.getElementById('calcPackage');
+      const taxOptions = document.getElementById('calc-tax-options');
+      if (!form || !priceEl) return;
+
+      const PRICES = {
+        jdg: {
+          kpir:    { '0': 249, '1-5': 399, '6-10': 599 },
+          ryczalt: { '0': 199, '1-5': 329, '6-10': 529 }
+        },
+        partnership: {
+          kpir:    { '0': 299, '1-5': 449, '6-10': 649 },
+          ryczalt: { '0': 249, '1-5': 379, '6-10': 579 }
+        },
+        llc: {
+          pelna:   { '0': 699, '1-5': 899, '6-10': 1299 }
+        }
+      };
+      const ADDONS = { doradztwo: 100, ksef: 80, kadry: 150 };
+
+      function make(tag, opts) {
+        opts = opts || {};
+        const n = document.createElement(tag);
+        if (opts.class) n.className = opts.class;
+        if (opts.text !== undefined) n.textContent = opts.text;
+        if (opts.attrs) for (const k in opts.attrs) n.setAttribute(k, opts.attrs[k]);
+        if (opts.children) opts.children.forEach(c => { if (c) n.appendChild(c); });
+        return n;
+      }
+
+      function packageFor(price) {
+        if (price <= 349) return 'Samozatrudniony';
+        if (price <= 699) return 'Mała firma';
+        return 'Spółka z o.o.';
+      }
+
+      function readState() {
+        const fd = new FormData(form);
+        return {
+          companyType: fd.get('company-type'),
+          taxForm: fd.get('tax-form') || 'pelna',
+          employees: fd.get('employees'),
+          addons: fd.getAll('addons')
+        };
+      }
+
+      function buildTaxOptions(companyType) {
+        while (taxOptions.firstChild) taxOptions.removeChild(taxOptions.firstChild);
+        const options = companyType === 'llc'
+          ? [{ value: 'pelna', label: 'Pełna księgowość', checked: true, note: '(wymagana dla sp. z o.o.)' }]
+          : [
+              { value: 'kpir',    label: 'KPiR',    checked: true },
+              { value: 'ryczalt', label: 'Ryczałt', checked: false }
+            ];
+        options.forEach(opt => {
+          const input = make('input', { attrs: Object.assign(
+            { type: 'radio', name: 'tax-form', value: opt.value },
+            opt.checked ? { checked: 'checked' } : {}
+          )});
+          const span = make('span', { text: opt.label });
+          if (opt.note) {
+            const em = make('em', { text: ' ' + opt.note });
+            span.appendChild(em);
+          }
+          const label = make('label', {
+            class: 'calc__option',
+            children: [input, span]
+          });
+          input.addEventListener('change', update);
+          taxOptions.appendChild(label);
+        });
+      }
+
+      function update() {
+        const { companyType, taxForm, employees, addons } = readState();
+
+        // Special case: 11+ employees → indywidualna wycena
+        if (employees === '11+') {
+          priceWrap.classList.add('calc__price--custom');
+          priceEl.textContent = 'Wycena indywidualna';
+          while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
+          packageEl.appendChild(document.createTextNode('Przy większym zespole przygotowujemy '));
+          packageEl.appendChild(make('strong', { text: 'dedykowaną ofertę' }));
+          packageEl.appendChild(document.createTextNode('.'));
+          return;
+        }
+        priceWrap.classList.remove('calc__price--custom');
+
+        const basePrice = PRICES[companyType] && PRICES[companyType][taxForm] && PRICES[companyType][taxForm][employees];
+        if (basePrice === undefined) {
+          priceEl.textContent = '—';
+          packageEl.textContent = 'Wybierz konfigurację';
+          return;
+        }
+
+        const addonsSum = addons.reduce((sum, a) => sum + (ADDONS[a] || 0), 0);
+        const total = basePrice + addonsSum;
+
+        priceEl.textContent = total.toLocaleString('pl-PL');
+        while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
+        packageEl.appendChild(document.createTextNode('Zbliżone do pakietu '));
+        packageEl.appendChild(make('strong', { text: packageFor(total) }));
+      }
+
+      // Rebuild tax options when company type changes
+      form.querySelectorAll('input[name="company-type"]').forEach(r => {
+        r.addEventListener('change', (e) => {
+          buildTaxOptions(e.target.value);
+          update();
+        });
+      });
+
+      // General change listener
+      form.addEventListener('change', update);
+
+      update();
     })();
 
     // ============================================================
