@@ -1168,6 +1168,77 @@
     /* ============================================================
        CONTACT
        ============================================================ */
+    .contact__choice {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    @media (max-width: 700px) {
+      .contact__choice { grid-template-columns: 1fr; }
+    }
+    .contact__choice-btn {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      padding: 1.5rem 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--heading);
+      text-decoration: none;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact__choice-btn:hover,
+    .contact__choice-btn:focus-visible {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: var(--shadow-lg);
+    }
+    .contact__choice-icon {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: var(--heading);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contact__choice-btn--call .contact__choice-icon {
+      background: var(--accent);
+      color: var(--heading);
+    }
+    .contact__choice-icon svg { width: 26px; height: 26px; }
+    .contact__choice-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+    }
+    .contact__choice-body strong {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .contact__choice-big {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      color: var(--heading);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .contact__choice-hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
     .contact__map {
       margin-bottom: 2.5rem;
       border-radius: var(--radius-lg);
@@ -1413,10 +1484,24 @@
       transform: translateY(0);
     }
 
-    /* Small screens nav tweaks */
-    @media (max-width: 420px) {
-      .logo__name { display: none; }
-      .logo__name-short { display: inline; }
+    /* Small screens nav tweaks — logo zawsze pokazuje pełną nazwę "Kowalski & Partnerzy",
+       po prostu zmniejsza się proporcjonalnie na ciasnych ekranach */
+    .logo__name-short { display: none; }
+    @media (max-width: 560px) {
+      .logo {
+        font-size: 1.1rem;
+        gap: 0.55rem;
+      }
+      .logo__mark {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+      }
+    }
+    @media (max-width: 400px) {
+      .logo { font-size: 1rem; }
+      .logo__mark { width: 32px; height: 32px; font-size: 0.85rem; }
     }
 
     /* ============================================================
@@ -2384,6 +2469,29 @@
           <h2 id="kontakt-title">Porozmawiajmy</h2>
           <p>Bezpłatna konsultacja. Odpowiadamy w ciągu 24 godzin.</p>
         </div>
+        <div class="contact__choice reveal">
+          <a href="tel:+48221234567" class="contact__choice-btn contact__choice-btn--call">
+            <span class="contact__choice-icon" aria-hidden="true">
+              <svg><use href="#i-phone"/></svg>
+            </span>
+            <span class="contact__choice-body">
+              <strong>Zadzwoń do nas</strong>
+              <span class="contact__choice-big">+48 22 123 45 67</span>
+              <span class="contact__choice-hint">Pn–Pt 8:00–17:00 · odpowiemy od razu</span>
+            </span>
+          </a>
+          <a href="#kontakt-form" class="contact__choice-btn contact__choice-btn--message" id="contactChoiceMessage">
+            <span class="contact__choice-icon" aria-hidden="true">
+              <svg><use href="#i-mail"/></svg>
+            </span>
+            <span class="contact__choice-body">
+              <strong>Napisz wiadomość</strong>
+              <span class="contact__choice-big">Formularz poniżej</span>
+              <span class="contact__choice-hint">Odpowiemy w ciągu 24h</span>
+            </span>
+          </a>
+        </div>
+
         <div class="contact__map reveal" aria-label="Mapa z lokalizacją biura">
           <iframe
             src="https://www.openstreetmap.org/export/embed.html?bbox=20.9900%2C52.2260%2C21.0220%2C52.2400&amp;layer=mapnik&amp;marker=52.2330%2C21.0060"
@@ -2398,7 +2506,7 @@
             rel="noopener noreferrer"
           >Otwórz w większej mapie →</a>
         </div>
-        <div class="contact__grid">
+        <div class="contact__grid" id="kontakt-form">
           <!-- DEMO: Formularz nie wysyła realnie. Do podpięcia: endpoint Formspree, Getform, własny backend. -->
           <form class="form reveal" id="contactForm" novalidate>
             <div class="form__row">
@@ -2591,8 +2699,8 @@
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && body.classList.contains('nav-open')) setOpen(false);
       });
-      // Close on nav link click (mobile)
-      document.querySelectorAll('.nav__links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+      // Close on ANY link click inside menu (mobile) — links, CTA, logo header
+      document.querySelectorAll('.nav__menu a').forEach(a => a.addEventListener('click', () => setOpen(false)));
       // Close on menu header close button (mobile, full-screen menu)
       const closeBtn = document.getElementById('navClose');
       if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
