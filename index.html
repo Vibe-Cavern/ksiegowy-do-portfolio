@@ -353,7 +353,7 @@
       .nav__cta { animation: none; }
       .nav__toggle { display: inline-flex; }
 
-      /* Full-screen fade-in menu */
+      /* Full-screen menu — unfolds from hamburger (top-right origin) */
       .nav__menu {
         position: fixed;
         inset: 0;
@@ -366,9 +366,10 @@
         overflow-y: auto;
         z-index: 100;
         opacity: 0;
-        transform: scale(0.98);
+        transform: scale(0.92);
+        transform-origin: top right;
         visibility: hidden;
-        transition: opacity 0.28s ease-out, transform 0.28s ease-out, visibility 0.28s;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
       }
       body.nav-open .nav__menu {
         opacity: 1;
@@ -469,14 +470,72 @@
         text-align: left;
         letter-spacing: -0.015em;
         line-height: 1.1;
-        transition: color 0.15s, padding-left 0.2s;
         display: block;
+        /* Initial state for staircase reveal */
+        opacity: 0;
+        transform: translateX(-12px);
+        transition:
+          opacity 0.3s ease-out,
+          transform 0.3s ease-out,
+          color 0.15s,
+          padding-left 0.2s,
+          background 0.15s;
       }
+      body.nav-open .nav__menu .nav__link {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      /* Stagger reveal — each link appears with small delay */
+      body.nav-open .nav__menu .nav__links > li:nth-child(1) .nav__link { transition-delay: 0.08s, 0.08s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(2) .nav__link { transition-delay: 0.12s, 0.12s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(3) .nav__link { transition-delay: 0.16s, 0.16s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(4) .nav__link { transition-delay: 0.20s, 0.20s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(5) .nav__link { transition-delay: 0.24s, 0.24s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(6) .nav__link { transition-delay: 0.28s, 0.28s, 0s, 0s, 0s; }
+
       .nav__menu .nav__link:hover,
       .nav__menu .nav__link:focus-visible {
         background: transparent;
         color: var(--accent);
         padding-left: 0.5rem;
+      }
+
+      /* Active link — subtle pill background + gold dot */
+      .nav__menu .nav__link--active {
+        position: relative;
+        background: color-mix(in srgb, var(--heading) 7%, transparent);
+        padding: 1rem 3rem 1rem 1rem;
+        border-radius: 14px;
+      }
+      .nav__menu .nav__link--active:hover,
+      .nav__menu .nav__link--active:focus-visible {
+        padding-left: 1rem;
+        background: color-mix(in srgb, var(--heading) 9%, transparent);
+        color: var(--heading);
+      }
+      .nav__menu .nav__link--active::after {
+        content: "";
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      /* Reduced motion: disable stagger, skip scale animation */
+      @media (prefers-reduced-motion: reduce) {
+        .nav__menu {
+          transform: none !important;
+          transition: opacity 0.15s, visibility 0.15s !important;
+        }
+        .nav__menu .nav__link {
+          opacity: 1 !important;
+          transform: none !important;
+          transition-delay: 0s !important;
+        }
       }
 
       /* Footer: CTA + subtitle + contact info */
@@ -1542,7 +1601,7 @@
           </button>
         </div>
         <ul class="nav__links">
-          <li><a class="nav__link" href="#top">Start</a></li>
+          <li><a class="nav__link nav__link--active" href="#top">Start</a></li>
           <li><a class="nav__link" href="#uslugi">Usługi</a></li>
           <li><a class="nav__link" href="#o-nas">O nas</a></li>
           <li><a class="nav__link" href="#cennik">Cennik</a></li>
