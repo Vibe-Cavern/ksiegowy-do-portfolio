@@ -2303,7 +2303,7 @@
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Podstawowe doradztwo</li>
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Obsługa w 100% online</li>
             </ul>
-            <a class="btn btn--outline" href="#kontakt">Wybierz pakiet</a>
+            <a class="btn btn--outline plan__pick" href="#kontakt" data-package="Samozatrudniony">Wybierz pakiet</a>
           </article>
           <article class="plan plan--featured reveal">
             <span class="plan__badge">Najpopularniejszy</span>
@@ -2319,7 +2319,7 @@
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Rozszerzone doradztwo</li>
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Dostęp do panelu klienta</li>
             </ul>
-            <a class="btn btn--primary" href="#kontakt">Wybierz pakiet</a>
+            <a class="btn btn--primary plan__pick" href="#kontakt" data-package="Mała firma">Wybierz pakiet</a>
           </article>
           <article class="plan reveal">
             <h3>Spółka z o.o.</h3>
@@ -2334,7 +2334,7 @@
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Dedykowany opiekun</li>
               <li><svg aria-hidden="true"><use href="#i-check"/></svg>Pełna obsługa kadrowa</li>
             </ul>
-            <a class="btn btn--outline" href="#kontakt">Wybierz pakiet</a>
+            <a class="btn btn--outline plan__pick" href="#kontakt" data-package="Spółka z o.o.">Wybierz pakiet</a>
           </article>
         </div>
         <p class="pricing__custom">
@@ -2995,6 +2995,52 @@
       form.addEventListener('change', update);
 
       update();
+    })();
+
+    // ============================================================
+    // PACKAGE PREFILL — klik w "Wybierz pakiet" w Cenniku zapamiętuje
+    // wybór, a klik w "Napisz wiadomość" automatycznie wypełnia treść
+    // wiadomości w formularzu kontaktowym.
+    // ============================================================
+    (function () {
+      const STORAGE_KEY = 'selectedPackage';
+      const MESSAGE_TPL = (pkg) =>
+        'Dzień dobry,\n\nJestem zainteresowany/a pakietem "' + pkg +
+        '". Proszę o kontakt w sprawie szczegółów oferty.\n\nPozdrawiam';
+
+      // 1) Save package name when user clicks "Wybierz pakiet" in Cennik
+      document.querySelectorAll('.plan__pick').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pkg = btn.dataset.package;
+          if (!pkg) return;
+          try { sessionStorage.setItem(STORAGE_KEY, pkg); } catch (e) {}
+        });
+      });
+
+      // 2) When user clicks "Napisz wiadomość" in contact choice → prefill
+      const messageBtn = document.getElementById('contactChoiceMessage');
+      const msgField = document.getElementById('f-msg');
+      if (messageBtn && msgField) {
+        messageBtn.addEventListener('click', () => {
+          let pkg = null;
+          try { pkg = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+          if (pkg && !msgField.value.trim()) {
+            msgField.value = MESSAGE_TPL(pkg);
+            // Flash border briefly so user sees the field got populated
+            msgField.style.transition = 'border-color 0.3s';
+            msgField.style.borderColor = 'var(--accent)';
+            setTimeout(() => { msgField.style.borderColor = ''; }, 900);
+          }
+        });
+      }
+
+      // 3) Clear storage after successful form submission
+      const contactForm = document.getElementById('contactForm');
+      if (contactForm) {
+        contactForm.addEventListener('submit', () => {
+          try { sessionStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        });
+      }
     })();
 
     // ============================================================
