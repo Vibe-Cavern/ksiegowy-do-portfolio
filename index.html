@@ -248,14 +248,15 @@
       padding: 0.6rem 1rem;
       border-radius: var(--radius);
       font-weight: 500;
-      background: color-mix(in srgb, var(--accent) 80%, transparent);
-      border: 1px solid color-mix(in srgb, var(--accent) 90%, transparent);
+      background: transparent;
+      border: 1px solid transparent;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
     }
-    .nav__link:hover {
+    .nav__link:hover,
+    .nav__link:focus-visible {
       color: var(--heading);
-      background: var(--accent);
-      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 26%, transparent);
     }
     .nav__cta-wrap {
       position: relative;
