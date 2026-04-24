@@ -317,6 +317,11 @@
       color: var(--heading);
     }
     .nav__toggle:hover { border-color: var(--accent); }
+    /* Mobile-only elements hidden on desktop (display: contents flattens nav__menu wrappers) */
+    .nav__menu-head,
+    .nav__cta-sub,
+    .nav__menu-contact { display: none; }
+    .nav__menu-footer { display: contents; }
     .theme-toggle {
       background: transparent;
       border: 1px solid var(--border);
@@ -347,41 +352,238 @@
       .nav__cta-wrap { display: none; }
       .nav__cta { animation: none; }
       .nav__toggle { display: inline-flex; }
-      body.nav-open .nav__menu {
-        transform: translateX(0);
-      }
+
+      /* Full-screen menu — unfolds from hamburger (top-right origin) */
       .nav__menu {
         position: fixed;
-        top: 0; right: 0;
-        width: min(360px, 100%);
+        inset: 0;
+        width: 100%;
         height: 100dvh;
         background: var(--bg);
-        box-shadow: -20px 0 60px rgba(0, 0, 0, 0.15);
-        padding: calc(var(--nav-h) + 1rem) 1.5rem 1.5rem;
-        transform: translateX(100%);
-        transition: transform 0.25s ease-out;
+        padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
         overflow-y: auto;
+        z-index: 100;
+        opacity: 0;
+        transform: scale(0.92);
+        transform-origin: top right;
+        visibility: hidden;
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
       }
-      .nav__menu .nav__links {
-        flex-direction: column;
-        align-items: stretch;
+      body.nav-open .nav__menu {
+        opacity: 1;
+        transform: scale(1);
+        visibility: visible;
+      }
+
+      /* Menu head: logo + close */
+      .nav__menu-head {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        padding-top: max(1.25rem, env(safe-area-inset-top));
+        flex-shrink: 0;
+      }
+      .nav__menu-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.85rem;
+        text-decoration: none;
+      }
+      .nav__menu-logo .logo__mark {
+        width: 48px;
+        height: 48px;
+        background: var(--heading);
+        color: var(--accent);
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-serif);
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+      .nav__menu-brand {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.15;
+      }
+      .nav__menu-brand strong {
+        font-family: var(--font-serif);
+        font-size: 1.15rem;
+        color: var(--heading);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .nav__menu-brand span {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        color: var(--accent);
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+      .nav__menu-close {
+        background: transparent;
+        border: 1px solid var(--border);
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: var(--heading);
+        padding: 0;
+        flex-shrink: 0;
+        transition: border-color 0.15s, color 0.15s, background 0.15s;
+      }
+      .nav__menu-close:hover,
+      .nav__menu-close:focus-visible {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-soft);
+      }
+      .nav__menu-close svg { width: 22px; height: 22px; }
+
+      /* Links: editorial serif, generous whitespace, no pills */
+      .nav__menu .nav__links {
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+        padding: 1rem 1.5rem;
+        gap: 0;
+        list-style: none;
+        margin: 0;
       }
       .nav__menu .nav__link {
-        padding: 0.85rem 1rem;
-        font-size: 1.05rem;
-      }
-      .nav__menu .nav__cta-wrap {
+        font-family: var(--font-serif);
+        font-size: clamp(1.75rem, 5vw, 2.25rem);
+        font-weight: 700;
+        color: var(--heading);
+        padding: 1rem 0;
+        background: transparent;
+        border: none;
+        text-align: left;
+        letter-spacing: -0.015em;
+        line-height: 1.1;
         display: block;
-        margin: 1rem 0 0;
+        /* Initial state for staircase reveal */
+        opacity: 0;
+        transform: translateX(-12px);
+        transition:
+          opacity 0.3s ease-out,
+          transform 0.3s ease-out,
+          color 0.15s,
+          padding-left 0.2s,
+          background 0.15s;
+      }
+      body.nav-open .nav__menu .nav__link {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      /* Stagger reveal — each link appears with small delay */
+      body.nav-open .nav__menu .nav__links > li:nth-child(1) .nav__link { transition-delay: 0.08s, 0.08s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(2) .nav__link { transition-delay: 0.12s, 0.12s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(3) .nav__link { transition-delay: 0.16s, 0.16s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(4) .nav__link { transition-delay: 0.20s, 0.20s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(5) .nav__link { transition-delay: 0.24s, 0.24s, 0s, 0s, 0s; }
+      body.nav-open .nav__menu .nav__links > li:nth-child(6) .nav__link { transition-delay: 0.28s, 0.28s, 0s, 0s, 0s; }
+
+      .nav__menu .nav__link:hover,
+      .nav__menu .nav__link:focus-visible {
+        background: transparent;
+        color: var(--accent);
+        padding-left: 0.5rem;
+      }
+
+      /* Active link — subtle pill background + gold dot */
+      .nav__menu .nav__link--active {
+        position: relative;
+        background: color-mix(in srgb, var(--heading) 7%, transparent);
+        padding: 1rem 3rem 1rem 1rem;
+        border-radius: 14px;
+      }
+      .nav__menu .nav__link--active:hover,
+      .nav__menu .nav__link--active:focus-visible {
+        padding-left: 1rem;
+        background: color-mix(in srgb, var(--heading) 9%, transparent);
+        color: var(--heading);
+      }
+      .nav__menu .nav__link--active::after {
+        content: "";
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      /* Reduced motion: disable stagger, skip scale animation */
+      @media (prefers-reduced-motion: reduce) {
+        .nav__menu {
+          transform: none !important;
+          transition: opacity 0.15s, visibility 0.15s !important;
+        }
+        .nav__menu .nav__link {
+          opacity: 1 !important;
+          transform: none !important;
+          transition-delay: 0s !important;
+        }
+      }
+
+      /* Footer: CTA + subtitle + contact info */
+      .nav__menu-footer {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        border-top: 1px solid var(--border);
+        flex-shrink: 0;
+        background: var(--card);
+      }
+      .nav__menu-footer .nav__cta-wrap {
+        display: block;
+        margin: 0;
         width: 100%;
       }
-      .nav__menu .nav__cta {
+      .nav__menu-footer .nav__cta {
         width: 100%;
+        justify-content: center;
+        font-size: 1.05rem;
+        padding: 0.95rem 1.5rem;
       }
+      .nav__cta-sub {
+        display: block;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.88rem;
+        margin: 0;
+      }
+      .nav__menu-contact {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 0.85rem;
+        margin-top: 0.35rem;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+      }
+      .nav__menu-contact a {
+        color: var(--heading);
+        font-size: 0.85rem;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav__menu-contact a:hover { color: var(--accent); }
     }
     @media (min-width: 901px) {
       .nav__menu { display: contents; }
@@ -1354,6 +1556,10 @@
         <line x1="5" y1="12" x2="19" y2="12"/>
         <polyline points="12 5 19 12 12 19"/>
       </symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </symbol>
       <symbol id="i-cursor" viewBox="0 0 24 24">
         <path d="M5 3 L5 21 L10 16 L13 21.5 L15.5 20.2 L12.8 15 L18 15 Z"
               fill="#0F2847" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
@@ -1382,16 +1588,36 @@
         <span class="logo__name-short">K&amp;P</span>
       </a>
       <nav class="nav__menu" aria-label="Główna nawigacja">
+        <div class="nav__menu-head">
+          <a href="#top" class="nav__menu-logo">
+            <span class="logo__mark" aria-hidden="true">KP</span>
+            <span class="nav__menu-brand">
+              <strong>Kowalski &amp; Partnerzy</strong>
+              <span>Biuro Rachunkowe</span>
+            </span>
+          </a>
+          <button class="nav__menu-close" id="navClose" type="button" aria-label="Zamknij menu">
+            <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+          </button>
+        </div>
         <ul class="nav__links">
+          <li><a class="nav__link nav__link--active" href="#top">Start</a></li>
           <li><a class="nav__link" href="#uslugi">Usługi</a></li>
           <li><a class="nav__link" href="#o-nas">O nas</a></li>
           <li><a class="nav__link" href="#cennik">Cennik</a></li>
           <li><a class="nav__link" href="#faq">FAQ</a></li>
           <li><a class="nav__link" href="#kontakt">Kontakt</a></li>
         </ul>
-        <div class="nav__cta-wrap">
-          <a class="btn btn--primary nav__cta" href="#kontakt">Umów konsultację</a>
-          <svg class="nav__cta-cursor" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cursor"/></svg>
+        <div class="nav__menu-footer">
+          <div class="nav__cta-wrap">
+            <a class="btn btn--primary nav__cta" href="#kontakt">Umów konsultację</a>
+            <svg class="nav__cta-cursor" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cursor"/></svg>
+          </div>
+          <p class="nav__cta-sub">Pierwsza konsultacja bezpłatna</p>
+          <div class="nav__menu-contact">
+            <a href="tel:+48221234567">+48 22 123 45 67</a>
+            <a href="mailto:kontakt@kowalski-partnerzy.pl">kontakt@kowalski-partnerzy.pl</a>
+          </div>
         </div>
       </nav>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Przełącz motyw jasny/ciemny" title="Przełącz motyw">
@@ -1889,6 +2115,9 @@
       });
       // Close on nav link click (mobile)
       document.querySelectorAll('.nav__links a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+      // Close on menu header close button (mobile, full-screen menu)
+      const closeBtn = document.getElementById('navClose');
+      if (closeBtn) closeBtn.addEventListener('click', () => setOpen(false));
     })();
 
     // ============================================================
