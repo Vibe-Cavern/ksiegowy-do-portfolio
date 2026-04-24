@@ -454,12 +454,14 @@
       }
       .nav__menu-close svg { width: 22px; height: 22px; }
 
-      /* Links: editorial serif, generous whitespace, no pills */
+      /* Links: editorial serif, generous whitespace, no pills.
+         flex: 0 0 auto (zamiast 1) — linki zajmuja naturalna wysokosc,
+         nie rozciagaja sie i nie spychaja CTA za nisko. */
       .nav__menu .nav__links {
-        flex: 1;
+        flex: 0 0 auto;
         flex-direction: column;
         display: flex;
-        padding: 1rem 1.5rem;
+        padding: 0.5rem 1.5rem 0.75rem;
         gap: 0;
         list-style: none;
         margin: 0;
@@ -549,9 +551,9 @@
       .nav__menu-footer {
         display: flex !important;
         flex-direction: column;
-        gap: 0.75rem;
-        padding: 1.25rem 1.5rem;
-        padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        gap: 0.6rem;
+        padding: 1rem 1.5rem;
+        padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
         border-top: 1px solid var(--border);
         flex-shrink: 0;
         background: var(--card);
@@ -1519,6 +1521,98 @@
       z-index: 60;
       font-family: var(--font-sans);
     }
+    .chatbot__teaser {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: min(300px, calc(100vw - 3rem));
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0.85rem 1rem;
+      box-shadow: 0 12px 32px rgba(15, 40, 71, 0.18);
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      transform-origin: bottom right;
+      transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+      cursor: pointer;
+      will-change: transform, opacity;
+    }
+    .chatbot__teaser.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .chatbot__teaser::after {
+      content: "";
+      position: absolute;
+      bottom: -7px;
+      right: 24px;
+      width: 14px;
+      height: 14px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transform: rotate(45deg);
+    }
+    .chatbot__teaser-close {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      border-radius: 6px;
+      font-family: inherit;
+      padding: 0;
+    }
+    .chatbot__teaser-close:hover {
+      background: var(--border);
+      color: var(--heading);
+    }
+    .chatbot__teaser-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding-right: 1.5rem;
+    }
+    .chatbot__teaser-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: var(--heading);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+    }
+    .chatbot__teaser-body strong {
+      display: block;
+      font-size: 0.92rem;
+      color: var(--heading);
+      margin-bottom: 0.2rem;
+    }
+    .chatbot__teaser-body p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .chatbot__teaser { transition: opacity 0.15s; transform: none !important; }
+    }
+
     .chatbot__fab {
       width: 60px;
       height: 60px;
@@ -2035,7 +2129,7 @@
               Bezpłatna konsultacja
               <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
             </a>
-            <a class="btn btn--outline" href="#cennik">Zobacz pakiety</a>
+            <a class="btn btn--outline" href="#kalkulator">Policz cenę</a>
           </div>
           <div class="hero__trust">
             <div class="hero__trust-item">
@@ -2500,17 +2594,17 @@
 
         <div class="contact__map reveal" aria-label="Mapa z lokalizacją biura">
           <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=20.9900%2C52.2260%2C21.0220%2C52.2400&amp;layer=mapnik&amp;marker=52.2330%2C21.0060"
+            src="https://maps.google.com/maps?q=52.2330,21.0060&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=&amp;output=embed"
             title="Biuro Rachunkowe Kowalski &amp; Partnerzy — ul. Przykładowa 12, 00-001 Warszawa"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
           <a
             class="contact__map-link"
-            href="https://www.openstreetmap.org/?mlat=52.2330&amp;mlon=21.0060#map=16/52.2330/21.0060"
+            href="https://www.google.com/maps/search/?api=1&amp;query=52.2330%2C21.0060"
             target="_blank"
             rel="noopener noreferrer"
-          >Otwórz w większej mapie →</a>
+          >Otwórz w Google Maps →</a>
         </div>
         <div class="contact__grid" id="kontakt-form">
           <!-- DEMO: Formularz nie wysyła realnie. Do podpięcia: endpoint Formspree, Getform, własny backend. -->
@@ -2635,6 +2729,16 @@
        FB Messenger API + WhatsApp Business API + SMTP na mail księgowego.
        ============================================================ -->
   <div class="chatbot" id="chatbot" data-open="false">
+    <div class="chatbot__teaser" id="chatbotTeaser" hidden>
+      <button class="chatbot__teaser-close" id="chatbotTeaserClose" type="button" aria-label="Zamknij powitanie">&times;</button>
+      <div class="chatbot__teaser-content">
+        <div class="chatbot__teaser-avatar" aria-hidden="true">KP</div>
+        <div class="chatbot__teaser-body">
+          <strong>Asystent K&amp;P</strong>
+          <p>Cześć! Pomogę z pytaniami o cennik, terminy, zmianę biura. Napisz, czego potrzebujesz →</p>
+        </div>
+      </div>
+    </div>
     <button class="chatbot__fab" id="chatbotFab" type="button" aria-label="Otwórz asystenta AI" aria-expanded="false">
       <svg class="chatbot__fab-icon chatbot__fab-icon--open" aria-hidden="true"><use href="#i-chat"/></svg>
       <svg class="chatbot__fab-icon chatbot__fab-icon--close" aria-hidden="true"><use href="#i-x"/></svg>
@@ -3149,6 +3253,50 @@
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && container.getAttribute('data-open') === 'true') closePanel();
       });
+
+      // ========= TEASER: dymek z Asystentem po 10s =========
+      const teaser = document.getElementById('chatbotTeaser');
+      const teaserClose = document.getElementById('chatbotTeaserClose');
+      if (teaser && teaserClose) {
+        const DISMISS_KEY = 'chatbotTeaserDismissed';
+        const DISMISS_HOURS = 24 * 7; // 7 dni "spokoju" po zamknięciu
+
+        function isDismissedRecently() {
+          try {
+            const ts = localStorage.getItem(DISMISS_KEY);
+            if (!ts) return false;
+            const hoursSince = (Date.now() - parseInt(ts, 10)) / (1000 * 60 * 60);
+            return hoursSince < DISMISS_HOURS;
+          } catch (e) { return false; }
+        }
+
+        function hideTeaser() {
+          teaser.classList.remove('show');
+          setTimeout(() => { teaser.hidden = true; }, 350);
+        }
+
+        function showTeaser() {
+          if (container.getAttribute('data-open') === 'true') return;
+          if (isDismissedRecently()) return;
+          teaser.hidden = false;
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => teaser.classList.add('show'));
+          });
+        }
+
+        setTimeout(showTeaser, 10000);
+
+        teaserClose.addEventListener('click', (e) => {
+          e.stopPropagation();
+          hideTeaser();
+          try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (err) {}
+        });
+
+        teaser.addEventListener('click', () => {
+          hideTeaser();
+          if (container.getAttribute('data-open') !== 'true') openPanel();
+        });
+      }
     })();
   </script>
 </body>
