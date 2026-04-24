@@ -942,6 +942,40 @@
     /* ============================================================
        CONTACT
        ============================================================ */
+    .contact__map {
+      margin-bottom: 2.5rem;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      background: var(--card);
+    }
+    .contact__map iframe {
+      display: block;
+      width: 100%;
+      height: 340px;
+      border: 0;
+    }
+    .contact__map-link {
+      display: block;
+      text-align: center;
+      padding: 0.6rem 1rem;
+      background: var(--card);
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-top: 1px solid var(--border);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .contact__map-link:hover {
+      background: var(--accent-soft);
+      color: var(--heading);
+    }
+    @media (max-width: 560px) {
+      .contact__map iframe { height: 260px; }
+    }
     .contact__grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -1963,6 +1997,20 @@
           <span class="eyebrow">Kontakt</span>
           <h2 id="kontakt-title">Porozmawiajmy</h2>
           <p>Bezpłatna konsultacja. Odpowiadamy w ciągu 24 godzin.</p>
+        </div>
+        <div class="contact__map reveal" aria-label="Mapa z lokalizacją biura">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=20.9900%2C52.2260%2C21.0220%2C52.2400&amp;layer=mapnik&amp;marker=52.2330%2C21.0060"
+            title="Biuro Rachunkowe Kowalski &amp; Partnerzy — ul. Przykładowa 12, 00-001 Warszawa"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <a
+            class="contact__map-link"
+            href="https://www.openstreetmap.org/?mlat=52.2330&amp;mlon=21.0060#map=16/52.2330/21.0060"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Otwórz w większej mapie →</a>
         </div>
         <div class="contact__grid">
           <!-- DEMO: Formularz nie wysyła realnie. Do podpięcia: endpoint Formspree, Getform, własny backend. -->
