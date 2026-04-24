@@ -941,6 +941,146 @@
     .faq__body p { margin: 0; }
 
     /* ============================================================
+       CALCULATOR
+       ============================================================ */
+    .calc {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) { .calc { grid-template-columns: 1fr; padding: 1.5rem; gap: 1.5rem; } }
+    .calc__form { display: flex; flex-direction: column; gap: 1.4rem; }
+    .calc__group { display: flex; flex-direction: column; }
+    .calc__label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--heading);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+    }
+    .calc__options {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .calc__option {
+      position: relative;
+      cursor: pointer;
+      flex: 1 1 auto;
+      min-width: fit-content;
+    }
+    .calc__option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .calc__option span {
+      display: block;
+      padding: 0.7rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      font-size: 0.92rem;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .calc__option span em {
+      font-style: normal;
+      color: var(--accent);
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.85em;
+    }
+    .calc__option input:checked + span {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--heading);
+      font-weight: 600;
+    }
+    .calc__option input:focus-visible + span {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .calc__options--checkbox .calc__option { flex: 1 1 100%; }
+    .calc__options--checkbox .calc__option span { text-align: left; }
+
+    .calc__result {
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      text-align: center;
+      border: 1px solid var(--border);
+      align-self: start;
+      position: sticky;
+      top: calc(var(--nav-h) + 1rem);
+    }
+    @media (max-width: 900px) { .calc__result { position: static; } }
+    .calc__price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 80px;
+    }
+    .calc__price-from { color: var(--muted); font-size: 1rem; }
+    .calc__price-value {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--heading);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .calc__price-unit {
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      align-items: flex-start;
+    }
+    .calc__price-unit small { font-size: 0.8rem; }
+    .calc__price--custom .calc__price-from,
+    .calc__price--custom .calc__price-unit { display: none; }
+    .calc__price--custom .calc__price-value {
+      font-size: 1.3rem;
+      font-family: var(--font-sans);
+      line-height: 1.3;
+      color: var(--heading);
+    }
+    .calc__package {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin: 0;
+      min-height: 2.5em;
+    }
+    .calc__package strong { color: var(--heading); }
+    .calc__cta { width: 100%; }
+    .calc__note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    /* ============================================================
        TIMELINE
        ============================================================ */
     .timeline {
@@ -2076,6 +2216,109 @@
     </section>
 
     <!-- ============================================================
+         CALCULATOR — Szacunkowa cena obsługi
+         ============================================================ -->
+    <section class="section" id="kalkulator" aria-labelledby="kalkulator-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Kalkulator</span>
+          <h2 id="kalkulator-title">Policz szacunkowy koszt obsługi</h2>
+          <p>Wypełnij formularz — otrzymasz szacunkową miesięczną cenę. Dokładna oferta po bezpłatnej konsultacji.</p>
+        </div>
+
+        <div class="calc reveal">
+          <form class="calc__form" id="calcForm" novalidate>
+            <div class="calc__group">
+              <label class="calc__label">Typ firmy</label>
+              <div class="calc__options">
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="jdg" checked>
+                  <span>JDG</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="partnership">
+                  <span>Spółka cywilna</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="company-type" value="llc">
+                  <span>Sp. z o.o.</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Forma opodatkowania</label>
+              <div class="calc__options" id="calc-tax-options">
+                <label class="calc__option">
+                  <input type="radio" name="tax-form" value="kpir" checked>
+                  <span>KPiR</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="tax-form" value="ryczalt">
+                  <span>Ryczałt</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Liczba pracowników</label>
+              <div class="calc__options">
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="0" checked>
+                  <span>0</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="1-5">
+                  <span>1–5</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="6-10">
+                  <span>6–10</span>
+                </label>
+                <label class="calc__option">
+                  <input type="radio" name="employees" value="11+">
+                  <span>11+</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="calc__group">
+              <label class="calc__label">Dodatkowe usługi (opcjonalnie)</label>
+              <div class="calc__options calc__options--checkbox">
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="doradztwo">
+                  <span>Doradztwo podatkowe <em>+100 zł</em></span>
+                </label>
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="ksef">
+                  <span>Obsługa KSeF <em>+80 zł</em></span>
+                </label>
+                <label class="calc__option">
+                  <input type="checkbox" name="addons" value="kadry">
+                  <span>Rozszerzona obsługa kadrowa <em>+150 zł</em></span>
+                </label>
+              </div>
+            </div>
+          </form>
+
+          <aside class="calc__result">
+            <div class="calc__price" id="calcPriceWrap">
+              <span class="calc__price-from">od</span>
+              <span class="calc__price-value" id="calcPrice">249</span>
+              <span class="calc__price-unit">zł/mies<small>netto</small></span>
+            </div>
+            <p class="calc__package" id="calcPackage">Zbliżone do pakietu <strong>Samozatrudniony</strong></p>
+            <a class="btn btn--primary calc__cta" href="#kontakt">
+              Umów dokładną wycenę
+              <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+            <p class="calc__note">To szacunkowa cena startowa. Dokładna oferta po konsultacji uwzględnia specyfikę Twojej firmy i branży.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
          TIMELINE — "Jak zaczynamy współpracę"
          ============================================================ -->
     <section class="section" id="jak-zaczynamy" aria-labelledby="timeline-title">
@@ -2409,6 +2652,131 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       reveals.forEach(el => io.observe(el));
+    })();
+
+    // ============================================================
+    // CALCULATOR — szacunkowy koszt obsługi księgowej
+    // Ceny demo (plausible dla rynku PL, do dostosowania w realu)
+    // ============================================================
+    (function () {
+      const form = document.getElementById('calcForm');
+      const priceEl = document.getElementById('calcPrice');
+      const priceWrap = document.getElementById('calcPriceWrap');
+      const packageEl = document.getElementById('calcPackage');
+      const taxOptions = document.getElementById('calc-tax-options');
+      if (!form || !priceEl) return;
+
+      const PRICES = {
+        jdg: {
+          kpir:    { '0': 249, '1-5': 399, '6-10': 599 },
+          ryczalt: { '0': 199, '1-5': 329, '6-10': 529 }
+        },
+        partnership: {
+          kpir:    { '0': 299, '1-5': 449, '6-10': 649 },
+          ryczalt: { '0': 249, '1-5': 379, '6-10': 579 }
+        },
+        llc: {
+          pelna:   { '0': 699, '1-5': 899, '6-10': 1299 }
+        }
+      };
+      const ADDONS = { doradztwo: 100, ksef: 80, kadry: 150 };
+
+      function make(tag, opts) {
+        opts = opts || {};
+        const n = document.createElement(tag);
+        if (opts.class) n.className = opts.class;
+        if (opts.text !== undefined) n.textContent = opts.text;
+        if (opts.attrs) for (const k in opts.attrs) n.setAttribute(k, opts.attrs[k]);
+        if (opts.children) opts.children.forEach(c => { if (c) n.appendChild(c); });
+        return n;
+      }
+
+      function packageFor(price) {
+        if (price <= 349) return 'Samozatrudniony';
+        if (price <= 699) return 'Mała firma';
+        return 'Spółka z o.o.';
+      }
+
+      function readState() {
+        const fd = new FormData(form);
+        return {
+          companyType: fd.get('company-type'),
+          taxForm: fd.get('tax-form') || 'pelna',
+          employees: fd.get('employees'),
+          addons: fd.getAll('addons')
+        };
+      }
+
+      function buildTaxOptions(companyType) {
+        while (taxOptions.firstChild) taxOptions.removeChild(taxOptions.firstChild);
+        const options = companyType === 'llc'
+          ? [{ value: 'pelna', label: 'Pełna księgowość', checked: true, note: '(wymagana dla sp. z o.o.)' }]
+          : [
+              { value: 'kpir',    label: 'KPiR',    checked: true },
+              { value: 'ryczalt', label: 'Ryczałt', checked: false }
+            ];
+        options.forEach(opt => {
+          const input = make('input', { attrs: Object.assign(
+            { type: 'radio', name: 'tax-form', value: opt.value },
+            opt.checked ? { checked: 'checked' } : {}
+          )});
+          const span = make('span', { text: opt.label });
+          if (opt.note) {
+            const em = make('em', { text: ' ' + opt.note });
+            span.appendChild(em);
+          }
+          const label = make('label', {
+            class: 'calc__option',
+            children: [input, span]
+          });
+          input.addEventListener('change', update);
+          taxOptions.appendChild(label);
+        });
+      }
+
+      function update() {
+        const { companyType, taxForm, employees, addons } = readState();
+
+        // Special case: 11+ employees → indywidualna wycena
+        if (employees === '11+') {
+          priceWrap.classList.add('calc__price--custom');
+          priceEl.textContent = 'Wycena indywidualna';
+          while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
+          packageEl.appendChild(document.createTextNode('Przy większym zespole przygotowujemy '));
+          packageEl.appendChild(make('strong', { text: 'dedykowaną ofertę' }));
+          packageEl.appendChild(document.createTextNode('.'));
+          return;
+        }
+        priceWrap.classList.remove('calc__price--custom');
+
+        const basePrice = PRICES[companyType] && PRICES[companyType][taxForm] && PRICES[companyType][taxForm][employees];
+        if (basePrice === undefined) {
+          priceEl.textContent = '—';
+          packageEl.textContent = 'Wybierz konfigurację';
+          return;
+        }
+
+        const addonsSum = addons.reduce((sum, a) => sum + (ADDONS[a] || 0), 0);
+        const total = basePrice + addonsSum;
+
+        priceEl.textContent = total.toLocaleString('pl-PL');
+        while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
+        packageEl.appendChild(document.createTextNode('Zbliżone do pakietu '));
+        packageEl.appendChild(make('strong', { text: packageFor(total) }));
+      }
+
+      // Rebuild tax options when company type changes
+      form.querySelectorAll('input[name="company-type"]').forEach(r => {
+        r.addEventListener('change', (e) => {
+          buildTaxOptions(e.target.value);
+          update();
+        });
+      });
+
+      // General change listener
+      form.addEventListener('change', update);
+
+      update();
     })();
 
     // ============================================================
