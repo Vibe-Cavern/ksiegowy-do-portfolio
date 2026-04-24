@@ -371,12 +371,15 @@
         transform: scale(0.92);
         transform-origin: top right;
         visibility: hidden;
-        transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
+        /* Close szybki (0.18s) — menu nie może zakrywać #kontakt podczas scrolla do anchora. */
+        transition: opacity 0.18s ease-out, transform 0.18s ease-out, visibility 0.18s;
       }
       body.nav-open .nav__menu {
         opacity: 1;
         transform: scale(1);
         visibility: visible;
+        /* Open powolniejszy (0.3s) dla eleganckiego reveala. */
+        transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s;
       }
 
       /* Menu head: logo + close */
