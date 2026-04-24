@@ -2121,7 +2121,7 @@
     <section class="hero section">
       <div class="container hero__grid">
         <div class="hero__content">
-          <span class="eyebrow">Biuro Rachunkowe · od 2009</span>
+          <span class="eyebrow">Biuro Rachunkowe · od&nbsp;2009</span>
           <h1>Księgowość bez stresu dla Twojej firmy</h1>
           <p class="hero__subtitle">Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.</p>
           <div class="hero__ctas">
@@ -2294,7 +2294,7 @@
             <h3>Samozatrudniony</h3>
             <div class="plan__price">
               <span class="plan__price-from">od</span>
-              <strong>199 zł</strong>
+              <strong>299 zł</strong>
             </div>
             <p class="plan__period">miesięcznie, netto</p>
             <ul class="plan__features">
@@ -2310,7 +2310,7 @@
             <h3>Mała firma</h3>
             <div class="plan__price">
               <span class="plan__price-from">od</span>
-              <strong>499 zł</strong>
+              <strong>599 zł</strong>
             </div>
             <p class="plan__period">miesięcznie, netto</p>
             <ul class="plan__features">
@@ -2325,7 +2325,7 @@
             <h3>Spółka z o.o.</h3>
             <div class="plan__price">
               <span class="plan__price-from">od</span>
-              <strong>899 zł</strong>
+              <strong>1099 zł</strong>
             </div>
             <p class="plan__period">miesięcznie, netto</p>
             <ul class="plan__features">
@@ -2886,15 +2886,15 @@
 
       const PRICES = {
         jdg: {
-          kpir:    { '0': 249, '1-5': 399, '6-10': 599 },
-          ryczalt: { '0': 199, '1-5': 329, '6-10': 529 }
+          kpir:    { '0': 349, '1-5': 499, '6-10': 749 },
+          ryczalt: { '0': 299, '1-5': 429, '6-10': 649 }
         },
         partnership: {
-          kpir:    { '0': 299, '1-5': 449, '6-10': 649 },
-          ryczalt: { '0': 249, '1-5': 379, '6-10': 579 }
+          kpir:    { '0': 399, '1-5': 549, '6-10': 799 },
+          ryczalt: { '0': 349, '1-5': 479, '6-10': 699 }
         },
         llc: {
-          pelna:   { '0': 699, '1-5': 899, '6-10': 1299 }
+          pelna:   { '0': 1099, '1-5': 1399, '6-10': 1799 }
         }
       };
       const ADDONS = { doradztwo: 100, ksef: 80, kadry: 150 };
@@ -2910,8 +2910,8 @@
       }
 
       function packageFor(price) {
-        if (price <= 349) return 'Samozatrudniony';
-        if (price <= 699) return 'Mała firma';
+        if (price <= 449) return 'Samozatrudniony';
+        if (price <= 899) return 'Mała firma';
         return 'Spółka z o.o.';
       }
 
@@ -3006,7 +3006,7 @@
     (function () {
       const QUESTIONS = [
         { q: "Ile kosztuje obsługa dla małej firmy?",
-          a: "Pakiet Mała firma (nasz najpopularniejszy) to od 499 zł/mies netto. Obejmuje wszystkie formy opodatkowania, do 10 pracowników i rozszerzone doradztwo. Szczegóły w sekcji Cennik." },
+          a: "Pakiet Mała firma (nasz najpopularniejszy) to od 599 zł/mies netto. Obejmuje wszystkie formy opodatkowania, do 10 pracowników i rozszerzone doradztwo. Szczegóły w sekcji Cennik." },
         { q: "Obsługujecie JDG i spółki z o.o.?",
           a: "Tak, prowadzimy wszystkie formy: JDG (KPiR lub ryczałt), spółki cywilne, jawne, komandytowe oraz z o.o. z pełną księgowością." },
         { q: "Jak wygląda zmiana biura rachunkowego?",
