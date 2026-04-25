@@ -5,7 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Biuro Rachunkowe Kowalski & Partnerzy — kompleksowa obsługa księgowa, kadry, doradztwo podatkowe. 15 lat doświadczenia, 150+ firm.">
   <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0F2847">
   <title>Biuro Rachunkowe Kowalski & Partnerzy — Księgowość bez stresu</title>
+
+  <!-- Open Graph (Facebook, LinkedIn, Slack itd.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pl_PL">
+  <meta property="og:site_name" content="Kowalski & Partnerzy">
+  <meta property="og:title" content="Biuro Rachunkowe Kowalski & Partnerzy — Księgowość bez stresu">
+  <meta property="og:description" content="Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe. 150+ firm nam zaufało · 15 lat doświadczenia · ★ 4.9/5.">
+  <meta property="og:url" content="https://vibe-cavern.github.io/ksiegowy-do-portfolio/">
+  <meta property="og:image" content="https://vibe-cavern.github.io/ksiegowy-do-portfolio/assets/team.jpg">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="1066">
+  <meta property="og:image:alt" content="Zespół Biura Rachunkowego Kowalski &amp; Partnerzy">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Biuro Rachunkowe Kowalski & Partnerzy">
+  <meta name="twitter:description" content="Pełna obsługa księgowa, kadry, doradztwo podatkowe. 150+ firm zaufało, 15 lat doświadczenia.">
+  <meta name="twitter:image" content="https://vibe-cavern.github.io/ksiegowy-do-portfolio/assets/team.jpg">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://vibe-cavern.github.io/ksiegowy-do-portfolio/">
+
+  <!-- Structured data: AccountingService (LocalBusiness) — Google rich result -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AccountingService",
+    "name": "Biuro Rachunkowe Kowalski & Partnerzy",
+    "description": "Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm.",
+    "url": "https://vibe-cavern.github.io/ksiegowy-do-portfolio/",
+    "image": "https://vibe-cavern.github.io/ksiegowy-do-portfolio/assets/team.jpg",
+    "telephone": "+48221234567",
+    "email": "kontakt@kowalski-partnerzy.pl",
+    "priceRange": "299–1099 zł/mies",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ul. Przykładowa 12",
+      "postalCode": "00-001",
+      "addressLocality": "Warszawa",
+      "addressCountry": "PL"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 52.2330,
+      "longitude": 21.0060
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "08:00",
+      "closes": "17:00"
+    }],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "87",
+      "bestRating": "5"
+    },
+    "sameAs": [
+      "https://www.facebook.com/",
+      "https://www.instagram.com/"
+    ]
+  }
+  </script>
   <script>
     // Theme init — musi być w <head> PRZED <style>, żeby uniknąć "flashu" złego motywu (FOUC)
     // Baza: light. Dark tylko gdy użytkownik ręcznie przełączył (zapisane w localStorage).
@@ -182,8 +247,27 @@
     .btn--primary {
       background: var(--accent);
       color: #1a1205;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
     }
     .btn--primary:hover { background: var(--accent-hover); color: #1a1205; }
+    /* Shine effect: gradient sweep przez przycisk na hover (premium feel) */
+    .btn--primary::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.7s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .btn--primary:hover::before { transform: translateX(100%); }
+    .btn--primary > * { position: relative; z-index: 2; }
+    @media (prefers-reduced-motion: reduce) {
+      .btn--primary::before { display: none; }
+    }
     .btn--outline {
       background: transparent;
       color: var(--heading);
@@ -964,7 +1048,29 @@
         radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 60%),
         var(--card);
       z-index: 1;
+      position: relative;
+      overflow: hidden;
     }
+    /* Shimmer sweep co 6s — subtelny premium polish */
+    .plan--featured::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, color-mix(in srgb, var(--accent) 25%, transparent) 50%, transparent 70%);
+      transform: translateX(-100%);
+      animation: plan-shimmer 6s ease-in-out 2s infinite;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+    @keyframes plan-shimmer {
+      0% { transform: translateX(-100%); }
+      35% { transform: translateX(100%); }
+      100% { transform: translateX(100%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .plan--featured::after { display: none; }
+    }
+    .plan--featured > * { position: relative; z-index: 1; }
     .plan--featured h3 {
       color: var(--heading);
     }
@@ -1084,6 +1190,35 @@
       line-height: 1.65;
     }
     .faq__body p { margin: 0; }
+    /* FAQ — popular item z badge "Najczęściej pytane" */
+    .faq__item--popular {
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+      background: linear-gradient(to right, color-mix(in srgb, var(--accent) 5%, var(--card)) 0%, var(--card) 100%);
+    }
+    .faq__q {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+    .faq__badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    @media (max-width: 560px) {
+      .faq__badge { font-size: 0.62rem; padding: 0.2rem 0.5rem; }
+    }
 
     /* ============================================================
        CALCULATOR
@@ -1244,6 +1379,59 @@
       color: var(--muted);
       margin: 0;
       line-height: 1.45;
+    }
+
+    /* ============================================================
+       LOGO MARQUEE — "Zaufali nam"
+       ============================================================ */
+    .logos {
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 60%, var(--card));
+      overflow: hidden;
+    }
+    .logos__title {
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 0 0 1.75rem;
+    }
+    .logos__marquee {
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+    .logos__track {
+      display: flex;
+      gap: 4rem;
+      width: fit-content;
+      animation: logos-scroll 40s linear infinite;
+    }
+    .logos__item {
+      flex-shrink: 0;
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      transition: color 0.2s;
+      padding: 0.5rem 0;
+    }
+    .logos__item:hover { color: var(--heading); }
+    @keyframes logos-scroll {
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .logos__track { animation: none; flex-wrap: wrap; justify-content: center; }
+    }
+    @media (max-width: 560px) {
+      .logos__item { font-size: 1.1rem; }
+      .logos__track { gap: 2.5rem; }
     }
 
     /* ============================================================
@@ -2454,6 +2642,36 @@
     </section>
 
     <!-- ============================================================
+         CLIENT LOGOS — marquee carousel
+         ============================================================ -->
+    <section class="logos" aria-labelledby="logos-title">
+      <div class="container">
+        <p id="logos-title" class="logos__title">Zaufali nam</p>
+      </div>
+      <div class="logos__marquee" aria-hidden="true">
+        <div class="logos__track">
+          <span class="logos__item">Studio Projekt</span>
+          <span class="logos__item">TechSoft Sp. z o.o.</span>
+          <span class="logos__item">KW Design</span>
+          <span class="logos__item">Nova Consulting</span>
+          <span class="logos__item">Aspekt Plus</span>
+          <span class="logos__item">Vertex Group</span>
+          <span class="logos__item">Akord</span>
+          <span class="logos__item">Pisarka.pl</span>
+          <!-- duplikat dla bezszwowej pętli -->
+          <span class="logos__item">Studio Projekt</span>
+          <span class="logos__item">TechSoft Sp. z o.o.</span>
+          <span class="logos__item">KW Design</span>
+          <span class="logos__item">Nova Consulting</span>
+          <span class="logos__item">Aspekt Plus</span>
+          <span class="logos__item">Vertex Group</span>
+          <span class="logos__item">Akord</span>
+          <span class="logos__item">Pisarka.pl</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
          PRICING
          ============================================================ -->
     <section class="section" id="cennik" aria-labelledby="cennik-title">
@@ -2528,16 +2746,16 @@
           <p>Zebraliśmy pytania, które klienci zadają nam najczęściej przed rozpoczęciem współpracy.</p>
         </div>
         <div class="faq">
-          <details class="faq__item reveal">
+          <details class="faq__item faq__item--popular reveal">
             <summary class="faq__summary">
-              Jak wygląda zmiana biura rachunkowego?
+              <span class="faq__q">Jak wygląda zmiana biura rachunkowego? <span class="faq__badge">★ Najczęściej pytane</span></span>
               <svg class="faq__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
             </summary>
             <div class="faq__body"><p>Przejęcie zajmuje 2–3 dni robocze. Odbieramy dokumentację, pełnomocnictwa podpisujemy elektronicznie, a Ty zajmujesz się biznesem. Zmianę można zgłosić do US w dowolnym momencie roku.</p></div>
           </details>
-          <details class="faq__item reveal">
+          <details class="faq__item faq__item--popular reveal">
             <summary class="faq__summary">
-              Obsługujecie zarówno JDG, jak i spółki z o.o.?
+              <span class="faq__q">Obsługujecie zarówno JDG, jak i spółki z o.o.? <span class="faq__badge">★ Najczęściej pytane</span></span>
               <svg class="faq__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
             </summary>
             <div class="faq__body"><p>Tak, prowadzimy wszystkie formy: JDG na KPiR lub ryczałcie, spółki cywilne, jawne, komandytowe oraz z o.o. z pełną księgowością.</p></div>
