@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="404 — strona nie znaleziona. Biuro Rachunkowe Kowalski & Partnerzy.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0F2847">
+  <title>404 — Strona nie znaleziona · Kowalski &amp; Partnerzy</title>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #F8F6F1;
+      --card: #FFFFFF;
+      --heading: #0F2847;
+      --text: #1F2937;
+      --muted: #4B5563;
+      --accent: #C9A961;
+      --accent-soft: #F5EDD8;
+      --border: #E5E7EB;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-serif: Georgia, "Times New Roman", Cambria, serif;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B1220;
+      --card: #111827;
+      --heading: #F3F4F6;
+      --text: #D1D5DB;
+      --muted: #9CA3AF;
+      --accent: #D4B87A;
+      --accent-soft: #2A2416;
+      --border: #1F2937;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      -webkit-font-smoothing: antialiased;
+    }
+    .e404-mark {
+      font-family: var(--font-serif);
+      font-size: clamp(6rem, 18vw, 11rem);
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin: 0 0 1rem;
+      background: linear-gradient(135deg, var(--heading) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin: 0 0 0.75rem;
+      line-height: 1.2;
+    }
+    p {
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 0 2rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .e404-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn--primary {
+      background: var(--accent);
+      color: #1a1205;
+    }
+    .btn--primary:hover { background: color-mix(in srgb, var(--accent) 88%, #000); }
+    .btn--outline {
+      background: transparent;
+      color: var(--heading);
+      border-color: var(--border);
+    }
+    .btn--outline:hover { border-color: var(--accent); color: var(--accent); }
+    .e404-brand {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--heading);
+      text-decoration: none;
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+    .e404-brand-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--heading);
+      color: var(--accent);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+  <a href="/ksiegowy-do-portfolio/" class="e404-brand">
+    <span class="e404-brand-mark">KP</span>
+    <span>Kowalski &amp; Partnerzy</span>
+  </a>
+  <div class="e404-mark" aria-hidden="true">404</div>
+  <h1>Tej strony nie znaleźliśmy</h1>
+  <p>Adres mógł zostać zmieniony, link mógł być błędny, albo strona została usunięta. Wróć na stronę główną, na pewno znajdziesz to, czego szukasz.</p>
+  <div class="e404-actions">
+    <a class="btn btn--primary" href="/ksiegowy-do-portfolio/">← Strona główna</a>
+    <a class="btn btn--outline" href="/ksiegowy-do-portfolio/#kontakt">Kontakt</a>
+  </div>
+</body>
+</html>
