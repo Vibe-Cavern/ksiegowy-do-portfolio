@@ -1893,6 +1893,73 @@
       text-decoration: none;
     }
     .contact-info__item a:hover { color: var(--accent); }
+    .contact-info__item p {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .contact-info__copy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.15s, transform 0.15s, color 0.15s, border-color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .contact-info__item:hover .contact-info__copy,
+    .contact-info__copy:focus-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .contact-info__copy:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .contact-info__copy svg { width: 14px; height: 14px; }
+    /* Mobile: copy button widoczny zawsze (no hover) */
+    @media (hover: none) {
+      .contact-info__copy { opacity: 1; transform: none; }
+    }
+
+    /* Toast notification (used for copy-to-clipboard, etc.) */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--heading);
+      color: var(--card);
+      padding: 0.85rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 12px 28px rgba(15, 40, 71, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      transition: opacity 0.25s, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      max-width: calc(100vw - 2rem);
+      text-align: center;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toast { transition: opacity 0.15s; }
+      .toast.show { transform: translateX(-50%) translateY(0); }
+    }
 
     /* ============================================================
        FOOTER
@@ -2557,6 +2624,10 @@
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
       </symbol>
       <symbol id="i-cursor" viewBox="0 0 24 24">
         <path d="M5 3 L5 21 L10 16 L13 21.5 L15.5 20.2 L12.8 15 L18 15 Z"
@@ -3238,14 +3309,24 @@
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></div>
               <div>
                 <h4>Telefon</h4>
-                <p><a href="tel:+48221234567">+48 22 123 45 67</a></p>
+                <p>
+                  <a href="tel:+48221234567">+48 22 123 45 67</a>
+                  <button class="contact-info__copy" type="button" data-copy="+48 22 123 45 67" aria-label="Skopiuj numer telefonu">
+                    <svg aria-hidden="true"><use href="#i-copy"/></svg>
+                  </button>
+                </p>
               </div>
             </div>
             <div class="contact-info__item">
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></div>
               <div>
                 <h4>Email</h4>
-                <p><a href="mailto:kontakt@kowalski-partnerzy.pl">kontakt@kowalski-partnerzy.pl</a></p>
+                <p>
+                  <a href="mailto:kontakt@kowalski-partnerzy.pl">kontakt@kowalski-partnerzy.pl</a>
+                  <button class="contact-info__copy" type="button" data-copy="kontakt@kowalski-partnerzy.pl" aria-label="Skopiuj adres email">
+                    <svg aria-hidden="true"><use href="#i-copy"/></svg>
+                  </button>
+                </p>
               </div>
             </div>
             <div class="contact-info__item">
@@ -3320,6 +3401,8 @@
        implementacji: POST do /api/ask → backend forwarduje na
        FB Messenger API + WhatsApp Business API + SMTP na mail księgowego.
        ============================================================ -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <div class="chatbot" id="chatbot" data-open="false">
     <div class="chatbot__teaser" id="chatbotTeaser" hidden>
       <button class="chatbot__teaser-close" id="chatbotTeaserClose" type="button" aria-label="Zamknij powitanie">&times;</button>
@@ -3417,6 +3500,52 @@
         item.addEventListener('toggle', () => {
           if (item.open) {
             items.forEach(other => { if (other !== item) other.open = false; });
+          }
+        });
+      });
+    })();
+
+    // ============================================================
+    // COPY-TO-CLIPBOARD + TOAST notifications
+    // ============================================================
+    (function () {
+      const toast = document.getElementById('toast');
+      let toastTimer = null;
+
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      // Expose globally — inne moduły mogą używać (np. chatbot, formularz)
+      window.__showToast = showToast;
+
+      document.querySelectorAll('[data-copy]').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const value = btn.dataset.copy;
+          if (!value) return;
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(value);
+            } else {
+              // Fallback dla starszych przeglądarek
+              const ta = document.createElement('textarea');
+              ta.value = value;
+              ta.style.position = 'absolute';
+              ta.style.left = '-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+            }
+            showToast('Skopiowano: ' + value);
+          } catch (err) {
+            showToast('Nie udało się skopiować');
           }
         });
       });
