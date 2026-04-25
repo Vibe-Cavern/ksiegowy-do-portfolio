@@ -1697,20 +1697,69 @@
     .form__field textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+      transform: translateY(-1px);
+    }
+    .form__field input,
+    .form__field textarea {
+      transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
     }
     .form__field textarea { resize: vertical; min-height: 120px; }
-    .form__submit { width: 100%; margin-top: 0.5rem; }
+    .form__submit { width: 100%; margin-top: 0.5rem; transition: opacity 0.2s; }
+    /* Submit spinner state */
+    .form__submit.is-loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    .form__submit.is-loading::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border: 2px solid currentColor;
+      border-top-color: transparent;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.5rem;
+      animation: form-spin 0.8s linear infinite;
+      vertical-align: -3px;
+    }
+    @keyframes form-spin { to { transform: rotate(360deg); } }
     .form__status {
       margin-top: 1rem;
-      padding: 0.85rem 1rem;
+      padding: 0.95rem 1rem;
       border-radius: var(--radius);
-      background: var(--accent-soft);
+      background: color-mix(in srgb, var(--accent) 18%, var(--card));
       color: var(--heading);
       font-size: 0.95rem;
       display: none;
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+      position: relative;
+      padding-left: 2.5rem;
     }
-    .form__status.show { display: block; }
+    .form__status::before {
+      content: "✓";
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%) scale(0);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.15rem;
+      animation: form-check-pop 0.5s 0.1s cubic-bezier(0.25, 1.5, 0.5, 1) forwards;
+    }
+    @keyframes form-check-pop {
+      to { transform: translateY(-50%) scale(1); }
+    }
+    .form__status.show { display: block; animation: form-status-slide 0.35s ease-out; }
+    @keyframes form-status-slide {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .form__field input:focus, .form__field textarea:focus { transform: none; }
+      .form__status, .form__status::before, .form__submit.is-loading::before { animation: none; }
+      .form__status::before { transform: translateY(-50%); }
+    }
     .form__note {
       margin-top: 1rem;
       font-size: 0.8rem;
@@ -3254,23 +3303,45 @@
     })();
 
     // ============================================================
-    // FORM: client-side validation + demo success message
-    // DEMO: ten formularz nie wysyła realnie. Do podpięcia: Formspree / Getform / własny backend.
+    // FORM: client-side validation + spinner state + success animation
+    // DEMO: nie wysyła realnie. Do podpięcia: Formspree / Getform / własny backend.
     // ============================================================
     (function () {
       const form = document.getElementById('contactForm');
       const status = document.getElementById('formStatus');
+      const submitBtn = form ? form.querySelector('.form__submit') : null;
+      if (!form) return;
+
+      const submitOriginalText = submitBtn ? submitBtn.textContent.trim() : 'Wyślij';
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (!form.checkValidity()) {
           form.reportValidity();
           return;
         }
-        const name = form.elements.name.value.trim().split(' ')[0] || '';
-        status.textContent = `Dziękujemy${name ? ', ' + name : ''}! Odezwiemy się w ciągu 24 godzin.`;
-        status.classList.add('show');
-        form.reset();
-        setTimeout(() => { status.classList.remove('show'); }, 8000);
+
+        // Loading state — spinner przed CTA text przez ~900ms (symulacja request)
+        if (submitBtn) {
+          submitBtn.classList.add('is-loading');
+          submitBtn.textContent = 'Wysyłam...';
+          submitBtn.disabled = true;
+        }
+
+        const name = (form.elements.name.value || '').trim().split(' ')[0];
+
+        setTimeout(() => {
+          // Success state
+          if (submitBtn) {
+            submitBtn.classList.remove('is-loading');
+            submitBtn.textContent = submitOriginalText;
+            submitBtn.disabled = false;
+          }
+          status.textContent = `Dziękujemy${name ? ', ' + name : ''}! Odezwiemy się w ciągu 24 godzin.`;
+          status.classList.add('show');
+          form.reset();
+          setTimeout(() => status.classList.remove('show'), 8000);
+        }, 900);
       });
     })();
 
