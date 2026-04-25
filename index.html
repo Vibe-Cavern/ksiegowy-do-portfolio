@@ -987,6 +987,26 @@
       border-radius: var(--radius-lg);
       box-shadow: 0 20px 40px -12px rgba(15, 40, 71, 0.25);
       display: block;
+      background: linear-gradient(
+        110deg,
+        color-mix(in srgb, var(--accent-soft) 60%, var(--card)) 8%,
+        color-mix(in srgb, var(--accent-soft) 100%, var(--card)) 18%,
+        color-mix(in srgb, var(--accent-soft) 60%, var(--card)) 33%
+      );
+      background-size: 200% 100%;
+      animation: hero-photo-shimmer 1.6s linear infinite;
+    }
+    /* Po załadowaniu zdjęcia: zatrzymaj animację (klasa dodawana przez JS) */
+    .hero__photo.is-loaded {
+      animation: none;
+      background: none;
+    }
+    @keyframes hero-photo-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__photo { animation: none; }
     }
     .hero__art-stat {
       position: absolute;
@@ -3748,6 +3768,24 @@
           rect = null;
         });
       });
+    })();
+
+    // ============================================================
+    // HERO PHOTO LOADING — shimmer placeholder przed załadowaniem
+    // CSS daje shimmer animation na .hero__photo. JS dodaje is-loaded
+    // class gdy obraz załadowany żeby zatrzymać animację.
+    // ============================================================
+    (function () {
+      const photo = document.querySelector('.hero__photo');
+      if (!photo) return;
+      function onLoad() { photo.classList.add('is-loaded'); }
+      if (photo.complete && photo.naturalHeight > 0) {
+        // Już z cache — natychmiast zaznacz jako loaded
+        onLoad();
+      } else {
+        photo.addEventListener('load', onLoad, { once: true });
+        photo.addEventListener('error', onLoad, { once: true });
+      }
     })();
 
     // ============================================================
