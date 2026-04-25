@@ -662,6 +662,18 @@
       max-width: 580px;
       width: 100%;
       justify-self: end;
+      isolation: isolate;
+    }
+    .hero__art::before {
+      /* Subtelny accent blob za zdjęciem — nowoczesny modern touch */
+      content: "";
+      position: absolute;
+      inset: -8% -10% -10% -8%;
+      background: radial-gradient(circle at 75% 30%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%);
+      filter: blur(50px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.9;
     }
     .hero__photo {
       position: relative;
@@ -670,8 +682,48 @@
       height: 100%;
       object-fit: cover;
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 20px 40px -12px rgba(15, 40, 71, 0.25);
       display: block;
+    }
+    .hero__art-stat {
+      position: absolute;
+      bottom: -18px;
+      left: -18px;
+      z-index: 2;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem 1.1rem;
+      box-shadow: 0 14px 32px rgba(15, 40, 71, 0.18);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      animation: hero-stat-float 4s ease-in-out infinite;
+    }
+    .hero__art-stat-icon {
+      color: var(--accent);
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+    .hero__art-stat-text strong {
+      display: block;
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.2rem;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .hero__art-stat-text span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    @keyframes hero-stat-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__art-stat { animation: none; }
     }
     @media (max-width: 900px) {
       .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -2159,6 +2211,13 @@
         </div>
         <div class="hero__art">
           <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" width="1600" height="1066">
+          <div class="hero__art-stat" aria-label="Średnia ocena klientów: 4.9 z 5">
+            <span class="hero__art-stat-icon" aria-hidden="true">★</span>
+            <div class="hero__art-stat-text">
+              <strong>4.9 / 5</strong>
+              <span>na podstawie 87 opinii</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
