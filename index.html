@@ -187,6 +187,24 @@
     ::selection { background: var(--accent); color: #1a1205; }
     ::-moz-selection { background: var(--accent); color: #1a1205; }
 
+    /* Scroll progress bar — gold line at top showing reading progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--heading)));
+      transform: scaleX(0);
+      transform-origin: 0 0;
+      z-index: 200;
+      pointer-events: none;
+      transition: transform 0.05s linear;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-progress { transition: none; }
+    }
+
     /* Skip-to-content link — visible only on Tab focus (a11y best practice) */
     .skip-link {
       position: absolute;
@@ -2689,6 +2707,9 @@
   <!-- Skip-to-content (a11y premium - klawiatura/screen readers) -->
   <a class="skip-link" href="#top">Przejdź do treści</a>
 
+  <!-- Scroll progress bar (gold line top of viewport, scales with scroll) -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <!-- ============================================================
        SVG ICON SPRITE
        ============================================================ -->
@@ -3670,6 +3691,30 @@
           }
         });
       });
+    })();
+
+    // ============================================================
+    // SCROLL PROGRESS BAR (top gold line)
+    // ============================================================
+    (function () {
+      const bar = document.getElementById('scrollProgress');
+      if (!bar) return;
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+        bar.style.transform = 'scaleX(' + progress + ')';
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
     })();
 
     // ============================================================
