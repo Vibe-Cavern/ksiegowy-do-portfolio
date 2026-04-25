@@ -1247,6 +1247,59 @@
     }
 
     /* ============================================================
+       LOGO MARQUEE — "Zaufali nam"
+       ============================================================ */
+    .logos {
+      padding: 2.5rem 0 3rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 60%, var(--card));
+      overflow: hidden;
+    }
+    .logos__title {
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 0 0 1.75rem;
+    }
+    .logos__marquee {
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+    .logos__track {
+      display: flex;
+      gap: 4rem;
+      width: fit-content;
+      animation: logos-scroll 40s linear infinite;
+    }
+    .logos__item {
+      flex-shrink: 0;
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      transition: color 0.2s;
+      padding: 0.5rem 0;
+    }
+    .logos__item:hover { color: var(--heading); }
+    @keyframes logos-scroll {
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .logos__track { animation: none; flex-wrap: wrap; justify-content: center; }
+    }
+    @media (max-width: 560px) {
+      .logos__item { font-size: 1.1rem; }
+      .logos__track { gap: 2.5rem; }
+    }
+
+    /* ============================================================
        TIMELINE
        ============================================================ */
     .timeline {
@@ -2449,6 +2502,36 @@
               <span>founderka, KW Design</span>
             </footer>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         CLIENT LOGOS — marquee carousel
+         ============================================================ -->
+    <section class="logos" aria-labelledby="logos-title">
+      <div class="container">
+        <p id="logos-title" class="logos__title">Zaufali nam</p>
+      </div>
+      <div class="logos__marquee" aria-hidden="true">
+        <div class="logos__track">
+          <span class="logos__item">Studio Projekt</span>
+          <span class="logos__item">TechSoft Sp. z o.o.</span>
+          <span class="logos__item">KW Design</span>
+          <span class="logos__item">Nova Consulting</span>
+          <span class="logos__item">Aspekt Plus</span>
+          <span class="logos__item">Vertex Group</span>
+          <span class="logos__item">Akord</span>
+          <span class="logos__item">Pisarka.pl</span>
+          <!-- duplikat dla bezszwowej pętli -->
+          <span class="logos__item">Studio Projekt</span>
+          <span class="logos__item">TechSoft Sp. z o.o.</span>
+          <span class="logos__item">KW Design</span>
+          <span class="logos__item">Nova Consulting</span>
+          <span class="logos__item">Aspekt Plus</span>
+          <span class="logos__item">Vertex Group</span>
+          <span class="logos__item">Akord</span>
+          <span class="logos__item">Pisarka.pl</span>
         </div>
       </div>
     </section>
