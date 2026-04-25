@@ -3906,21 +3906,25 @@
           el.textContent = target + suffix;
           return;
         }
-        // Reset do 0 + force reflow przed animacją (gwarantuje że user zobaczy start od 0)
+        // Reset do 0
         el.textContent = '0' + suffix;
-        void el.offsetHeight; // trigger reflow
-
-        const duration = 1400;
-        const startTime = performance.now();
-        function tick(now) {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-          const current = Math.round(eased * target);
-          el.textContent = current + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
+        // Double RAF: pierwsze renderuje '0', drugie startuje animację.
+        // Bez tego browser może zbatchować text changes i user nie zobaczy '0'.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const duration = 1800;
+            const startTime = performance.now();
+            function tick(now) {
+              const elapsed = now - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = Math.round(eased * target);
+              el.textContent = current + suffix;
+              if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+        });
       }
 
       if (!('IntersectionObserver' in window)) {
@@ -3935,10 +3939,11 @@
           }
         });
       }, {
-        // Threshold 0.2 (20%) + rootMargin -10% = animacja odpala się ZANIM user
-        // skupi wzrok na elemencie. Daje czas zobaczyć wzrost od 0 do target.
-        threshold: 0.2,
-        rootMargin: '0px 0px -10% 0px'
+        // threshold 0 + rootMargin 0 = fire jak tylko 1 piksel elementu wjedzie
+        // w viewport. User na pewno zobaczy animację bo dopiero zaczyna scroll
+        // do tego elementu, ma 1.8s na przewinięcie.
+        threshold: 0,
+        rootMargin: '0px'
       });
       counters.forEach(c => io.observe(c));
     })();
