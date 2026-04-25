@@ -3890,29 +3890,32 @@
     })();
 
     // ============================================================
-    // COUNT-UP ANIMATION dla trust row liczb (150+, 15 lat itd.)
-    // Animuje liczby od 0 do data-counter gdy wjadą w viewport.
-    // Respektuje prefers-reduced-motion (zero animacji wtedy).
+    // COUNT-UP ANIMATION dla liczb (150+, 15 lat itd.)
+    // Reset do 0 + animate dopiero przy wjechaniu w viewport.
+    // Bez init-reset na load — fallback gdy JS nie odpali = pełne liczby.
     // ============================================================
     (function () {
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const counters = document.querySelectorAll('[data-counter]');
       if (counters.length === 0) return;
 
-      function animate(el) {
+      function animateOnView(el) {
         const target = parseInt(el.dataset.counter, 10);
         const suffix = el.dataset.suffix || '';
         if (prefersReduced || !target) {
           el.textContent = target + suffix;
           return;
         }
-        const duration = 1400; // ms
+        // Reset do 0 + force reflow przed animacją (gwarantuje że user zobaczy start od 0)
+        el.textContent = '0' + suffix;
+        void el.offsetHeight; // trigger reflow
+
+        const duration = 1400;
         const startTime = performance.now();
         function tick(now) {
           const elapsed = now - startTime;
           const progress = Math.min(elapsed / duration, 1);
-          // Ease-out cubic — szybki start, łagodne dojście do końca
-          const eased = 1 - Math.pow(1 - progress, 3);
+          const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
           const current = Math.round(eased * target);
           el.textContent = current + suffix;
           if (progress < 1) requestAnimationFrame(tick);
@@ -3921,21 +3924,23 @@
       }
 
       if (!('IntersectionObserver' in window)) {
-        counters.forEach(animate);
+        counters.forEach(animateOnView);
         return;
       }
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            animate(entry.target);
+            animateOnView(entry.target);
             io.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.5 });
-      counters.forEach(c => {
-        c.textContent = '0' + (c.dataset.suffix || '');
-        io.observe(c);
+      }, {
+        // Threshold 0.2 (20%) + rootMargin -10% = animacja odpala się ZANIM user
+        // skupi wzrok na elemencie. Daje czas zobaczyć wzrost od 0 do target.
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px'
       });
+      counters.forEach(c => io.observe(c));
     })();
 
     // ============================================================
