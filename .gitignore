@@ -28,3 +28,13 @@ build/
 
 # Claude Code (lokalne ustawienia sesji)
 .claude/settings.local.json
+
+# Superpowers brainstorming (lokalne mockupy / Visual Companion)
+.superpowers/
+
+# Playwright test artefakty
+.playwright-mcp/
+
+# Lokalne screenshoty testowe w roocie (assets/* śledzimy normalnie)
+/*.png
+/*.jpeg

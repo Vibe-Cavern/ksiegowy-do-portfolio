@@ -2309,6 +2309,391 @@
     }
 
     /* ============================================================
+       BOOKING MODAL — Calendly-style picker (custom, zero deps)
+       ============================================================ */
+    .booking {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: bookingFadeIn 0.2s ease-out;
+    }
+    .booking[hidden] { display: none; }
+    @keyframes bookingFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .booking__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 40, 71, 0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .booking__panel {
+      position: relative;
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 30px 80px -20px rgba(15, 40, 71, 0.4), 0 10px 30px -10px rgba(15, 40, 71, 0.2);
+      width: 100%;
+      max-width: 760px;
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      padding: 2rem 2rem 1.75rem;
+      animation: bookingSlideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes bookingSlideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .booking, .booking__panel { animation: none; }
+    }
+    .booking__close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      z-index: 2;
+    }
+    .booking__close:hover {
+      background: var(--bg);
+      color: var(--heading);
+      border-color: var(--accent);
+    }
+    .booking__head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-right: 2.5rem;
+    }
+    .booking__avatar {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--heading), var(--accent));
+      color: var(--card);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(15, 40, 71, 0.18);
+    }
+    .booking__head h2 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      margin: 0 0 0.15rem;
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+    .booking__head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .booking__body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .booking__panel { padding: 1.5rem 1.25rem 1.25rem; }
+      .booking__body { grid-template-columns: 1fr; gap: 1.25rem; }
+      .booking__head h2 { font-size: 1.2rem; }
+    }
+    .booking__calendar {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.85rem;
+      background: var(--card);
+    }
+    .booking__cal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+      padding: 0 0.25rem;
+    }
+    .booking__cal-head strong {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .booking__cal-nav {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .booking__cal-nav:hover {
+      background: var(--bg);
+      color: var(--heading);
+      border-color: var(--border);
+    }
+    .booking__cal-nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    .booking__cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 4px;
+    }
+    .booking__cal-weekdays span {
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 0;
+    }
+    .booking__cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .booking__cal-day {
+      aspect-ratio: 1;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .booking__cal-day:hover:not(:disabled):not(.is-selected) {
+      background: var(--accent-soft);
+      color: var(--heading);
+    }
+    .booking__cal-day:active:not(:disabled) { transform: scale(0.94); }
+    .booking__cal-day.is-today {
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .booking__cal-day.is-selected {
+      background: var(--accent);
+      color: #1a1205;
+      border-color: var(--accent);
+    }
+    .booking__cal-day:disabled {
+      color: color-mix(in srgb, var(--muted) 50%, transparent);
+      cursor: not-allowed;
+    }
+    .booking__cal-day--empty {
+      visibility: hidden;
+    }
+    .booking__slots h3 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1rem;
+      margin: 0 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+    .booking__slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+      gap: 0.5rem;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+    .booking__slots-grid::-webkit-scrollbar { width: 6px; }
+    .booking__slots-grid::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    .booking__slot {
+      padding: 0.65rem 0.4rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--heading);
+      font-size: 0.92rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .booking__slot:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent-soft) 50%, transparent);
+    }
+    .booking__slot:active { transform: scale(0.96); }
+    .booking__slot.is-selected {
+      background: var(--accent);
+      color: #1a1205;
+      border-color: var(--accent);
+    }
+    .booking__slots-empty {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .booking__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: transparent;
+      border: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 1rem;
+      transition: color 0.15s;
+    }
+    .booking__back:hover { color: var(--accent); }
+    .booking__step[data-step="form"] h2,
+    .booking__step[data-step="confirmed"] h2 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem;
+      line-height: 1.2;
+    }
+    .booking__summary {
+      color: var(--muted);
+      margin: 0 0 1.25rem;
+      font-size: 0.95rem;
+    }
+    .booking__summary strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .booking__form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .booking__field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .booking__field label {
+      color: var(--heading);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .booking__field .req {
+      color: var(--accent);
+      margin-left: 0.15rem;
+    }
+    .booking__field input,
+    .booking__field textarea {
+      width: 100%;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--card);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      resize: vertical;
+    }
+    .booking__field input:focus,
+    .booking__field textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+    .booking__field input:invalid:not(:placeholder-shown),
+    .booking__field textarea:invalid:not(:placeholder-shown) {
+      border-color: #B91C1C;
+    }
+    .booking__submit {
+      width: 100%;
+      justify-content: center;
+      margin-top: 0.5rem;
+    }
+    .booking__note {
+      margin: 0.5rem 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+    .booking__step[data-step="confirmed"] {
+      text-align: center;
+      padding: 1rem 0 0.5rem;
+    }
+    .booking__check {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--heading)));
+      color: var(--card);
+      font-size: 2.4rem;
+      line-height: 72px;
+      margin: 0 auto 1rem;
+      box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--accent) 50%, transparent);
+      animation: bookingCheckPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes bookingCheckPop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .booking__check { animation: none; }
+    }
+    .booking__confirm {
+      color: var(--text);
+      margin: 0 0 1rem;
+      line-height: 1.6;
+    }
+    .booking__confirm strong { color: var(--heading); }
+    .booking__confirm-info {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+    }
+    .booking__confirm-info small {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
        CHATBOT (AI ASYSTENT) — prawy-dolny róg
        ============================================================ */
     .chatbot {
@@ -2912,7 +3297,7 @@
         </ul>
         <div class="nav__menu-footer">
           <div class="nav__cta-wrap">
-            <a class="btn btn--primary nav__cta" href="#kontakt">Umów konsultację</a>
+            <a class="btn btn--primary nav__cta" href="#kontakt" data-booking-open>Umów konsultację</a>
             <svg class="nav__cta-cursor" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-cursor"/></svg>
           </div>
           <p class="nav__cta-sub">Pierwsza konsultacja bezpłatna</p>
@@ -2945,7 +3330,7 @@
           <h1>Księgowość bez stresu dla Twojej firmy</h1>
           <p class="hero__subtitle" id="heroSubtitle" data-typewriter="Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.">Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.</p>
           <div class="hero__ctas">
-            <a class="btn btn--primary" href="#kontakt">
+            <a class="btn btn--primary" href="#kontakt" data-booking-open>
               Bezpłatna konsultacja
               <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
             </a>
@@ -3460,7 +3845,7 @@
           </li>
         </ol>
         <div class="timeline__cta reveal">
-          <a class="btn btn--primary" href="#kontakt">
+          <a class="btn btn--primary" href="#kontakt" data-booking-open data-booking-topic="Chcę zacząć współpracę. Wstępnie wiem, że szukam księgowego.">
             Umów bezpłatną konsultację
             <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
@@ -3652,6 +4037,91 @@
        FB Messenger API + WhatsApp Business API + SMTP na mail księgowego.
        ============================================================ -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ============================================================
+       BOOKING MODAL — custom Calendly-style widget (zero external deps)
+       DEMO: w realnej implementacji podmieniasz HTML na <iframe> Cal.com
+       lub Calendly z konkretnym embed URL klienta.
+       ============================================================ -->
+  <div class="booking" id="bookingModal" hidden>
+    <div class="booking__backdrop" data-booking-close></div>
+    <div class="booking__panel" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+      <button class="booking__close" type="button" data-booking-close aria-label="Zamknij">&times;</button>
+
+      <div class="booking__step" data-step="datetime">
+        <div class="booking__head">
+          <div class="booking__avatar" aria-hidden="true">KP</div>
+          <div>
+            <h2 id="bookingTitle">Bezpłatna konsultacja</h2>
+            <p>30 minut · online lub telefonicznie</p>
+          </div>
+        </div>
+
+        <div class="booking__body">
+          <div class="booking__calendar">
+            <header class="booking__cal-head">
+              <button class="booking__cal-nav" type="button" id="bookingPrevMonth" aria-label="Poprzedni miesiąc">‹</button>
+              <strong id="bookingMonthLabel">—</strong>
+              <button class="booking__cal-nav" type="button" id="bookingNextMonth" aria-label="Następny miesiąc">›</button>
+            </header>
+            <div class="booking__cal-weekdays" aria-hidden="true">
+              <span>Pn</span><span>Wt</span><span>Śr</span><span>Cz</span><span>Pt</span><span>So</span><span>Nd</span>
+            </div>
+            <div class="booking__cal-grid" id="bookingCalGrid" role="grid" aria-label="Wybierz datę">
+              <!-- Generated by JS -->
+            </div>
+          </div>
+
+          <div class="booking__slots" id="bookingSlots">
+            <h3 id="bookingSlotsTitle">Wybierz datę z kalendarza</h3>
+            <div class="booking__slots-grid" id="bookingSlotsGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="booking__step" data-step="form" hidden>
+        <button class="booking__back" type="button" id="bookingBack">← Wybierz inny termin</button>
+        <h2>Potwierdź dane</h2>
+        <p class="booking__summary"><strong id="bookingSummary"></strong></p>
+        <form class="booking__form" id="bookingForm" novalidate>
+          <div class="booking__field">
+            <label for="b-name">Imię i nazwisko<span class="req" aria-hidden="true">*</span></label>
+            <input id="b-name" name="name" type="text" required autocomplete="name" placeholder="Jan Kowalski">
+          </div>
+          <div class="booking__field">
+            <label for="b-email">Email<span class="req" aria-hidden="true">*</span></label>
+            <input id="b-email" name="email" type="email" required autocomplete="email" placeholder="jan@firma.pl">
+          </div>
+          <div class="booking__field">
+            <label for="b-phone">Telefon (opcjonalnie, dla rezerwowego kontaktu)</label>
+            <input id="b-phone" name="phone" type="tel" autocomplete="tel" placeholder="+48 600 000 000">
+          </div>
+          <div class="booking__field">
+            <label for="b-topic">Krótko o sprawie</label>
+            <textarea id="b-topic" name="topic" placeholder="Np. zmiana z biura konkurencji, przejście z KPiR na pełną księgowość, JDG starts..." rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary booking__submit">
+            Zarezerwuj termin
+            <svg class="icon" width="18" height="18" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </button>
+          <p class="booking__note">Otrzymasz email z potwierdzeniem i Google Calendar invite.</p>
+        </form>
+      </div>
+
+      <div class="booking__step" data-step="confirmed" hidden>
+        <div class="booking__check" aria-hidden="true">✓</div>
+        <h2>Termin zarezerwowany</h2>
+        <p class="booking__confirm">
+          Wysłaliśmy potwierdzenie na <strong id="bookingConfirmEmail"></strong>.<br>
+          Spotykamy się <strong id="bookingConfirmWhen"></strong>.
+        </p>
+        <p class="booking__confirm-info">
+          <small>Dostaniesz email z linkiem do Google Meet 15 minut przed rozmową. Jeśli musisz zmienić termin — odpisz na maila lub zadzwoń.</small>
+        </p>
+        <button class="btn btn--outline" type="button" data-booking-close>Zamknij</button>
+      </div>
+    </div>
+  </div>
 
   <div class="chatbot" id="chatbot" data-open="false">
     <div class="chatbot__teaser" id="chatbotTeaser" hidden>
@@ -4688,6 +5158,240 @@
           scrollTicking = true;
         }
       }, { passive: true });
+    })();
+
+    // ============================================================
+    // BOOKING MODAL — Calendly-style picker
+    // DEMO: brak realnego backendu. Submit pokazuje "termin zarezerwowany".
+    // W realnej impl: POST do /api/book → integracja z Cal.com / Google Calendar.
+    // ============================================================
+    (function () {
+      const modal = document.getElementById('bookingModal');
+      if (!modal) return;
+
+      const calGrid = document.getElementById('bookingCalGrid');
+      const monthLabel = document.getElementById('bookingMonthLabel');
+      const prevMonthBtn = document.getElementById('bookingPrevMonth');
+      const nextMonthBtn = document.getElementById('bookingNextMonth');
+      const slotsGrid = document.getElementById('bookingSlotsGrid');
+      const slotsTitle = document.getElementById('bookingSlotsTitle');
+      const backBtn = document.getElementById('bookingBack');
+      const summary = document.getElementById('bookingSummary');
+      const form = document.getElementById('bookingForm');
+      const confirmEmail = document.getElementById('bookingConfirmEmail');
+      const confirmWhen = document.getElementById('bookingConfirmWhen');
+      const stepDateTime = modal.querySelector('[data-step="datetime"]');
+      const stepForm = modal.querySelector('[data-step="form"]');
+      const stepConfirmed = modal.querySelector('[data-step="confirmed"]');
+
+      const MONTHS = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+      const WEEKDAYS_LONG = ['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
+
+      // 9:00–17:00 co 30min, biznesowe godziny (Mon–Fri only)
+      const SLOTS = [
+        '09:00','09:30','10:00','10:30','11:00','11:30',
+        '12:00','12:30','13:00','13:30','14:00','14:30',
+        '15:00','15:30','16:00','16:30'
+      ];
+
+      let viewYear, viewMonth;       // aktualnie wyświetlany miesiąc
+      let selectedDate = null;       // Date — wybrana data
+      let selectedSlot = null;       // string "HH:MM"
+      let lastFocused = null;        // do przywracania focusa po zamknięciu
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const minDate = new Date(today);
+      const maxDate = new Date(today);
+      maxDate.setMonth(maxDate.getMonth() + 2); // 60 dni naprzód, max 2 miesiące
+
+      function sameDay(a, b) {
+        return a.getFullYear() === b.getFullYear()
+            && a.getMonth() === b.getMonth()
+            && a.getDate() === b.getDate();
+      }
+
+      function isPickable(date) {
+        if (date < minDate) return false;
+        if (date > maxDate) return false;
+        const dow = date.getDay();
+        if (dow === 0 || dow === 6) return false; // weekend
+        return true;
+      }
+
+      function renderCalendar() {
+        const first = new Date(viewYear, viewMonth, 1);
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+        // pn=0, nd=6 (PL convention)
+        let startDow = first.getDay() - 1;
+        if (startDow < 0) startDow = 6;
+
+        monthLabel.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+        calGrid.replaceChildren();
+
+        for (let i = 0; i < startDow; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'booking__cal-day booking__cal-day--empty';
+          empty.setAttribute('aria-hidden', 'true');
+          calGrid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const date = new Date(viewYear, viewMonth, d);
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'booking__cal-day';
+          btn.textContent = String(d);
+          btn.setAttribute('role', 'gridcell');
+          btn.setAttribute('aria-label', d + ' ' + MONTHS[viewMonth].toLowerCase() + ' ' + viewYear);
+
+          if (sameDay(date, today)) btn.classList.add('is-today');
+          if (selectedDate && sameDay(date, selectedDate)) {
+            btn.classList.add('is-selected');
+            btn.setAttribute('aria-pressed', 'true');
+          }
+
+          if (!isPickable(date)) {
+            btn.disabled = true;
+          } else {
+            btn.addEventListener('click', function () {
+              selectedDate = date;
+              selectedSlot = null;
+              renderCalendar();
+              renderSlots();
+            });
+          }
+          calGrid.appendChild(btn);
+        }
+
+        // disable nav out of bounds
+        prevMonthBtn.disabled = (viewYear < minDate.getFullYear()) ||
+          (viewYear === minDate.getFullYear() && viewMonth <= minDate.getMonth());
+        nextMonthBtn.disabled = (viewYear > maxDate.getFullYear()) ||
+          (viewYear === maxDate.getFullYear() && viewMonth >= maxDate.getMonth());
+      }
+
+      function renderSlots() {
+        slotsGrid.replaceChildren();
+        if (!selectedDate) {
+          slotsTitle.textContent = 'Wybierz datę z kalendarza';
+          return;
+        }
+        const dStr = selectedDate.getDate() + ' ' + MONTHS[selectedDate.getMonth()].toLowerCase();
+        slotsTitle.textContent = 'Wolne godziny — ' + dStr;
+
+        SLOTS.forEach(function (s) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'booking__slot';
+          btn.textContent = s;
+          if (selectedSlot === s) btn.classList.add('is-selected');
+          btn.addEventListener('click', function () {
+            selectedSlot = s;
+            // przejście do kroku 2 z krótkim opóźnieniem żeby user zobaczył selection
+            renderSlots();
+            setTimeout(goToForm, 180);
+          });
+          slotsGrid.appendChild(btn);
+        });
+      }
+
+      function formatWhen() {
+        if (!selectedDate || !selectedSlot) return '';
+        const dow = WEEKDAYS_LONG[selectedDate.getDay()];
+        const d = selectedDate.getDate();
+        const m = MONTHS[selectedDate.getMonth()].toLowerCase();
+        return dow + ', ' + d + ' ' + m + ', godz. ' + selectedSlot;
+      }
+
+      function showStep(step) {
+        stepDateTime.hidden = step !== 'datetime';
+        stepForm.hidden = step !== 'form';
+        stepConfirmed.hidden = step !== 'confirmed';
+      }
+
+      function goToForm() {
+        summary.textContent = formatWhen();
+        showStep('form');
+        const firstField = form.querySelector('input');
+        if (firstField) firstField.focus();
+      }
+
+      function openModal(opts) {
+        lastFocused = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        // reset stanu
+        selectedDate = null;
+        selectedSlot = null;
+        viewYear = today.getFullYear();
+        viewMonth = today.getMonth();
+        renderCalendar();
+        renderSlots();
+        showStep('datetime');
+        if (opts && opts.topic) {
+          const topicField = form.querySelector('#b-topic');
+          if (topicField) topicField.value = opts.topic;
+        } else {
+          form.reset();
+        }
+        // focus na panel dla a11y
+        const panel = modal.querySelector('.booking__panel');
+        if (panel) panel.focus();
+      }
+
+      function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocused && typeof lastFocused.focus === 'function') {
+          try { lastFocused.focus(); } catch (e) {}
+        }
+      }
+
+      // close handlers
+      modal.querySelectorAll('[data-booking-close]').forEach(function (el) {
+        el.addEventListener('click', closeModal);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+      });
+
+      prevMonthBtn.addEventListener('click', function () {
+        viewMonth--;
+        if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+        renderCalendar();
+      });
+      nextMonthBtn.addEventListener('click', function () {
+        viewMonth++;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        renderCalendar();
+      });
+
+      backBtn.addEventListener('click', function () {
+        showStep('datetime');
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const email = form.querySelector('#b-email').value.trim();
+        const name = form.querySelector('#b-name').value.trim();
+        if (!name || !email) return;
+        confirmEmail.textContent = email;
+        confirmWhen.textContent = formatWhen();
+        showStep('confirmed');
+      });
+
+      // Public API — pozwala innym przyciskom otworzyć modal
+      window.openBookingModal = openModal;
+
+      // Hookuj wszystkie elementy z [data-booking-open]
+      document.querySelectorAll('[data-booking-open]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          const topic = btn.getAttribute('data-booking-topic') || '';
+          openModal({ topic: topic });
+        });
+      });
     })();
   </script>
 </body>
