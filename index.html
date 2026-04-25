@@ -221,6 +221,75 @@
       border: 0;
     }
 
+    /* ============================================================
+       PRINT STYLESHEET — gdy klient drukuje stronę / zapisuje PDF
+       ============================================================ */
+    @media print {
+      /* Ukryj UI elementy które nie mają sensu na druku */
+      .nav, .hero__scroll, .chatbot, .toast, .skip-link,
+      .nav__cta-cursor, .footer__social, .hero__art-stat,
+      .logos__marquee, .nav__menu, .calc__form, .calc__result,
+      .form__submit, .contact__choice, .contact__map,
+      .nav__back, body::after {
+        display: none !important;
+      }
+
+      /* Reset color/background dla oszczędności tonera */
+      * {
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+
+      body {
+        font-size: 11pt;
+        line-height: 1.4;
+      }
+
+      /* Większy padding bocznego marginesu drukowanego dokumentu */
+      .container { padding: 0 1cm; max-width: 100%; }
+      .section { padding: 1.5cm 0; page-break-inside: avoid; }
+
+      /* Logo i tytuł sekcji widoczne i wyróżnione */
+      h1, h2, h3 {
+        color: #000 !important;
+        page-break-after: avoid;
+      }
+      h2 { font-size: 18pt; margin-top: 1cm; }
+      h3 { font-size: 13pt; }
+
+      /* Karty bez tła, ale z border dla wizualnej hierarchii */
+      .service, .testimonial, .plan, .about__facts, .form, .faq__item {
+        border: 1px solid #999 !important;
+        page-break-inside: avoid;
+      }
+
+      /* URL pod każdym linkiem (klasyczna print konwencja) */
+      a[href^="http"]::after,
+      a[href^="mailto:"]::after,
+      a[href^="tel:"]::after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #555 !important;
+      }
+
+      /* Hero photo: bardziej kompaktowo */
+      .hero__art { max-width: 8cm; }
+      .hero__photo { max-width: 100%; height: auto; }
+
+      /* FAQ: zawsze rozwiniete na druku */
+      .faq__item { padding: 0.5rem 1rem; }
+      .faq__body { display: block !important; padding: 0.5rem 0; }
+      .faq__chevron { display: none; }
+
+      /* Kalkulator wyniku: ukryty (interaktywny, bez sensu na druku) */
+      #kalkulator .calc { display: none !important; }
+    }
+
     /* Custom scrollbar — premium accent gold (Webkit + Firefox) */
     @media (min-width: 768px) {
       /* Tylko desktop — mobile scrollbar zazwyczaj nie widać i jest auto-hidden */
