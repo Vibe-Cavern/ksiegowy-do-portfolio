@@ -267,7 +267,9 @@
     .nav__cta {
       font-size: 1.05rem;
       padding: 0.65rem 1.1rem;
-      animation: cta-pulse 6s ease-in-out infinite;
+      /* 3 cykle (18s) zamiast infinite — wystarczy żeby user zauważył,
+         potem przestaje rozpraszać przy czytaniu treści. */
+      animation: cta-pulse 6s ease-in-out 3;
       transform-origin: center;
       will-change: transform, box-shadow;
     }
@@ -280,7 +282,7 @@
       pointer-events: none;
       opacity: 0;
       z-index: 10;
-      animation: cursor-approach 6s ease-in-out infinite;
+      animation: cursor-approach 6s ease-in-out 3;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
     }
     @keyframes cursor-approach {
