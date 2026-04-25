@@ -1149,6 +1149,35 @@
       line-height: 1.65;
     }
     .faq__body p { margin: 0; }
+    /* FAQ — popular item z badge "Najczęściej pytane" */
+    .faq__item--popular {
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+      background: linear-gradient(to right, color-mix(in srgb, var(--accent) 5%, var(--card)) 0%, var(--card) 100%);
+    }
+    .faq__q {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+    .faq__badge {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    @media (max-width: 560px) {
+      .faq__badge { font-size: 0.62rem; padding: 0.2rem 0.5rem; }
+    }
 
     /* ============================================================
        CALCULATOR
@@ -2676,16 +2705,16 @@
           <p>Zebraliśmy pytania, które klienci zadają nam najczęściej przed rozpoczęciem współpracy.</p>
         </div>
         <div class="faq">
-          <details class="faq__item reveal">
+          <details class="faq__item faq__item--popular reveal">
             <summary class="faq__summary">
-              Jak wygląda zmiana biura rachunkowego?
+              <span class="faq__q">Jak wygląda zmiana biura rachunkowego? <span class="faq__badge">★ Najczęściej pytane</span></span>
               <svg class="faq__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
             </summary>
             <div class="faq__body"><p>Przejęcie zajmuje 2–3 dni robocze. Odbieramy dokumentację, pełnomocnictwa podpisujemy elektronicznie, a Ty zajmujesz się biznesem. Zmianę można zgłosić do US w dowolnym momencie roku.</p></div>
           </details>
-          <details class="faq__item reveal">
+          <details class="faq__item faq__item--popular reveal">
             <summary class="faq__summary">
-              Obsługujecie zarówno JDG, jak i spółki z o.o.?
+              <span class="faq__q">Obsługujecie zarówno JDG, jak i spółki z o.o.? <span class="faq__badge">★ Najczęściej pytane</span></span>
               <svg class="faq__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
             </summary>
             <div class="faq__body"><p>Tak, prowadzimy wszystkie formy: JDG na KPiR lub ryczałcie, spółki cywilne, jawne, komandytowe oraz z o.o. z pełną księgowością.</p></div>
