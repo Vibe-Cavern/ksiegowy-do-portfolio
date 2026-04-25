@@ -746,6 +746,60 @@
     @media (prefers-reduced-motion: reduce) {
       .hero__art-stat { animation: none; }
     }
+    /* Hero scroll indicator: animowana strzałka pod hero */
+    .hero__scroll {
+      position: absolute;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      opacity: 0.7;
+      transition: opacity 0.2s, color 0.2s;
+      animation: hero-scroll-fade 4s ease-in-out 2s 1 backwards;
+    }
+    .hero__scroll:hover,
+    .hero__scroll:focus-visible {
+      opacity: 1;
+      color: var(--heading);
+    }
+    .hero__scroll-icon {
+      display: inline-flex;
+      animation: hero-scroll-bounce 2s ease-in-out infinite;
+    }
+    .hero__scroll-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+    @keyframes hero-scroll-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    @keyframes hero-scroll-fade {
+      0% { opacity: 0; transform: translate(-50%, 8px); }
+      100% { opacity: 0.7; transform: translate(-50%, 0); }
+    }
+    /* Hero potrzebuje position: relative dla absolute scroll indicator */
+    .hero {
+      position: relative;
+    }
+    /* Ukryj strzałkę w mobile menu (zbyt mało miejsca) i przy reduced motion */
+    @media (max-width: 560px) {
+      .hero__scroll-text { display: none; }
+      .hero__scroll { bottom: 1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__scroll-icon { animation: none; }
+      .hero__scroll { animation: none; opacity: 0.7; }
+    }
     @media (max-width: 900px) {
       .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .hero__art { max-width: 360px; margin: 0 auto; justify-self: center; }
@@ -2262,6 +2316,14 @@
           </div>
         </div>
       </div>
+      <a class="hero__scroll" href="#uslugi" aria-label="Przewiń do sekcji Usługi">
+        <span class="hero__scroll-text">Zobacz więcej</span>
+        <span class="hero__scroll-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </span>
+      </a>
     </section>
 
     <!-- ============================================================
