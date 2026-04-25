@@ -3159,11 +3159,38 @@
         });
       }
 
+      // Animowana aktualizacja wartości ceny (count-up od poprzedniej do nowej)
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let priceAnimFrame = null;
+      function setPriceAnimated(target) {
+        const current = parseInt((priceEl.textContent || '0').replace(/\D/g, ''), 10) || 0;
+        if (priceAnimFrame) cancelAnimationFrame(priceAnimFrame);
+        if (prefersReduced || Math.abs(target - current) < 5) {
+          priceEl.textContent = target.toLocaleString('pl-PL');
+          return;
+        }
+        const duration = 450;
+        const startTime = performance.now();
+        const delta = target - current;
+        function tick(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease-out quad
+          const eased = 1 - (1 - progress) * (1 - progress);
+          const value = Math.round(current + delta * eased);
+          priceEl.textContent = value.toLocaleString('pl-PL');
+          if (progress < 1) priceAnimFrame = requestAnimationFrame(tick);
+          else priceAnimFrame = null;
+        }
+        priceAnimFrame = requestAnimationFrame(tick);
+      }
+
       function update() {
         const { companyType, taxForm, employees, addons } = readState();
 
         // Special case: 11+ employees → indywidualna wycena
         if (employees === '11+') {
+          if (priceAnimFrame) { cancelAnimationFrame(priceAnimFrame); priceAnimFrame = null; }
           priceWrap.classList.add('calc__price--custom');
           priceEl.textContent = 'Wycena indywidualna';
           while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
@@ -3184,7 +3211,7 @@
         const addonsSum = addons.reduce((sum, a) => sum + (ADDONS[a] || 0), 0);
         const total = basePrice + addonsSum;
 
-        priceEl.textContent = total.toLocaleString('pl-PL');
+        setPriceAnimated(total);
         while (packageEl.firstChild) packageEl.removeChild(packageEl.firstChild);
         packageEl.appendChild(document.createTextNode('Zbliżone do pakietu '));
         packageEl.appendChild(make('strong', { text: packageFor(total) }));
