@@ -259,6 +259,13 @@
       background: color-mix(in srgb, var(--accent) 14%, transparent);
       border-color: color-mix(in srgb, var(--accent) 26%, transparent);
     }
+    /* Desktop: aktywny link (scroll-spy) — wyrazniejszy gold accent */
+    .nav__link.nav__link--active {
+      color: var(--heading);
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+      font-weight: 600;
+    }
     .nav__cta-wrap {
       position: relative;
       display: inline-flex;
@@ -2926,6 +2933,59 @@
         form.reset();
         setTimeout(() => { status.classList.remove('show'); }, 8000);
       });
+    })();
+
+    // ============================================================
+    // SCROLL-SPY: aktywny link w nav podąża za sekcją w viewporcie
+    // ============================================================
+    (function () {
+      const links = document.querySelectorAll('.nav__link[href^="#"]');
+      if (links.length === 0 || !('IntersectionObserver' in window)) return;
+
+      // Mapa href → linki (jeden href może mieć desktop + mobile copy w nav)
+      const linksByHref = new Map();
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (!linksByHref.has(href)) linksByHref.set(href, []);
+        linksByHref.get(href).push(link);
+      });
+
+      // Obserwowane sekcje + hero
+      const sections = document.querySelectorAll('main section[id], main > [id="top"], #top');
+      const fallbackTop = document.querySelector('main') || document.body;
+
+      function setActive(id) {
+        linksByHref.forEach((linkList, href) => {
+          const isActive = href === '#' + id;
+          linkList.forEach(l => l.classList.toggle('nav__link--active', isActive));
+        });
+      }
+
+      // Domyślnie Start (#top) jest aktywne dopóki user nie zacznie scrollować
+      setActive('top');
+
+      const io = new IntersectionObserver((entries) => {
+        // Wybierz pierwszą widoczną sekcję najwyżej w viewporcie
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          const id = visible[0].target.id;
+          if (id) setActive(id);
+        }
+      }, {
+        // Aktywuj gdy sekcja zajmuje środek viewportu
+        rootMargin: '-30% 0px -50% 0px',
+        threshold: 0
+      });
+
+      sections.forEach(s => io.observe(s));
+
+      // Specjalny case: gdy user na samym top strony (powyżej #uslugi),
+      // aktywne pozostaje "Start"
+      window.addEventListener('scroll', () => {
+        if (window.scrollY < 100) setActive('top');
+      }, { passive: true });
     })();
 
     // ============================================================
