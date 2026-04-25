@@ -921,6 +921,63 @@
       .hero__trust { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
       .hero__trust-item:last-child { grid-column: span 2; }
     }
+    /* Desktop: ukryj trust w hero (przeniesione do osobnego stats-strip).
+       Mobile: zostaje w hero (compact, naturalne wśród reszty contentu). */
+    @media (min-width: 901px) {
+      .hero__trust { display: none; }
+    }
+
+    /* ============================================================
+       STATS STRIP — dedykowana sekcja z 3 stats (desktop only)
+       ============================================================ */
+    .stats-strip {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 70%, var(--card));
+    }
+    @media (max-width: 900px) {
+      .stats-strip { display: none; }
+    }
+    .stats-strip__grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .stats-strip__item {
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem 1.5rem;
+      position: relative;
+    }
+    .stats-strip__item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 25%;
+      bottom: 25%;
+      width: 1px;
+      background: var(--border);
+    }
+    .stats-strip__item strong {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--heading);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stats-strip__item span {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
 
     /* ============================================================
        SERVICES
@@ -2626,6 +2683,28 @@
           </svg>
         </span>
       </a>
+    </section>
+
+    <!-- ============================================================
+         STATS STRIP — desktop-only trust signals (mobile zachowuje w hero)
+         ============================================================ -->
+    <section class="stats-strip" aria-label="Liczby budujące zaufanie">
+      <div class="container">
+        <div class="stats-strip__grid">
+          <div class="stats-strip__item">
+            <strong data-counter="150" data-suffix="+">150+</strong>
+            <span>firm nam zaufało</span>
+          </div>
+          <div class="stats-strip__item">
+            <strong data-counter="15" data-suffix=" lat">15 lat</strong>
+            <span>doświadczenia</span>
+          </div>
+          <div class="stats-strip__item">
+            <strong>Licencja MF</strong>
+            <span>nr 12345</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============================================================
