@@ -1968,6 +1968,19 @@
       right: 1.5rem;
       z-index: 60;
       font-family: var(--font-sans);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    /* Auto-hide na mobile przy scroll-down (JS toggluje klasę chatbot--hidden) */
+    @media (max-width: 768px) {
+      .chatbot--hidden {
+        transform: translateY(120px) scale(0.85);
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .chatbot { transition: opacity 0.15s; }
+      .chatbot--hidden { transform: none; }
     }
     .chatbot__teaser {
       position: absolute;
@@ -3994,6 +4007,43 @@
           if (container.getAttribute('data-open') !== 'true') openPanel();
         });
       }
+
+      // ========= AUTO-HIDE FAB ON SCROLL-DOWN (mobile only) =========
+      // Mobile: gdy user scrolluje w dół, FAB chowa się w prawy-dolny róg.
+      // Gdy user scrolluje w górę (czyta ponownie / cofa), FAB pokazuje się.
+      // Nie aktywne gdy chat otwarty.
+      let lastScrollY = window.scrollY;
+      let scrollTicking = false;
+      const HIDE_DELTA = 16; // minimum scroll distance to trigger toggle
+      const HIDE_THRESHOLD = 300; // dopiero po 300px od góry zaczynamy auto-hide
+      function onScrollFab() {
+        if (window.innerWidth > 768) {
+          container.classList.remove('chatbot--hidden');
+          scrollTicking = false;
+          return;
+        }
+        // Nie chowaj jeśli chat otwarty
+        if (container.getAttribute('data-open') === 'true') {
+          container.classList.remove('chatbot--hidden');
+          scrollTicking = false;
+          return;
+        }
+        const currentY = window.scrollY;
+        const delta = currentY - lastScrollY;
+        if (currentY > HIDE_THRESHOLD && delta > HIDE_DELTA) {
+          container.classList.add('chatbot--hidden'); // scrolling down
+        } else if (delta < -HIDE_DELTA || currentY <= HIDE_THRESHOLD) {
+          container.classList.remove('chatbot--hidden'); // scrolling up or near top
+        }
+        lastScrollY = currentY;
+        scrollTicking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+          requestAnimationFrame(onScrollFab);
+          scrollTicking = true;
+        }
+      }, { passive: true });
     })();
   </script>
 </body>
