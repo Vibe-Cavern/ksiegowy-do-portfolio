@@ -329,6 +329,31 @@
     .section {
       padding: clamp(3rem, 8vw, 6rem) 0;
     }
+    /* Subtelny ornament między sekcjami — gold-fade lines + center dot */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.25rem 0;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .section-divider::before,
+    .section-divider::after {
+      content: "";
+      flex: 0 0 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, color-mix(in srgb, var(--accent) 50%, transparent) 50%, transparent 100%);
+    }
+    .section-divider__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+    }
     .section-head {
       text-align: center;
       max-width: 680px;
@@ -851,6 +876,20 @@
       padding: clamp(3rem, 7vw, 5rem) 0 clamp(3rem, 6vw, 4.5rem);
       position: relative;
       overflow: hidden;
+    }
+    /* Desktop: hero zajmuje pełen viewport (minus sticky nav).
+       Stats strip i logos pojawiają się dopiero na drugim ekranie. */
+    @media (min-width: 901px) {
+      .hero {
+        min-height: calc(100dvh - var(--nav-h));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .hero__grid {
+        flex: 1;
+        align-content: center;
+      }
     }
     .hero__grid {
       display: grid;
@@ -2966,6 +3005,10 @@
       </div>
     </section>
 
+    <div class="section-divider" aria-hidden="true">
+      <span class="section-divider__dot"></span>
+    </div>
+
     <!-- ============================================================
          TESTIMONIALS
          ============================================================ -->
@@ -3104,6 +3147,10 @@
         </p>
       </div>
     </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <span class="section-divider__dot"></span>
+    </div>
 
     <!-- ============================================================
          FAQ
@@ -3327,6 +3374,10 @@
         </div>
       </div>
     </section>
+
+    <div class="section-divider" aria-hidden="true">
+      <span class="section-divider__dot"></span>
+    </div>
 
     <!-- ============================================================
          CONTACT
