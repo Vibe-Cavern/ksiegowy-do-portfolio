@@ -187,6 +187,24 @@
     ::selection { background: var(--accent); color: #1a1205; }
     ::-moz-selection { background: var(--accent); color: #1a1205; }
 
+    /* Scroll progress bar — gold line at top showing reading progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--heading)));
+      transform: scaleX(0);
+      transform-origin: 0 0;
+      z-index: 200;
+      pointer-events: none;
+      transition: transform 0.05s linear;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-progress { transition: none; }
+    }
+
     /* Skip-to-content link — visible only on Tab focus (a11y best practice) */
     .skip-link {
       position: absolute;
@@ -969,6 +987,26 @@
       border-radius: var(--radius-lg);
       box-shadow: 0 20px 40px -12px rgba(15, 40, 71, 0.25);
       display: block;
+      background: linear-gradient(
+        110deg,
+        color-mix(in srgb, var(--accent-soft) 60%, var(--card)) 8%,
+        color-mix(in srgb, var(--accent-soft) 100%, var(--card)) 18%,
+        color-mix(in srgb, var(--accent-soft) 60%, var(--card)) 33%
+      );
+      background-size: 200% 100%;
+      animation: hero-photo-shimmer 1.6s linear infinite;
+    }
+    /* Po załadowaniu zdjęcia: zatrzymaj animację (klasa dodawana przez JS) */
+    .hero__photo.is-loaded {
+      animation: none;
+      background: none;
+    }
+    @keyframes hero-photo-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__photo { animation: none; }
     }
     .hero__art-stat {
       position: absolute;
@@ -1258,7 +1296,28 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+      will-change: transform;
+      position: relative;
     }
+    .testimonial:hover {
+      box-shadow: 0 24px 48px -16px rgba(15, 40, 71, 0.18);
+      border-color: var(--accent);
+    }
+    /* Subtle accent gradient overlay on hover */
+    .testimonial::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 50%);
+      border-radius: inherit;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .testimonial:hover::before { opacity: 1; }
+    .testimonial > * { position: relative; z-index: 1; }
     .testimonial__stars {
       display: inline-flex;
       gap: 2px;
@@ -2689,6 +2748,9 @@
   <!-- Skip-to-content (a11y premium - klawiatura/screen readers) -->
   <a class="skip-link" href="#top">Przejdź do treści</a>
 
+  <!-- Scroll progress bar (gold line top of viewport, scales with scroll) -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <!-- ============================================================
        SVG ICON SPRITE
        ============================================================ -->
@@ -3673,6 +3735,84 @@
     })();
 
     // ============================================================
+    // TESTIMONIAL PARALLAX TILT (mouse-tracking 3D effect)
+    // Karty opinii przechylają się delikatnie za kursorem (max 4° tilt)
+    // i radial accent glow podąża za myszą.
+    // ============================================================
+    (function () {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Skip na touch devices (no real hover)
+      const isTouch = window.matchMedia('(hover: none)').matches;
+      if (prefersReduced || isTouch) return;
+
+      const cards = document.querySelectorAll('.testimonial');
+      cards.forEach(card => {
+        let rect = null;
+        card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); });
+        card.addEventListener('mousemove', (e) => {
+          if (!rect) rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          // tilt range: -4 do 4 stopni
+          const tiltX = (py - 0.5) * -8;
+          const tiltY = (px - 0.5) * 8;
+          card.style.transform = 'perspective(1200px) rotateX(' + tiltX.toFixed(2) + 'deg) rotateY(' + tiltY.toFixed(2) + 'deg) translateZ(2px)';
+          // radial glow follows cursor
+          card.style.setProperty('--mx', (px * 100) + '%');
+          card.style.setProperty('--my', (py * 100) + '%');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+          card.style.removeProperty('--mx');
+          card.style.removeProperty('--my');
+          rect = null;
+        });
+      });
+    })();
+
+    // ============================================================
+    // HERO PHOTO LOADING — shimmer placeholder przed załadowaniem
+    // CSS daje shimmer animation na .hero__photo. JS dodaje is-loaded
+    // class gdy obraz załadowany żeby zatrzymać animację.
+    // ============================================================
+    (function () {
+      const photo = document.querySelector('.hero__photo');
+      if (!photo) return;
+      function onLoad() { photo.classList.add('is-loaded'); }
+      if (photo.complete && photo.naturalHeight > 0) {
+        // Już z cache — natychmiast zaznacz jako loaded
+        onLoad();
+      } else {
+        photo.addEventListener('load', onLoad, { once: true });
+        photo.addEventListener('error', onLoad, { once: true });
+      }
+    })();
+
+    // ============================================================
+    // SCROLL PROGRESS BAR (top gold line)
+    // ============================================================
+    (function () {
+      const bar = document.getElementById('scrollProgress');
+      if (!bar) return;
+      let ticking = false;
+      function update() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+        bar.style.transform = 'scaleX(' + progress + ')';
+        ticking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      }, { passive: true });
+      window.addEventListener('resize', update, { passive: true });
+      update();
+    })();
+
+    // ============================================================
     // COPY-TO-CLIPBOARD + TOAST notifications
     // ============================================================
     (function () {
@@ -3730,8 +3870,52 @@
 
       const submitOriginalText = submitBtn ? submitBtn.textContent.trim() : 'Wyślij';
 
+      // Custom validation messages (PL branded zamiast generic browser default)
+      const VALIDATION_MESSAGES = {
+        'f-name': {
+          valueMissing: 'Wpisz proszę swoje imię — chcemy wiedzieć jak się do Ciebie zwracać.'
+        },
+        'f-email': {
+          valueMissing: 'Bez emaila nie zdążymy odpowiedzieć — wpisz proszę swój adres.',
+          typeMismatch: 'Hmm, ten email wygląda dziwnie. Sprawdź czy nie ma literówki.'
+        },
+        'f-phone': {
+          patternMismatch: 'Ten numer telefonu wygląda nietypowo — sprawdź czy jest w porządku.'
+        },
+        'f-msg': {
+          valueMissing: 'Powiedz krótko o czym chciałbyś z nami porozmawiać.'
+        }
+      };
+
+      function setCustomMessage(field) {
+        const messages = VALIDATION_MESSAGES[field.id];
+        if (!messages) return;
+        field.setCustomValidity('');
+        if (!field.validity.valid) {
+          for (const key in messages) {
+            if (field.validity[key]) {
+              field.setCustomValidity(messages[key]);
+              return;
+            }
+          }
+        }
+      }
+
+      // Apply custom messages on input change + invalid event
+      Object.keys(VALIDATION_MESSAGES).forEach(id => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        field.addEventListener('invalid', () => setCustomMessage(field));
+        field.addEventListener('input', () => setCustomMessage(field));
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        // Re-set custom messages przed walidacją (dla przypadku po reset)
+        Object.keys(VALIDATION_MESSAGES).forEach(id => {
+          const field = document.getElementById(id);
+          if (field) setCustomMessage(field);
+        });
         if (!form.checkValidity()) {
           form.reportValidity();
           return;
@@ -3906,21 +4090,25 @@
           el.textContent = target + suffix;
           return;
         }
-        // Reset do 0 + force reflow przed animacją (gwarantuje że user zobaczy start od 0)
+        // Reset do 0
         el.textContent = '0' + suffix;
-        void el.offsetHeight; // trigger reflow
-
-        const duration = 1400;
-        const startTime = performance.now();
-        function tick(now) {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-          const current = Math.round(eased * target);
-          el.textContent = current + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
+        // Double RAF: pierwsze renderuje '0', drugie startuje animację.
+        // Bez tego browser może zbatchować text changes i user nie zobaczy '0'.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const duration = 1800;
+            const startTime = performance.now();
+            function tick(now) {
+              const elapsed = now - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const eased = 1 - Math.pow(1 - progress, 3);
+              const current = Math.round(eased * target);
+              el.textContent = current + suffix;
+              if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+        });
       }
 
       if (!('IntersectionObserver' in window)) {
@@ -3935,10 +4123,11 @@
           }
         });
       }, {
-        // Threshold 0.2 (20%) + rootMargin -10% = animacja odpala się ZANIM user
-        // skupi wzrok na elemencie. Daje czas zobaczyć wzrost od 0 do target.
-        threshold: 0.2,
-        rootMargin: '0px 0px -10% 0px'
+        // threshold 0 + rootMargin 0 = fire jak tylko 1 piksel elementu wjedzie
+        // w viewport. User na pewno zobaczy animację bo dopiero zaczyna scroll
+        // do tego elementu, ma 1.8s na przewinięcie.
+        threshold: 0,
+        rootMargin: '0px'
       });
       counters.forEach(c => io.observe(c));
     })();
