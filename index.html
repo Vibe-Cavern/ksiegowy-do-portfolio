@@ -3832,8 +3832,52 @@
 
       const submitOriginalText = submitBtn ? submitBtn.textContent.trim() : 'Wyślij';
 
+      // Custom validation messages (PL branded zamiast generic browser default)
+      const VALIDATION_MESSAGES = {
+        'f-name': {
+          valueMissing: 'Wpisz proszę swoje imię — chcemy wiedzieć jak się do Ciebie zwracać.'
+        },
+        'f-email': {
+          valueMissing: 'Bez emaila nie zdążymy odpowiedzieć — wpisz proszę swój adres.',
+          typeMismatch: 'Hmm, ten email wygląda dziwnie. Sprawdź czy nie ma literówki.'
+        },
+        'f-phone': {
+          patternMismatch: 'Ten numer telefonu wygląda nietypowo — sprawdź czy jest w porządku.'
+        },
+        'f-msg': {
+          valueMissing: 'Powiedz krótko o czym chciałbyś z nami porozmawiać.'
+        }
+      };
+
+      function setCustomMessage(field) {
+        const messages = VALIDATION_MESSAGES[field.id];
+        if (!messages) return;
+        field.setCustomValidity('');
+        if (!field.validity.valid) {
+          for (const key in messages) {
+            if (field.validity[key]) {
+              field.setCustomValidity(messages[key]);
+              return;
+            }
+          }
+        }
+      }
+
+      // Apply custom messages on input change + invalid event
+      Object.keys(VALIDATION_MESSAGES).forEach(id => {
+        const field = document.getElementById(id);
+        if (!field) return;
+        field.addEventListener('invalid', () => setCustomMessage(field));
+        field.addEventListener('input', () => setCustomMessage(field));
+      });
+
       form.addEventListener('submit', (e) => {
         e.preventDefault();
+        // Re-set custom messages przed walidacją (dla przypadku po reset)
+        Object.keys(VALIDATION_MESSAGES).forEach(id => {
+          const field = document.getElementById(id);
+          if (field) setCustomMessage(field);
+        });
         if (!form.checkValidity()) {
           form.reportValidity();
           return;
