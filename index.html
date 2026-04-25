@@ -2144,11 +2144,11 @@
           </div>
           <div class="hero__trust">
             <div class="hero__trust-item">
-              <strong>150+</strong>
+              <strong data-counter="150" data-suffix="+">150+</strong>
               <span>firm nam zaufało</span>
             </div>
             <div class="hero__trust-item">
-              <strong>15 lat</strong>
+              <strong data-counter="15" data-suffix=" lat">15 lat</strong>
               <span>doświadczenia</span>
             </div>
             <div class="hero__trust-item">
@@ -2888,6 +2888,55 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       reveals.forEach(el => io.observe(el));
+    })();
+
+    // ============================================================
+    // COUNT-UP ANIMATION dla trust row liczb (150+, 15 lat itd.)
+    // Animuje liczby od 0 do data-counter gdy wjadą w viewport.
+    // Respektuje prefers-reduced-motion (zero animacji wtedy).
+    // ============================================================
+    (function () {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const counters = document.querySelectorAll('[data-counter]');
+      if (counters.length === 0) return;
+
+      function animate(el) {
+        const target = parseInt(el.dataset.counter, 10);
+        const suffix = el.dataset.suffix || '';
+        if (prefersReduced || !target) {
+          el.textContent = target + suffix;
+          return;
+        }
+        const duration = 1400; // ms
+        const startTime = performance.now();
+        function tick(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease-out cubic — szybki start, łagodne dojście do końca
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.round(eased * target);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        counters.forEach(animate);
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(c => {
+        c.textContent = '0' + (c.dataset.suffix || '');
+        io.observe(c);
+      });
     })();
 
     // ============================================================
