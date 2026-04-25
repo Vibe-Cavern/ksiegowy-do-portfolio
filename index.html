@@ -267,7 +267,9 @@
     .nav__cta {
       font-size: 1.05rem;
       padding: 0.65rem 1.1rem;
-      animation: cta-pulse 6s ease-in-out infinite;
+      /* 3 cykle (18s) zamiast infinite — wystarczy żeby user zauważył,
+         potem przestaje rozpraszać przy czytaniu treści. */
+      animation: cta-pulse 6s ease-in-out 3;
       transform-origin: center;
       will-change: transform, box-shadow;
     }
@@ -280,7 +282,7 @@
       pointer-events: none;
       opacity: 0;
       z-index: 10;
-      animation: cursor-approach 6s ease-in-out infinite;
+      animation: cursor-approach 6s ease-in-out 3;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
     }
     @keyframes cursor-approach {
@@ -660,6 +662,18 @@
       max-width: 580px;
       width: 100%;
       justify-self: end;
+      isolation: isolate;
+    }
+    .hero__art::before {
+      /* Subtelny accent blob za zdjęciem — nowoczesny modern touch */
+      content: "";
+      position: absolute;
+      inset: -8% -10% -10% -8%;
+      background: radial-gradient(circle at 75% 30%, color-mix(in srgb, var(--accent) 22%, transparent) 0%, transparent 60%);
+      filter: blur(50px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.9;
     }
     .hero__photo {
       position: relative;
@@ -668,8 +682,48 @@
       height: 100%;
       object-fit: cover;
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
+      box-shadow: 0 20px 40px -12px rgba(15, 40, 71, 0.25);
       display: block;
+    }
+    .hero__art-stat {
+      position: absolute;
+      bottom: -18px;
+      left: -18px;
+      z-index: 2;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem 1.1rem;
+      box-shadow: 0 14px 32px rgba(15, 40, 71, 0.18);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      animation: hero-stat-float 4s ease-in-out infinite;
+    }
+    .hero__art-stat-icon {
+      color: var(--accent);
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+    .hero__art-stat-text strong {
+      display: block;
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.2rem;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .hero__art-stat-text span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    @keyframes hero-stat-float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero__art-stat { animation: none; }
     }
     @media (max-width: 900px) {
       .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -828,26 +882,35 @@
       position: relative;
     }
     .plan--featured {
-      border-color: var(--accent);
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-6px);
+      border: 2px solid var(--accent);
+      box-shadow: 0 24px 48px -12px rgba(201, 169, 97, 0.35), var(--shadow-lg);
+      transform: translateY(-12px) scale(1.04);
+      background:
+        radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 60%),
+        var(--card);
+      z-index: 1;
+    }
+    .plan--featured h3 {
+      color: var(--heading);
     }
     @media (max-width: 900px) {
-      .plan--featured { transform: none; }
+      .plan--featured { transform: scale(1.02); }
     }
     .plan__badge {
       position: absolute;
-      top: -12px;
+      top: -14px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 80%, var(--heading)) 100%);
       color: #1a1205;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 0.35rem 0.85rem;
+      padding: 0.45rem 1.1rem;
       border-radius: 999px;
+      box-shadow: 0 6px 16px rgba(201, 169, 97, 0.4);
+      white-space: nowrap;
     }
     .plan h3 {
       font-family: var(--font-sans);
@@ -2133,11 +2196,11 @@
           </div>
           <div class="hero__trust">
             <div class="hero__trust-item">
-              <strong>150+</strong>
+              <strong data-counter="150" data-suffix="+">150+</strong>
               <span>firm nam zaufało</span>
             </div>
             <div class="hero__trust-item">
-              <strong>15 lat</strong>
+              <strong data-counter="15" data-suffix=" lat">15 lat</strong>
               <span>doświadczenia</span>
             </div>
             <div class="hero__trust-item">
@@ -2147,7 +2210,14 @@
           </div>
         </div>
         <div class="hero__art">
-          <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" width="1200" height="900">
+          <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" width="1600" height="1066">
+          <div class="hero__art-stat" aria-label="Średnia ocena klientów: 4.9 z 5">
+            <span class="hero__art-stat-icon" aria-hidden="true">★</span>
+            <div class="hero__art-stat-text">
+              <strong>4.9 / 5</strong>
+              <span>na podstawie 87 opinii</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2306,7 +2376,7 @@
             <a class="btn btn--outline plan__pick" href="#kontakt" data-package="Samozatrudniony">Wybierz pakiet</a>
           </article>
           <article class="plan plan--featured reveal">
-            <span class="plan__badge">Najpopularniejszy</span>
+            <span class="plan__badge">⭐ Najczęściej wybierany</span>
             <h3>Mała firma</h3>
             <div class="plan__price">
               <span class="plan__price-from">od</span>
@@ -2877,6 +2947,55 @@
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
       reveals.forEach(el => io.observe(el));
+    })();
+
+    // ============================================================
+    // COUNT-UP ANIMATION dla trust row liczb (150+, 15 lat itd.)
+    // Animuje liczby od 0 do data-counter gdy wjadą w viewport.
+    // Respektuje prefers-reduced-motion (zero animacji wtedy).
+    // ============================================================
+    (function () {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const counters = document.querySelectorAll('[data-counter]');
+      if (counters.length === 0) return;
+
+      function animate(el) {
+        const target = parseInt(el.dataset.counter, 10);
+        const suffix = el.dataset.suffix || '';
+        if (prefersReduced || !target) {
+          el.textContent = target + suffix;
+          return;
+        }
+        const duration = 1400; // ms
+        const startTime = performance.now();
+        function tick(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Ease-out cubic — szybki start, łagodne dojście do końca
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.round(eased * target);
+          el.textContent = current + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      if (!('IntersectionObserver' in window)) {
+        counters.forEach(animate);
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(c => {
+        c.textContent = '0' + (c.dataset.suffix || '');
+        io.observe(c);
+      });
     })();
 
     // ============================================================
