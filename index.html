@@ -988,13 +988,6 @@
       pointer-events: none;
       opacity: 0.9;
     }
-    .hero__art > picture {
-      display: block;
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-    }
     .hero__photo {
       position: relative;
       z-index: 1;
@@ -2974,19 +2967,14 @@
           </div>
         </div>
         <div class="hero__art">
-          <picture>
-            <source type="image/avif"
-                    srcset="assets/team-800.avif 800w, assets/team.avif 1200w"
-                    sizes="(max-width: 900px) 360px, 580px">
-            <img class="hero__photo"
-                 src="assets/team.jpg"
-                 srcset="assets/team-800.jpg 800w, assets/team.jpg 1200w"
-                 sizes="(max-width: 900px) 360px, 580px"
-                 alt="Zespół Biura Rachunkowego Kowalski & Partnerzy"
-                 loading="eager"
-                 fetchpriority="high"
-                 width="1200" height="799">
-          </picture>
+          <img class="hero__photo"
+               src="assets/team.jpg"
+               srcset="assets/team-800.jpg 800w, assets/team.jpg 1200w"
+               sizes="(max-width: 900px) 360px, 580px"
+               alt="Zespół Biura Rachunkowego Kowalski & Partnerzy"
+               loading="eager"
+               fetchpriority="high"
+               width="1200" height="799">
           <div class="hero__art-stat" aria-label="Średnia ocena klientów: 4.9 z 5">
             <span class="hero__art-stat-icon" aria-hidden="true">★</span>
             <div class="hero__art-stat-text">
