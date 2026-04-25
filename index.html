@@ -184,7 +184,35 @@
       outline-offset: 2px;
       border-radius: 4px;
     }
-    ::selection { background: var(--accent); color: #fff; }
+    ::selection { background: var(--accent); color: #1a1205; }
+    ::-moz-selection { background: var(--accent); color: #1a1205; }
+
+    /* Custom scrollbar — premium accent gold (Webkit + Firefox) */
+    @media (min-width: 768px) {
+      /* Tylko desktop — mobile scrollbar zazwyczaj nie widać i jest auto-hidden */
+      html { scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+      html::-webkit-scrollbar { width: 10px; height: 10px; }
+      html::-webkit-scrollbar-track {
+        background: color-mix(in srgb, var(--bg) 80%, var(--card));
+      }
+      html::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--accent) 60%, var(--muted));
+        border-radius: 999px;
+        border: 2px solid color-mix(in srgb, var(--bg) 80%, var(--card));
+      }
+      html::-webkit-scrollbar-thumb:hover {
+        background: var(--accent);
+      }
+      /* Inner scrollable areas (chatbot, mobile menu) — cieńszy */
+      .chatbot__messages::-webkit-scrollbar,
+      .nav__menu::-webkit-scrollbar { width: 6px; }
+      .chatbot__messages::-webkit-scrollbar-thumb,
+      .nav__menu::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--accent) 50%, var(--muted));
+        border-radius: 999px;
+        border: none;
+      }
+    }
 
     /* ============================================================
        LAYOUT HELPERS
