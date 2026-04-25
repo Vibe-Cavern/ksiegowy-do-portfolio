@@ -909,12 +909,36 @@
       padding: 2rem 1.75rem;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s, border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Subtle radial accent glow appearing on hover */
+    .service::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 20%, transparent) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
     .service:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-6px) scale(1.015);
+      box-shadow: 0 24px 48px -16px rgba(15, 40, 71, 0.18), 0 4px 12px rgba(15, 40, 71, 0.06);
       border-color: var(--accent);
+    }
+    .service:hover::before { opacity: 1; }
+    .service:hover .service__icon {
+      transform: scale(1.08) rotate(-4deg);
+      background: var(--accent);
+      color: var(--card);
+    }
+    .service__icon { transition: transform 0.25s, background 0.2s, color 0.2s; }
+    .service > * { position: relative; z-index: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      .service:hover { transform: none; }
+      .service:hover .service__icon { transform: none; }
     }
     .service__icon {
       width: 48px;
