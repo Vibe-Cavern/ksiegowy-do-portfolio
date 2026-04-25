@@ -29,6 +29,10 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://vibe-cavern.github.io/ksiegowy-do-portfolio/">
 
+  <!-- Favicon (inline SVG data URI z monogramem KP) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230F2847'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' font-weight='700' text-anchor='middle' fill='%23C9A961'%3EKP%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='34' fill='%230F2847'/%3E%3Ctext x='90' y='118' font-family='Georgia,serif' font-size='90' font-weight='700' text-anchor='middle' fill='%23C9A961'%3EKP%3C/text%3E%3C/svg%3E">
+
   <!-- Structured data: AccountingService (LocalBusiness) — Google rich result -->
   <script type="application/ld+json">
   {
@@ -388,9 +392,15 @@
       font-size: 0.8rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--accent);
+      /* Light mode: accent na cream ma za niski kontrast (2:1).
+         Mieszanka 35% accent + 65% heading = ciemniejsze gold (~5:1). */
+      color: color-mix(in srgb, var(--accent) 35%, var(--heading) 65%);
       font-weight: 600;
       margin-bottom: 0.75rem;
+    }
+    /* Dark mode: oryginalny accent ma już wystarczający kontrast na dark bg */
+    [data-theme="dark"] .eyebrow {
+      color: var(--accent);
     }
     .hero .eyebrow {
       font-size: 1.28rem;
@@ -1271,7 +1281,7 @@
       justify-content: center;
     }
     .fact__icon svg { width: 22px; height: 22px; }
-    .fact h4 {
+    .fact h3 {
       font-family: var(--font-sans);
       font-size: 1rem;
       color: var(--heading);
@@ -2085,7 +2095,7 @@
       flex-shrink: 0;
     }
     .contact-info__icon svg { width: 22px; height: 22px; }
-    .contact-info h4 {
+    .contact-info h3 {
       font-family: var(--font-sans);
       font-size: 0.85rem;
       color: var(--muted);
@@ -2868,7 +2878,7 @@
        ============================================================ -->
   <header class="nav" id="nav">
     <div class="container nav__inner">
-      <a href="#top" class="logo" aria-label="Biuro Rachunkowe Kowalski i Partnerzy">
+      <a href="#top" class="logo" aria-label="Kowalski &amp; Partnerzy — strona główna">
         <span class="logo__mark" aria-hidden="true">KP</span>
         <span class="logo__name">Kowalski &amp; Partnerzy</span>
         <span class="logo__name-short">K&amp;P</span>
@@ -2953,7 +2963,7 @@
           </div>
         </div>
         <div class="hero__art">
-          <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" width="1600" height="1066">
+          <img class="hero__photo" src="assets/team.jpg" alt="Zespół Biura Rachunkowego Kowalski & Partnerzy" loading="eager" fetchpriority="high" width="1600" height="1066">
           <div class="hero__art-stat" aria-label="Średnia ocena klientów: 4.9 z 5">
             <span class="hero__art-stat-icon" aria-hidden="true">★</span>
             <div class="hero__art-stat-text">
@@ -3055,21 +3065,21 @@
           <div class="fact">
             <div class="fact__icon"><svg aria-hidden="true"><use href="#i-award"/></svg></div>
             <div>
-              <h4>Licencja MF nr 12345</h4>
+              <h3>Licencja MF nr 12345</h3>
               <p>Pełne uprawnienia do usługowego prowadzenia ksiąg rachunkowych.</p>
             </div>
           </div>
           <div class="fact">
             <div class="fact__icon"><svg aria-hidden="true"><use href="#i-shield"/></svg></div>
             <div>
-              <h4>Członkostwo w SKwP</h4>
+              <h3>Członkostwo w SKwP</h3>
               <p>Stowarzyszenie Księgowych w Polsce — ciągłe doskonalenie zawodowe.</p>
             </div>
           </div>
           <div class="fact">
             <div class="fact__icon"><svg aria-hidden="true"><use href="#i-calendar"/></svg></div>
             <div>
-              <h4>15 lat na rynku</h4>
+              <h3>15 lat na rynku</h3>
               <p>Stabilny partner, który rośnie razem z klientami od 2009 roku.</p>
             </div>
           </div>
@@ -3093,7 +3103,7 @@
         </div>
         <div class="testimonials__grid">
           <article class="testimonial reveal">
-            <div class="testimonial__stars" aria-label="Ocena 5 na 5">
+            <div class="testimonial__stars" role="img" aria-label="Ocena 5 na 5">
               <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
             </div>
             <blockquote class="testimonial__quote">„Przeszliśmy do K&amp;P rok temu i nie wyobrażam sobie powrotu. Wreszcie wiem, na czym stoję każdego miesiąca."</blockquote>
@@ -3103,7 +3113,7 @@
             </footer>
           </article>
           <article class="testimonial reveal">
-            <div class="testimonial__stars" aria-label="Ocena 5 na 5">
+            <div class="testimonial__stars" role="img" aria-label="Ocena 5 na 5">
               <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
             </div>
             <blockquote class="testimonial__quote">„Zawsze odpowiadają tego samego dnia. Polecam każdemu przedsiębiorcy, który chce mieć głowę zajętą tylko swoim biznesem."</blockquote>
@@ -3113,7 +3123,7 @@
             </footer>
           </article>
           <article class="testimonial reveal">
-            <div class="testimonial__stars" aria-label="Ocena 5 na 5">
+            <div class="testimonial__stars" role="img" aria-label="Ocena 5 na 5">
               <svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg>
             </div>
             <blockquote class="testimonial__quote">„Profesjonalizm i cierpliwość do moich pytań. Tłumaczą tak, żebym rozumiała — nawet kiedy pytam to samo po raz trzeci."</blockquote>
@@ -3530,14 +3540,14 @@
             <div class="contact-info__item">
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-pin"/></svg></div>
               <div>
-                <h4>Adres</h4>
+                <h3>Adres</h3>
                 <p>ul. Przykładowa 12<br>00-001 Warszawa</p>
               </div>
             </div>
             <div class="contact-info__item">
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-phone"/></svg></div>
               <div>
-                <h4>Telefon</h4>
+                <h3>Telefon</h3>
                 <p>
                   <a href="tel:+48221234567">+48 22 123 45 67</a>
                   <button class="contact-info__copy" type="button" data-copy="+48 22 123 45 67" aria-label="Skopiuj numer telefonu">
@@ -3549,7 +3559,7 @@
             <div class="contact-info__item">
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-mail"/></svg></div>
               <div>
-                <h4>Email</h4>
+                <h3>Email</h3>
                 <p>
                   <a href="mailto:kontakt@kowalski-partnerzy.pl">kontakt@kowalski-partnerzy.pl</a>
                   <button class="contact-info__copy" type="button" data-copy="kontakt@kowalski-partnerzy.pl" aria-label="Skopiuj adres email">
@@ -3561,7 +3571,7 @@
             <div class="contact-info__item">
               <div class="contact-info__icon"><svg aria-hidden="true"><use href="#i-clock"/></svg></div>
               <div>
-                <h4>Godziny</h4>
+                <h3>Godziny</h3>
                 <p>Pn–Pt 8:00–17:00</p>
               </div>
             </div>
