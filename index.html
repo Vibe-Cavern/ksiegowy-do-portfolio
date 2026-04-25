@@ -903,6 +903,16 @@
       max-width: 54ch;
       margin: 0 0 2rem;
     }
+    .hero__subtitle-cursor {
+      display: inline-block;
+      color: var(--accent);
+      margin-left: 1px;
+      animation: subtitle-blink 0.7s steps(2) infinite;
+      font-weight: normal;
+    }
+    @keyframes subtitle-blink {
+      to { opacity: 0; }
+    }
     .hero__ctas {
       display: flex;
       gap: 0.75rem;
@@ -2857,7 +2867,7 @@
         <div class="hero__content">
           <span class="eyebrow">Biuro Rachunkowe · od&nbsp;2009</span>
           <h1>Księgowość bez stresu dla Twojej firmy</h1>
-          <p class="hero__subtitle">Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.</p>
+          <p class="hero__subtitle" id="heroSubtitle" data-typewriter="Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.">Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe dla małych i średnich firm. Zero papierologii — wszystko online, z dedykowanym opiekunem.</p>
           <div class="hero__ctas">
             <a class="btn btn--primary" href="#kontakt">
               Bezpłatna konsultacja
@@ -3802,6 +3812,60 @@
       window.addEventListener('scroll', () => {
         if (window.scrollY < 100) setActive('top');
       }, { passive: true });
+    })();
+
+    // ============================================================
+    // TYPEWRITER hero subtitle (1x na sesję, respektuje reduced motion)
+    // ============================================================
+    (function () {
+      const el = document.getElementById('heroSubtitle');
+      if (!el) return;
+      const fullText = el.dataset.typewriter || el.textContent;
+      const SESSION_KEY = 'heroTypewriterPlayed';
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Pokazuj instant gdy już graliśmy w tej sesji albo reduced motion
+      let alreadyPlayed = false;
+      try { alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === '1'; } catch (e) {}
+      if (alreadyPlayed || prefersReduced) {
+        el.textContent = fullText;
+        return;
+      }
+
+      // Reset and prepare for animation
+      el.textContent = '';
+      el.style.minHeight = el.offsetHeight + 'px'; // prevent layout shift
+      const cursor = document.createElement('span');
+      cursor.className = 'hero__subtitle-cursor';
+      cursor.textContent = '▋';
+      el.appendChild(cursor);
+
+      const totalDuration = 2200; // ms
+      const startTime = performance.now() + 350; // małe opóźnienie po load
+      const charsPerStep = Math.max(1, Math.ceil(fullText.length / (totalDuration / 16))); // ~60fps
+
+      function tick(now) {
+        if (now < startTime) {
+          requestAnimationFrame(tick);
+          return;
+        }
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / totalDuration, 1);
+        // Ease-out — szybciej na początku, wolniej na końcu
+        const eased = 1 - Math.pow(1 - progress, 2);
+        const charsToShow = Math.floor(eased * fullText.length);
+        // Update text — wymień zawartość przed cursor
+        const text = fullText.slice(0, charsToShow);
+        el.firstChild ? (el.firstChild.nodeValue = text) : el.insertBefore(document.createTextNode(text), cursor);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          // Animacja ukończona — usuń cursor po krótkiej chwili
+          setTimeout(() => cursor.remove(), 600);
+          try { sessionStorage.setItem(SESSION_KEY, '1'); } catch (e) {}
+        }
+      }
+      requestAnimationFrame(tick);
     })();
 
     // ============================================================
