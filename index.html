@@ -1076,7 +1076,6 @@
       font-weight: 600;
       opacity: 1;
       transition: opacity 0.2s, color 0.2s;
-      animation: hero-scroll-fade 4s ease-in-out 2s 1 backwards;
     }
     .hero__scroll:hover,
     .hero__scroll:focus-visible {
@@ -2968,14 +2967,19 @@
           </div>
         </div>
         <div class="hero__art">
-          <img class="hero__photo"
-               src="assets/team.jpg"
-               srcset="assets/team-800.jpg 800w, assets/team.jpg 1200w"
-               sizes="(max-width: 900px) 360px, 580px"
-               alt="Zespół Biura Rachunkowego Kowalski & Partnerzy"
-               loading="eager"
-               fetchpriority="high"
-               width="1200" height="799">
+          <picture>
+            <source type="image/avif"
+                    srcset="assets/team-800.avif 800w, assets/team.avif 1200w"
+                    sizes="(max-width: 900px) 360px, 580px">
+            <img class="hero__photo"
+                 src="assets/team.jpg"
+                 srcset="assets/team-800.jpg 800w, assets/team.jpg 1200w"
+                 sizes="(max-width: 900px) 360px, 580px"
+                 alt="Zespół Biura Rachunkowego Kowalski & Partnerzy"
+                 loading="eager"
+                 fetchpriority="high"
+                 width="1200" height="799">
+          </picture>
           <div class="hero__art-stat" aria-label="Średnia ocena klientów: 4.9 z 5">
             <span class="hero__art-stat-icon" aria-hidden="true">★</span>
             <div class="hero__art-stat-text">
