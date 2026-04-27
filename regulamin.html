@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Regulamin świadczenia usług księgowych przez Biuro Rachunkowe Kowalski & Partnerzy.">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0F2847">
+  <title>Regulamin · Kowalski &amp; Partnerzy</title>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #F8F6F1;
+      --card: #FFFFFF;
+      --heading: #0F2847;
+      --text: #1F2937;
+      --muted: #4B5563;
+      --accent: #C9A961;
+      --accent-soft: #F5EDD8;
+      --border: #E5E7EB;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-serif: Georgia, "Times New Roman", Cambria, serif;
+      --radius: 10px;
+      --max: 760px;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B1220;
+      --card: #111827;
+      --heading: #F3F4F6;
+      --text: #D1D5DB;
+      --muted: #9CA3AF;
+      --accent: #D4B87A;
+      --accent-soft: #2A2416;
+      --border: #1F2937;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+    a:hover { color: color-mix(in srgb, var(--accent) 75%, var(--heading)); text-decoration: underline; }
+    .legal-header {
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .legal-header__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--heading);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .logo:hover { text-decoration: none; color: var(--heading); }
+    .logo__mark {
+      width: 36px;
+      height: 36px;
+      background: var(--heading);
+      color: var(--accent);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .legal-back {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .legal-back:hover { color: var(--accent); }
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    .legal-meta {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: clamp(1.75rem, 4vw, 2.6rem);
+      line-height: 1.2;
+      margin: 0 0 2rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.4rem;
+      margin: 2.5rem 0 0.85rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-family: var(--font-sans);
+      color: var(--heading);
+      font-size: 1.05rem;
+      margin: 1.6rem 0 0.5rem;
+      font-weight: 600;
+    }
+    p, li { font-size: 1rem; }
+    p { margin: 0 0 1rem; }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--accent); }
+    .lead {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0 2rem;
+      color: var(--heading);
+      font-size: 0.97rem;
+    }
+    .lead p { margin: 0; }
+    .legal-toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .legal-toc h2 {
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: var(--font-sans);
+      margin: 0 0 0.85rem;
+    }
+    .legal-toc ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: toc;
+    }
+    .legal-toc li {
+      counter-increment: toc;
+      margin: 0.35rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+    .legal-toc li::before {
+      content: counter(toc, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .legal-toc a { color: var(--text); }
+    .legal-toc a:hover { color: var(--accent); }
+    .legal-footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+    .legal-footer a { color: var(--muted); }
+    .legal-footer a:hover { color: var(--accent); }
+    @media (max-width: 540px) {
+      main { padding: 2rem 1.25rem 3rem; }
+      h1 { font-size: 1.85rem; }
+      h2 { font-size: 1.2rem; margin-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="legal-header">
+    <div class="legal-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__mark" aria-hidden="true">KP</span>
+        <span>Kowalski &amp; Partnerzy</span>
+      </a>
+      <a href="index.html" class="legal-back">← Strona główna</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="legal-meta">Dokument · Aktualizacja: 27 kwietnia 2026</p>
+    <h1>Regulamin świadczenia usług</h1>
+
+    <div class="lead">
+      <p>Niniejszy regulamin określa zasady współpracy między Biurem Rachunkowym Kowalski &amp; Partnerzy a klientami korzystającymi z usług księgowych, kadrowo-płacowych i doradztwa podatkowego.</p>
+    </div>
+
+    <nav class="legal-toc" aria-label="Spis treści">
+      <h2>Spis treści</h2>
+      <ol>
+        <li><a href="#definicje">Definicje</a></li>
+        <li><a href="#zakres">Zakres usług</a></li>
+        <li><a href="#zawarcie">Zawarcie umowy</a></li>
+        <li><a href="#obowiazki">Obowiązki stron</a></li>
+        <li><a href="#wynagrodzenie">Wynagrodzenie i terminy płatności</a></li>
+        <li><a href="#odpowiedzialnosc">Odpowiedzialność</a></li>
+        <li><a href="#poufnosc">Poufność i RODO</a></li>
+        <li><a href="#reklamacje">Reklamacje</a></li>
+        <li><a href="#wypowiedzenie">Wypowiedzenie umowy</a></li>
+        <li><a href="#postanowienia">Postanowienia końcowe</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="definicje">1. Definicje</h2>
+    <ul>
+      <li><strong>Biuro</strong> — Biuro Rachunkowe Kowalski &amp; Partnerzy Sp. z o.o., NIP 000-00-00-000, ul. Przykładowa 12, 00-001 Warszawa.</li>
+      <li><strong>Klient</strong> — osoba fizyczna prowadząca działalność gospodarczą, spółka osobowa lub kapitałowa, korzystająca z usług Biura.</li>
+      <li><strong>Umowa</strong> — pisemna lub elektroniczna umowa o świadczenie usług księgowych zawarta między Biurem a Klientem.</li>
+      <li><strong>Usługi</strong> — usługi księgowe, kadrowo-płacowe i doradcze świadczone przez Biuro.</li>
+    </ul>
+
+    <h2 id="zakres">2. Zakres usług</h2>
+    <p>Biuro świadczy w szczególności:</p>
+    <ul>
+      <li>Prowadzenie ksiąg rachunkowych, ksiąg przychodów i rozchodów, ewidencji ryczałtowej</li>
+      <li>Sporządzanie i składanie deklaracji podatkowych (VAT, PIT, CIT) oraz JPK</li>
+      <li>Obsługę kadrowo-płacową, ZUS, listy płac</li>
+      <li>Doradztwo w bieżących sprawach księgowych i podatkowych</li>
+      <li>Reprezentowanie Klienta przed urzędami w zakresie udzielonego pełnomocnictwa</li>
+    </ul>
+    <p>Szczegółowy zakres usług określa indywidualnie zawarta Umowa.</p>
+
+    <h2 id="zawarcie">3. Zawarcie umowy</h2>
+    <p>Umowa zawierana jest po:</p>
+    <ol>
+      <li>Bezpłatnej konsultacji wstępnej (online, telefonicznie lub w siedzibie Biura)</li>
+      <li>Przedstawieniu indywidualnej oferty z wyceną</li>
+      <li>Akceptacji oferty przez Klienta</li>
+      <li>Podpisaniu Umowy oraz pełnomocnictw (US, ZUS)</li>
+    </ol>
+    <p>Wstępne zapytanie przez formularz kontaktowy lub kalendarz rezerwacji nie stanowi zawarcia Umowy.</p>
+
+    <h2 id="obowiazki">4. Obowiązki stron</h2>
+    <h3>Biuro zobowiązuje się do:</h3>
+    <ul>
+      <li>Rzetelnego prowadzenia ksiąg zgodnie z obowiązującymi przepisami</li>
+      <li>Terminowego składania deklaracji w imieniu Klienta</li>
+      <li>Informowania o terminach i obowiązkach Klienta</li>
+      <li>Zachowania tajemnicy zawodowej</li>
+      <li>Posiadania ważnej polisy OC</li>
+    </ul>
+    <h3>Klient zobowiązuje się do:</h3>
+    <ul>
+      <li>Przekazywania kompletnych dokumentów księgowych do <strong>5. dnia kolejnego miesiąca</strong></li>
+      <li>Niezwłocznego informowania o zmianach (formy prawnej, adresu, rachunków bankowych)</li>
+      <li>Terminowej zapłaty wynagrodzenia</li>
+      <li>Udzielenia niezbędnych pełnomocnictw</li>
+    </ul>
+
+    <h2 id="wynagrodzenie">5. Wynagrodzenie i terminy płatności</h2>
+    <p>Wynagrodzenie ustalane jest indywidualnie i zależy m.in. od formy prawnej, liczby pracowników, liczby dokumentów miesięcznie, formy opodatkowania.</p>
+    <p>Faktury wystawiane są do 7. dnia każdego miesiąca z 14-dniowym terminem płatności. Za opóźnienie naliczamy odsetki ustawowe.</p>
+    <p>Aktualny cennik orientacyjny dostępny na stronie głównej w sekcji <a href="index.html#cennik">Cennik</a>.</p>
+
+    <h2 id="odpowiedzialnosc">6. Odpowiedzialność</h2>
+    <p>Biuro ponosi odpowiedzialność za szkody wynikłe z niewłaściwego wykonania usług na zasadach ogólnych Kodeksu cywilnego, w granicach sumy gwarancyjnej polisy OC zawodowej.</p>
+    <p>Biuro nie ponosi odpowiedzialności za:</p>
+    <ul>
+      <li>Skutki przekazania niekompletnych lub nieprawdziwych dokumentów przez Klienta</li>
+      <li>Niedotrzymanie terminów wynikłe z opóźnień w przekazywaniu dokumentów przez Klienta</li>
+      <li>Decyzje organów podatkowych wynikające z niewłaściwego doboru formy opodatkowania, gdy Klient nie skorzystał z naszej rekomendacji</li>
+    </ul>
+
+    <h2 id="poufnosc">7. Poufność i RODO</h2>
+    <p>Wszelkie informacje przekazywane przez Klienta stanowią tajemnicę zawodową. Pracownicy Biura objęci są obowiązkiem zachowania poufności bezterminowo.</p>
+    <p>Zasady przetwarzania danych osobowych szczegółowo opisuje <a href="polityka-prywatnosci.html">Polityka prywatności</a>.</p>
+
+    <h2 id="reklamacje">8. Reklamacje</h2>
+    <p>Klient może złożyć reklamację:</p>
+    <ul>
+      <li>Mailowo: <a href="mailto:reklamacje@kowalski-partnerzy.pl">reklamacje@kowalski-partnerzy.pl</a></li>
+      <li>Pisemnie na adres siedziby Biura</li>
+    </ul>
+    <p>Reklamacja powinna zawierać dane Klienta, opis problemu i oczekiwany sposób rozwiązania. Odpowiadamy w terminie do 14 dni roboczych.</p>
+
+    <h2 id="wypowiedzenie">9. Wypowiedzenie umowy</h2>
+    <p>Każda ze Stron może wypowiedzieć Umowę z zachowaniem <strong>jednomiesięcznego okresu wypowiedzenia</strong> ze skutkiem na koniec miesiąca kalendarzowego.</p>
+    <p>W przypadku rażącego naruszenia postanowień Umowy przez Klienta (m.in. brak zapłaty wynagrodzenia przez 2 miesiące, przekazywanie nieprawdziwych dokumentów) Biuro może wypowiedzieć Umowę ze skutkiem natychmiastowym.</p>
+    <p>Po zakończeniu Umowy dokumentację przekazujemy Klientowi (lub wskazanemu przez niego biuru) w terminie 14 dni — protokolarnie, za pisemnym potwierdzeniem.</p>
+
+    <h2 id="postanowienia">10. Postanowienia końcowe</h2>
+    <p>W sprawach nieuregulowanych niniejszym Regulaminem zastosowanie mają przepisy Kodeksu cywilnego, ustawy o rachunkowości i ordynacji podatkowej.</p>
+    <p>Spory rozstrzyga sąd właściwy dla siedziby Biura, chyba że Klient jest konsumentem — wówczas sądem właściwym jest sąd zgodnie z art. 31<sup>2</sup> Kodeksu postępowania cywilnego.</p>
+    <p>Regulamin wchodzi w życie z dniem 27 kwietnia 2026 r. i może być zmieniany — z 30-dniowym wyprzedzeniem informujemy Klientów drogą mailową lub poprzez ogłoszenie na stronie.</p>
+  </main>
+
+  <footer class="legal-footer">
+    <span>© 2026 Biuro Rachunkowe Kowalski &amp; Partnerzy</span>
+    <span>
+      <a href="polityka-prywatnosci.html">Polityka prywatności</a> ·
+      <a href="polityka-cookies.html">Cookies</a> ·
+      <a href="index.html#kontakt">Kontakt</a>
+    </span>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Polityka prywatności Biura Rachunkowego Kowalski & Partnerzy. RODO, ochrona danych osobowych, prawa klienta.">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0F2847">
+  <title>Polityka prywatności · Kowalski &amp; Partnerzy</title>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #F8F6F1;
+      --card: #FFFFFF;
+      --heading: #0F2847;
+      --text: #1F2937;
+      --muted: #4B5563;
+      --accent: #C9A961;
+      --accent-soft: #F5EDD8;
+      --border: #E5E7EB;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-serif: Georgia, "Times New Roman", Cambria, serif;
+      --radius: 10px;
+      --max: 760px;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B1220;
+      --card: #111827;
+      --heading: #F3F4F6;
+      --text: #D1D5DB;
+      --muted: #9CA3AF;
+      --accent: #D4B87A;
+      --accent-soft: #2A2416;
+      --border: #1F2937;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+    a:hover { color: color-mix(in srgb, var(--accent) 75%, var(--heading)); text-decoration: underline; }
+    .legal-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+    }
+    .legal-header__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--heading);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .logo:hover { text-decoration: none; color: var(--heading); }
+    .logo__mark {
+      width: 36px;
+      height: 36px;
+      background: var(--heading);
+      color: var(--accent);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .legal-back {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .legal-back:hover { color: var(--accent); }
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    .legal-meta {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: clamp(1.75rem, 4vw, 2.6rem);
+      line-height: 1.2;
+      margin: 0 0 2rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.4rem;
+      margin: 2.5rem 0 0.85rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    h3 {
+      font-family: var(--font-sans);
+      color: var(--heading);
+      font-size: 1.05rem;
+      margin: 1.6rem 0 0.5rem;
+      font-weight: 600;
+    }
+    p, li { font-size: 1rem; }
+    p { margin: 0 0 1rem; }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--accent); }
+    .lead {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0 2rem;
+      color: var(--heading);
+      font-size: 0.97rem;
+    }
+    .lead p { margin: 0; }
+    .legal-toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .legal-toc h2 {
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-family: var(--font-sans);
+      margin: 0 0 0.85rem;
+    }
+    .legal-toc ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: toc;
+    }
+    .legal-toc li {
+      counter-increment: toc;
+      margin: 0.35rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+    .legal-toc li::before {
+      content: counter(toc, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .legal-toc a { color: var(--text); }
+    .legal-toc a:hover { color: var(--accent); }
+    .legal-footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+    .legal-footer a { color: var(--muted); }
+    .legal-footer a:hover { color: var(--accent); }
+    @media (max-width: 540px) {
+      main { padding: 2rem 1.25rem 3rem; }
+      h1 { font-size: 1.85rem; }
+      h2 { font-size: 1.2rem; margin-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="legal-header">
+    <div class="legal-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__mark" aria-hidden="true">KP</span>
+        <span>Kowalski &amp; Partnerzy</span>
+      </a>
+      <a href="index.html" class="legal-back">← Strona główna</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="legal-meta">Dokument · Aktualizacja: 27 kwietnia 2026</p>
+    <h1>Polityka prywatności</h1>
+
+    <div class="lead">
+      <p>Dbamy o Twoje dane jak o własne. Ten dokument w przejrzysty sposób wyjaśnia, jakie dane zbieramy, w jakim celu i jakie masz wobec nich prawa.</p>
+    </div>
+
+    <nav class="legal-toc" aria-label="Spis treści">
+      <h2>Spis treści</h2>
+      <ol>
+        <li><a href="#administrator">Administrator danych</a></li>
+        <li><a href="#zakres">Zakres przetwarzanych danych</a></li>
+        <li><a href="#cele">Cele i podstawy prawne</a></li>
+        <li><a href="#odbiorcy">Odbiorcy danych</a></li>
+        <li><a href="#czas">Czas przechowywania</a></li>
+        <li><a href="#prawa">Prawa osoby, której dane dotyczą</a></li>
+        <li><a href="#bezpieczenstwo">Bezpieczeństwo</a></li>
+        <li><a href="#kontakt">Kontakt w sprawie danych</a></li>
+      </ol>
+    </nav>
+
+    <h2 id="administrator">1. Administrator danych</h2>
+    <p>Administratorem Twoich danych osobowych jest <strong>Biuro Rachunkowe Kowalski &amp; Partnerzy Sp. z o.o.</strong> z siedzibą w Warszawie, ul. Przykładowa 12, 00-001 Warszawa, wpisana do Krajowego Rejestru Sądowego pod nr 0000000000, NIP 000-00-00-000.</p>
+
+    <h2 id="zakres">2. Zakres przetwarzanych danych</h2>
+    <p>W zależności od formy kontaktu i zakresu współpracy przetwarzamy:</p>
+    <ul>
+      <li><strong>Dane identyfikacyjne</strong>: imię, nazwisko, nazwa firmy, NIP, REGON</li>
+      <li><strong>Dane kontaktowe</strong>: adres email, numer telefonu, adres korespondencyjny</li>
+      <li><strong>Dane finansowe i księgowe</strong>: w zakresie niezbędnym do świadczenia usług księgowych</li>
+      <li><strong>Dane techniczne</strong>: adres IP, typ przeglądarki, czas wizyty na stronie</li>
+    </ul>
+
+    <h2 id="cele">3. Cele i podstawy prawne</h2>
+    <p>Przetwarzamy dane wyłącznie w określonych celach:</p>
+    <ul>
+      <li><strong>Realizacja umowy</strong> o świadczenie usług księgowych — art. 6 ust. 1 lit. b RODO</li>
+      <li><strong>Wypełnienie obowiązku prawnego</strong> (m.in. ustawa o rachunkowości, ordynacja podatkowa) — art. 6 ust. 1 lit. c RODO</li>
+      <li><strong>Odpowiedź na zapytanie</strong> z formularza kontaktowego lub umówienia konsultacji — art. 6 ust. 1 lit. f RODO (uzasadniony interes)</li>
+      <li><strong>Marketing własnych usług</strong> — wyłącznie za Twoją zgodą, art. 6 ust. 1 lit. a RODO</li>
+    </ul>
+
+    <h2 id="odbiorcy">4. Odbiorcy danych</h2>
+    <p>Dane mogą być przekazywane wyłącznie w niezbędnym zakresie:</p>
+    <ul>
+      <li>Organom państwowym (US, ZUS, GUS) — w zakresie wymaganym przepisami prawa</li>
+      <li>Podmiotom przetwarzającym (hosting, system księgowy, system mailingowy) — na podstawie umowy powierzenia</li>
+      <li>Doradcom i kancelariom prawnym — w razie sporu lub kontroli</li>
+    </ul>
+    <p>Nie sprzedajemy Twoich danych. Nie udostępniamy ich do celów marketingowych podmiotom trzecim.</p>
+
+    <h2 id="czas">5. Czas przechowywania</h2>
+    <p>Czas przechowywania zależy od celu przetwarzania:</p>
+    <ul>
+      <li><strong>Dokumenty księgowe</strong>: 5 lat od końca roku podatkowego (art. 86 § 1 Ordynacji podatkowej)</li>
+      <li><strong>Korespondencja klienta</strong>: do zakończenia umowy + okres przedawnienia roszczeń (do 10 lat)</li>
+      <li><strong>Zapytania z formularza</strong>: 12 miesięcy od ostatniego kontaktu</li>
+      <li><strong>Dane marketingowe</strong>: do wycofania zgody</li>
+    </ul>
+
+    <h2 id="prawa">6. Prawa osoby, której dane dotyczą</h2>
+    <p>W każdej chwili masz prawo do:</p>
+    <ul>
+      <li>Dostępu do swoich danych i otrzymania ich kopii</li>
+      <li>Sprostowania nieprawidłowych danych</li>
+      <li>Usunięcia danych („prawo do bycia zapomnianym")</li>
+      <li>Ograniczenia przetwarzania</li>
+      <li>Przenoszenia danych do innego administratora</li>
+      <li>Sprzeciwu wobec przetwarzania</li>
+      <li>Wycofania zgody w dowolnym momencie (gdy podstawą jest zgoda)</li>
+      <li>Wniesienia skargi do <strong>Prezesa Urzędu Ochrony Danych Osobowych</strong> (uodo.gov.pl)</li>
+    </ul>
+
+    <h2 id="bezpieczenstwo">7. Bezpieczeństwo</h2>
+    <p>Stosujemy adekwatne środki techniczne i organizacyjne, w tym: szyfrowanie połączenia (HTTPS/TLS), ograniczenie dostępu do danych według zasady „need to know", regularne kopie zapasowe, audyty bezpieczeństwa. Pracownicy mają obowiązek zachowania tajemnicy zawodowej.</p>
+
+    <h2 id="kontakt">8. Kontakt w sprawie danych</h2>
+    <p>W sprawie danych osobowych skontaktuj się z nami:</p>
+    <ul>
+      <li>Email: <a href="mailto:rodo@kowalski-partnerzy.pl">rodo@kowalski-partnerzy.pl</a></li>
+      <li>Telefon: <a href="tel:+48221234567">+48 22 123 45 67</a></li>
+      <li>Listownie: ul. Przykładowa 12, 00-001 Warszawa, z dopiskiem „RODO"</li>
+    </ul>
+    <p>Odpowiadamy w ciągu 30 dni od otrzymania wniosku.</p>
+  </main>
+
+  <footer class="legal-footer">
+    <span>© 2026 Biuro Rachunkowe Kowalski &amp; Partnerzy</span>
+    <span>
+      <a href="polityka-cookies.html">Cookies</a> ·
+      <a href="regulamin.html">Regulamin</a> ·
+      <a href="index.html#kontakt">Kontakt</a>
+    </span>
+  </footer>
+</body>
+</html>

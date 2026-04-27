@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>OG image source</title>
+<!-- Plik pomocniczy do generowania assets/og.png (Open Graph 1200x630).
+     Regeneracja:
+       chrome --headless --disable-gpu --hide-scrollbars \
+         --screenshot=assets/og.png --window-size=1200,630 \
+         http://localhost:8765/og-source.html
+     Nie linkujemy do tego pliku z reszty serwisu — istnieje tylko jako źródło PNG. -->
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+      radial-gradient(circle at 85% 15%, rgba(201, 169, 97, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 15% 85%, rgba(201, 169, 97, 0.12) 0%, transparent 45%),
+      linear-gradient(135deg, #0F2847 0%, #1A3A5F 50%, #0F2847 100%);
+    color: #F8F6F1;
+    position: relative;
+  }
+  /* Subtle grid lines */
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201, 169, 97, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 169, 97, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .stage {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    padding: 60px 80px 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1;
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .mark {
+    width: 64px;
+    height: 64px;
+    background: #C9A961;
+    color: #0F2847;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    box-shadow: 0 8px 24px rgba(201, 169, 97, 0.35);
+  }
+  .brand-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #F8F6F1;
+  }
+  .brand-sub {
+    color: #C9A961;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -40px;
+  }
+  .eyebrow {
+    color: #C9A961;
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-family: system-ui, sans-serif;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: 4.8rem;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: #F8F6F1;
+    font-weight: 700;
+    max-width: 1000px;
+  }
+  h1 em {
+    font-style: italic;
+    color: #C9A961;
+  }
+  .lede {
+    margin-top: 22px;
+    font-size: 1.35rem;
+    line-height: 1.4;
+    color: #D6D3CC;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    max-width: 880px;
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(201, 169, 97, 0.25);
+    padding-top: 24px;
+  }
+  .stats {
+    display: flex;
+    gap: 50px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  .stat__num {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    color: #C9A961;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat__label {
+    font-size: 0.78rem;
+    color: rgba(216, 210, 196, 0.7);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .pill {
+    background: rgba(201, 169, 97, 0.18);
+    color: #C9A961;
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(201, 169, 97, 0.4);
+    font-family: system-ui, sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <header class="top">
+      <div class="mark">KP</div>
+      <div>
+        <div class="brand-name">Kowalski &amp; Partnerzy</div>
+        <div class="brand-sub">Biuro Rachunkowe · od 2009</div>
+      </div>
+    </header>
+
+    <div class="middle">
+      <div class="eyebrow">Premium księgowość</div>
+      <h1>Księgowość <em>bez stresu</em><br>dla Twojej firmy</h1>
+      <p class="lede">Pełna obsługa księgowa, kadrowo-płacowa i doradztwo podatkowe. Wszystko online, z dedykowanym opiekunem.</p>
+    </div>
+
+    <footer class="bottom">
+      <div class="stats">
+        <div>
+          <div class="stat__num">150+</div>
+          <div class="stat__label">Firm nam zaufało</div>
+        </div>
+        <div>
+          <div class="stat__num">15</div>
+          <div class="stat__label">Lat doświadczenia</div>
+        </div>
+        <div>
+          <div class="stat__num">★ 4.9</div>
+          <div class="stat__label">Ocena klientów</div>
+        </div>
+      </div>
+      <div class="pill">kowalski-partnerzy.pl</div>
+    </footer>
+  </div>
+</body>
+</html>
