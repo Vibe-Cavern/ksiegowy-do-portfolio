@@ -2125,20 +2125,6 @@
       to { transform: translateY(-50%) scale(1); }
     }
     .form__status.show { display: block; animation: form-status-slide 0.35s ease-out; }
-    .form__status.is-error {
-      background: color-mix(in srgb, #B91C1C 12%, var(--card));
-      border-color: color-mix(in srgb, #B91C1C 35%, transparent);
-      color: #7F1D1D;
-    }
-    .form__status.is-error::before { content: "!"; color: #B91C1C; }
-    [data-theme="dark"] .form__status.is-error { color: #FCA5A5; }
-    .form__honeypot {
-      position: absolute;
-      left: -10000px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    }
     @keyframes form-status-slide {
       from { opacity: 0; transform: translateY(-6px); }
       to { opacity: 1; transform: translateY(0); }
@@ -4040,14 +4026,10 @@
           >Otwórz w Google Maps →</a>
         </div>
         <div class="contact__grid" id="kontakt-form">
-          <!-- Netlify Forms: bez backendu, submissions w panelu Netlify (Forms tab).
-               Bez Netlify (np. lokalnie / GitHub Pages) JS pokazuje success bez wysłania. -->
-          <form class="form reveal" id="contactForm" name="contact" method="POST"
-                data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
-            <input type="hidden" name="form-name" value="contact">
-            <p class="form__honeypot" aria-hidden="true" hidden>
-              <label>Nie wypełniaj: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-            </p>
+          <!-- DEMO: formularz to showcase w portfolio Vibe-Cavern. Submit
+               pokazuje toast "Dziękujemy" bez realnego POST. W produkcji
+               podmieniasz na endpoint klienta (Formspree/Netlify/własny). -->
+          <form class="form reveal" id="contactForm" novalidate>
             <div class="form__row">
               <div class="form__field">
                 <label for="f-name">Imię i nazwisko<span class="req" aria-hidden="true">*</span></label>
@@ -4235,13 +4217,7 @@
         <button class="booking__back" type="button" id="bookingBack">← Wybierz inny termin</button>
         <h2>Potwierdź dane</h2>
         <p class="booking__summary"><strong id="bookingSummary"></strong></p>
-        <form class="booking__form" id="bookingForm" name="booking" method="POST"
-              data-netlify="true" data-netlify-honeypot="bot-field" novalidate>
-          <input type="hidden" name="form-name" value="booking">
-          <input type="hidden" name="appointment" id="b-appointment">
-          <p class="form__honeypot" aria-hidden="true" hidden>
-            <label>Nie wypełniaj: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-          </p>
+        <form class="booking__form" id="bookingForm" novalidate>
           <div class="booking__field">
             <label for="b-name">Imię i nazwisko<span class="req" aria-hidden="true">*</span></label>
             <input id="b-name" name="name" type="text" required autocomplete="name" placeholder="Jan Kowalski">
@@ -4570,7 +4546,7 @@
           return;
         }
 
-        // Loading state
+        // Loading state — spinner przed CTA text przez ~900ms (symulacja request)
         if (submitBtn) {
           submitBtn.classList.add('is-loading');
           submitBtn.textContent = 'Wysyłam...';
@@ -4579,48 +4555,18 @@
 
         const name = (form.elements.name.value || '').trim().split(' ')[0];
 
-        function showSuccess() {
+        // Demo: zawsze success (showcase w portfolio, brak realnego backendu).
+        setTimeout(() => {
           if (submitBtn) {
             submitBtn.classList.remove('is-loading');
             submitBtn.textContent = submitOriginalText;
             submitBtn.disabled = false;
           }
           status.textContent = `Dziękujemy${name ? ', ' + name : ''}! Odezwiemy się w ciągu 24 godzin.`;
-          status.classList.remove('is-error');
           status.classList.add('show');
           form.reset();
           setTimeout(() => status.classList.remove('show'), 8000);
-        }
-
-        function showError() {
-          if (submitBtn) {
-            submitBtn.classList.remove('is-loading');
-            submitBtn.textContent = submitOriginalText;
-            submitBtn.disabled = false;
-          }
-          status.textContent = 'Coś poszło nie tak. Zadzwoń bezpośrednio lub spróbuj ponownie.';
-          status.classList.add('show', 'is-error');
-          setTimeout(() => status.classList.remove('show', 'is-error'), 8000);
-        }
-
-        // Netlify Forms: POST do siebie samego z urlencoded body.
-        // Gdy nie na Netlify (np. lokalny preview, GitHub Pages) — fallback na demo success.
-        const isNetlify = /\.netlify\.(app|com)$/.test(location.hostname) || location.hostname.endsWith('.netlify.live');
-        if (!isNetlify) {
-          // Demo path — pokazuje sukces bez realnego POST
-          setTimeout(showSuccess, 900);
-          return;
-        }
-
-        const data = new URLSearchParams();
-        new FormData(form).forEach((v, k) => data.append(k, v));
-        fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: data.toString()
-        }).then(r => {
-          if (r.ok) showSuccess(); else showError();
-        }).catch(showError);
+        }, 900);
       });
     })();
 
@@ -5629,58 +5575,10 @@
         const email = form.querySelector('#b-email').value.trim();
         const name = form.querySelector('#b-name').value.trim();
         if (!name || !email) return;
-
-        const when = formatWhen();
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalLabel = submitBtn ? submitBtn.innerHTML : '';
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Wysyłam...';
-        }
-
-        // appointment hidden input — żeby Netlify dostał termin razem z resztą
-        const apptField = form.querySelector('#b-appointment');
-        if (apptField) apptField.value = when;
-
-        function showConfirmed() {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalLabel;
-          }
-          confirmEmail.textContent = email;
-          confirmWhen.textContent = when;
-          showStep('confirmed');
-        }
-
-        const isNetlify = /\.netlify\.(app|com)$/.test(location.hostname) || location.hostname.endsWith('.netlify.live');
-        if (!isNetlify) {
-          // Demo path bez Netlify
-          showConfirmed();
-          return;
-        }
-
-        const data = new URLSearchParams();
-        new FormData(form).forEach((v, k) => data.append(k, v));
-        fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: data.toString()
-        }).then(r => {
-          if (r.ok) showConfirmed();
-          else {
-            if (submitBtn) {
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = originalLabel;
-            }
-            alert('Wystąpił błąd. Zadzwoń bezpośrednio lub spróbuj ponownie za chwilę.');
-          }
-        }).catch(() => {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalLabel;
-          }
-          alert('Wystąpił błąd sieci. Zadzwoń bezpośrednio lub spróbuj ponownie za chwilę.');
-        });
+        // Demo: pokazuje confirmed step bez realnego POST
+        confirmEmail.textContent = email;
+        confirmWhen.textContent = formatWhen();
+        showStep('confirmed');
       });
 
       // Public API — pozwala innym przyciskom otworzyć modal
