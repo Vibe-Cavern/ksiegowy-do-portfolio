@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Polityka cookies Biura Rachunkowego Kowalski & Partnerzy. Jakie pliki cookies używamy i jak nimi zarządzać.">
+  <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0F2847">
+  <title>Polityka cookies · Kowalski &amp; Partnerzy</title>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = stored === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --bg: #F8F6F1;
+      --card: #FFFFFF;
+      --heading: #0F2847;
+      --text: #1F2937;
+      --muted: #4B5563;
+      --accent: #C9A961;
+      --accent-soft: #F5EDD8;
+      --border: #E5E7EB;
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-serif: Georgia, "Times New Roman", Cambria, serif;
+      --radius: 10px;
+      --max: 760px;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0B1220;
+      --card: #111827;
+      --heading: #F3F4F6;
+      --text: #D1D5DB;
+      --muted: #9CA3AF;
+      --accent: #D4B87A;
+      --accent-soft: #2A2416;
+      --border: #1F2937;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+    a:hover { color: color-mix(in srgb, var(--accent) 75%, var(--heading)); text-decoration: underline; }
+    .legal-header {
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .legal-header__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--heading);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .logo:hover { text-decoration: none; color: var(--heading); }
+    .logo__mark {
+      width: 36px;
+      height: 36px;
+      background: var(--heading);
+      color: var(--accent);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .legal-back {
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .legal-back:hover { color: var(--accent); }
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    .legal-meta {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin: 0 0 0.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: clamp(1.75rem, 4vw, 2.6rem);
+      line-height: 1.2;
+      margin: 0 0 2rem;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-family: var(--font-serif);
+      color: var(--heading);
+      font-size: 1.4rem;
+      margin: 2.5rem 0 0.85rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    p, li { font-size: 1rem; }
+    p { margin: 0 0 1rem; }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.4rem; }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--accent); }
+    .lead {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin: 1.5rem 0 2rem;
+      color: var(--heading);
+      font-size: 0.97rem;
+    }
+    .lead p { margin: 0; }
+    table.cookies-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.92rem;
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .cookies-table th, .cookies-table td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .cookies-table th {
+      background: color-mix(in srgb, var(--accent-soft) 60%, var(--card));
+      color: var(--heading);
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .cookies-table tr:last-child td { border-bottom: 0; }
+    .cookies-table code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      background: var(--accent-soft);
+      color: var(--heading);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    .legal-footer {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+    .legal-footer a { color: var(--muted); }
+    .legal-footer a:hover { color: var(--accent); }
+    @media (max-width: 540px) {
+      main { padding: 2rem 1.25rem 3rem; }
+      h1 { font-size: 1.85rem; }
+      h2 { font-size: 1.2rem; margin-top: 2rem; }
+      .cookies-table { font-size: 0.85rem; }
+      .cookies-table th, .cookies-table td { padding: 0.6rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="legal-header">
+    <div class="legal-header__inner">
+      <a href="index.html" class="logo">
+        <span class="logo__mark" aria-hidden="true">KP</span>
+        <span>Kowalski &amp; Partnerzy</span>
+      </a>
+      <a href="index.html" class="legal-back">← Strona główna</a>
+    </div>
+  </header>
+
+  <main>
+    <p class="legal-meta">Dokument · Aktualizacja: 27 kwietnia 2026</p>
+    <h1>Polityka cookies</h1>
+
+    <div class="lead">
+      <p>Nasza strona używa <strong>wyłącznie technicznych plików cookie i pamięci lokalnej przeglądarki</strong> niezbędnych do działania serwisu. Nie korzystamy z plików marketingowych ani trackerów reklamowych.</p>
+    </div>
+
+    <h2>Czym są pliki cookies</h2>
+    <p>Cookies to niewielkie pliki tekstowe zapisywane przez przeglądarkę na Twoim urządzeniu podczas korzystania ze stron internetowych. Pomagają zapamiętać preferencje użytkownika (np. wybór trybu jasnego/ciemnego), by przy kolejnej wizycie strona zachowywała się tak, jak ją zostawiłeś.</p>
+    <p>Obok cookies stosujemy też <strong>local storage</strong> — mechanizm zbliżony funkcjonalnie, ale przechowujący dane tylko po stronie Twojej przeglądarki (nie są wysyłane na serwer).</p>
+
+    <h2>Jakie pliki używamy</h2>
+    <table class="cookies-table">
+      <thead>
+        <tr>
+          <th>Nazwa</th>
+          <th>Typ</th>
+          <th>Cel</th>
+          <th>Czas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>theme</code></td>
+          <td>Local storage</td>
+          <td>Zapamiętanie wybranego trybu (jasny/ciemny)</td>
+          <td>Bez wygaśnięcia (do usunięcia przez Ciebie)</td>
+        </tr>
+        <tr>
+          <td><code>chatbotTeaserDismissed</code></td>
+          <td>Local storage</td>
+          <td>Zapamiętanie zamknięcia powitania asystenta AI</td>
+          <td>7 dni</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Nie używamy</strong> Google Analytics, Facebook Pixel, Google Ads, ani innych narzędzi reklamowych ani analitycznych w wersji opartej o cookies. Jeśli to się zmieni — zaktualizujemy ten dokument i wprowadzimy banner zgody.</p>
+
+    <h2>Jak zarządzać cookies</h2>
+    <p>Możesz w każdej chwili zarządzać plikami cookies w ustawieniach swojej przeglądarki. Linki do dokumentacji najpopularniejszych przeglądarek:</p>
+    <ul>
+      <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener">Google Chrome</a></li>
+      <li><a href="https://support.mozilla.org/pl/kb/usuwanie-ciasteczek-i-danych-stron-firefox" target="_blank" rel="noopener">Mozilla Firefox</a></li>
+      <li><a href="https://support.apple.com/pl-pl/guide/safari/sfri11471/mac" target="_blank" rel="noopener">Apple Safari</a></li>
+      <li><a href="https://support.microsoft.com/pl-pl/microsoft-edge/usuwanie-plik%C3%B3w-cookie-w-przegl%C4%85darce-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener">Microsoft Edge</a></li>
+    </ul>
+    <p>Aby usunąć dane z local storage, w większości przeglądarek użyjesz tej samej opcji „Wyczyść dane przeglądania" → „Pliki cookies i dane stron".</p>
+
+    <h2>Konsekwencje wyłączenia</h2>
+    <p>Strona działa poprawnie również bez cookies / local storage — ale przy każdej wizycie wróci do trybu domyślnego (jasnego), a powitanie asystenta AI pojawi się ponownie.</p>
+
+    <h2>Kontakt</h2>
+    <p>W razie pytań o przetwarzanie danych: <a href="mailto:rodo@kowalski-partnerzy.pl">rodo@kowalski-partnerzy.pl</a>. Pełne informacje o przetwarzaniu danych osobowych znajdziesz w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</p>
+  </main>
+
+  <footer class="legal-footer">
+    <span>© 2026 Biuro Rachunkowe Kowalski &amp; Partnerzy</span>
+    <span>
+      <a href="polityka-prywatnosci.html">Polityka prywatności</a> ·
+      <a href="regulamin.html">Regulamin</a> ·
+      <a href="index.html#kontakt">Kontakt</a>
+    </span>
+  </footer>
+</body>
+</html>
